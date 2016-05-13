@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="app/images/favicon.ico"
+	type="image/x-icon" />
+<title>统一平台</title>
+<!-- Bootstrap -->
+<link href="resource/css/bootstrap.css" rel="stylesheet">
+<link href="resource/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="resource/css/bootstrap-checkbox.css">
+<link rel="stylesheet" href="resource/css/jquery.gritter.css" />
+<link href="app/css/minimal.css" rel="stylesheet">
+<link href="app/css/gritter.css" rel="stylesheet">
+<link href="resource/css/jquery.jgrowl.min.css" rel="stylesheet">
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+    <script src="resource/html5/html5shiv.min.js"></script>
+    <script src="resource/html5/respond.min.js"></script>
+    <![endif]-->
+<style type="text/css">
+.widget-box {
+	display: none !important;
+}
+
+.widget-box.visible {
+	display: block !important;
+}
+
+.little-title {
+	border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+	text-align: left;
+	line-height: 28px;
+	margin-bottom: 20px;
+	font-size: 14px;
+}
+
+#content.full-page {
+	background: none;
+}
+
+body.solid-bg-0 #content {
+	background: none;
+}
+</style>
+</head>
+<body class="solid-bg-0">
+
+
+	<!-- Wrap all page content here -->
+	<div id="wrap">
+		<!-- Make page fluid -->
+		<div class="row">
+			<!-- Page content -->
+			<div id="content" class="col-md-12 full-page login">
+				<div class="inside-block" style="position: relative;">
+					<div
+						style="width: 360px; position: absolute; left: 50%; top: 50px; margin-left: -180px;"
+						id="position">
+						<h1 style="font-size: 30px; margin-top: 50px;">统一平台</h1>
+						<h3
+							style="margin-top: 10px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+							<strong>Meters<span
+								style="font-size: 25px; font-weight: 700; color: #dd5a43;">/</span>bonwe
+							</strong>
+						</h3>
+						<!-- login-box -->
+						<div id="login-box" class="visible widget-box">
+							<form method="post" action="/login" id="login-form">
+								<section>
+									<div class="input-group">
+										<input type="text" class="form-control" name="userName"
+											placeholder="工号" id="login-username" />
+										<div class="input-group-addon">
+											<i class="fa fa-user"></i>
+										</div>
+									</div>
+									<div class="input-group">
+										<input type="password" class="form-control" name="password"
+											placeholder="密码" />
+										<div class="input-group-addon">
+											<i class="fa fa-key"></i>
+										</div>
+									</div>
+								</section>
+								<section class="controls">
+									<div class="checkbox check-transparent">
+										<input type="checkbox" id="login-remember"> <label
+											for="login-remember">记住我</label>
+									</div>
+									<a href="#" onclick="show_box('forgot-box'); return false;">忘记密码？</a>
+								</section>
+								<section class="log-in">
+									<button type="button" class="btn btn-greensea"
+										onclick="login()">登录</button>
+									<span>or</span>
+									<button class="btn btn-slategray"
+										onclick="show_box('signup-box');position(); return false;">注册</button>
+								</section>
+							</form>
+						</div>
+						<!-- /login-box -->
+
+						<!-- forgot-box -->
+						<div id="forgot-box" class="widget-box">
+							<form method="post" action="/findPassword" id="findPassword-form">
+								<div class="little-title">
+									<i class="fa fa-key"></i> 找回密码
+								</div>
+								<section>
+									<div class="input-group">
+										<input type="email" name="email" class="form-control"
+											placeholder="邮箱" id="lost-mail" />
+										<div class="input-group-addon">
+											<i class="fa fa-envelope"></i>
+										</div>
+									</div>
+								</section>
+								<section class="log-in">
+									<button type="button" class="btn btn-red"
+										onclick="findPassword()">发送</button>
+									<span>or</span>
+									<button type="button" class="btn btn-slategray"
+										onclick="show_box('login-box'); return false;">返回</button>
+								</section>
+							</form>
+						</div>
+						<!-- /forgot-box -->
+
+						<!-- signup-box -->
+						<div id="signup-box" class="widget-box">
+							<form id="register-form">
+								<div class="little-title">
+									<i class="fa fa-users"></i> 新用户注册
+								</div>
+								<section>
+									<div class="input-group">
+										<input type="email" name="email" class="form-control"
+											placeholder="邮箱" id="register-mail" />
+										<div class="input-group-addon">
+											<i class="fa fa-envelope"></i>
+										</div>
+									</div>
+								</section>
+								<section>
+									<div class="input-group">
+										<input type="text" name="userName" class="form-control"
+											placeholder="工号" />
+										<div class="input-group-addon">
+											<i class="fa fa-user"></i>
+										</div>
+									</div>
+								</section>
+								<section>
+									<div class="input-group">
+										<input type="text" name="nickName" class="form-control"
+											placeholder="姓名" />
+										<div class="input-group-addon">
+											<i class="fa fa-user-plus"></i>
+										</div>
+									</div>
+								</section>
+								<section>
+									<div class="input-group">
+										<input type="text" name="phoneNO" class="form-control"
+											placeholder="手机号" />
+										<div class="input-group-addon">
+											<i class="fa fa-phone"></i>
+										</div>
+									</div>
+								</section>
+								<section>
+									<div class="input-group">
+										<input type="password" name="password" class="form-control"
+											placeholder="密码" />
+										<div class="input-group-addon">
+											<i class="fa fa-key"></i>
+										</div>
+									</div>
+								</section>
+								<section>
+									<div class="input-group">
+										<input type="password" class="form-control" placeholder="确认密码" />
+										<div class="input-group-addon">
+											<i class="fa fa-retweet"></i>
+										</div>
+									</div>
+								</section>
+								<section class="log-in">
+									<button type="button" class="btn btn-success"
+										onclick="register()">注册</button>
+									<span>or</span>
+									<button type="button" class="btn btn-slategray"
+										onclick="show_box('login-box');position(); return false;">返回</button>
+								</section>
+							</form>
+						</div>
+						<!-- /signup-box -->
+					</div>
+				</div>
+			</div>
+			<!-- /Page content -->
+		</div>
+	</div>
+	<!-- Wrap all page content end -->
+
+	<!--[if !IE]> -->
+	<script type="text/javascript">
+		window.jQuery
+				|| document
+						.write("<script src='resource/js/jquery-2.0.3.min.js'>"
+								+ "<"+"/script>");
+	</script>
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='resource/js/jquery-1.11.2.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+
+	<script type="text/javascript">
+		if ("ontouchend" in document)
+			document
+					.write("<script src='resource/js/jquery.mobile.custom.min.js'>"
+							+ "<"+"/script>");
+	</script>
+
+	<script type="text/javascript" src="resource/js/jquery.form.js"></script>
+	<script src="resource/js/jquery.gritter.min.js"></script>
+	<script src="resource/js/jquery.jgrowl.js"></script>
+	<script src="app/js/src/Base.js"></script>
+	<script src="app/js/login.js"></script>
+</body>
+</html>
+

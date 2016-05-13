@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.core.mapper.StockShopRemailTranDefineMapper">
+	<insert id="insertDataByWarehIdRemailTime" parameterType="java.util.HashMap">
+		insert
+		into
+		stock_shop_remail_tran ( wareh_id, prod_id,
+		cell_remail_stock,
+		cell_remail_order_type, update_time,rll_num
+		)select
+		a.wareh_id,a.prod_id,a.remail_stock,#{cell_remail_order_type,jdbcType=VARCHAR},SYSDATE(),rll_num
+		from
+		stock_shop_remail a where a.wareh_id=#{wareh_id,jdbcType=VARCHAR}
+		and a.update_time between #{beginTime,jdbcType=TIMESTAMP} and
+		#{andTime,jdbcType=TIMESTAMP}
+	</insert>
+	
+    <insert id="insertData" parameterType="com.metersbonwe.stock.po.core.StockShopRemail">
+        insert into stock_shop_remail_tran (
+            wareh_id,
+            prod_id,
+            loc_id,
+            cell_remail_stock,
+            cell_remail_order_type, 
+            update_time,
+            rll_num
+        ) VALUES (
+            #{warehId,jdbcType=VARCHAR},
+            #{prodId,jdbcType=VARCHAR},
+            #{locId,jdbcType=VARCHAR},
+            #{remailStock,jdbcType=INTEGER},
+            'CQ',
+            CURRENT_TIMESTAMP,
+            #{rllNum,jdbcType=VARCHAR}
+        )
+    </insert>
+</mapper>

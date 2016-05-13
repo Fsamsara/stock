@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.auto.core.mapper.TmpStockWarehProdMapper">
+	<resultMap id="BaseResultMap"
+		type="com.metersbonwe.stock.po.core.TmpStockWarehProd">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="wareh_id" property="warehId" jdbcType="VARCHAR" />
+		<result column="prod_id" property="prodId" jdbcType="VARCHAR" />
+		<result column="stk_on_hand" property="stkOnHand" jdbcType="INTEGER" />
+		<result column="qty_committed" property="qtyCommitted"
+			jdbcType="INTEGER" />
+		<result column="free_share_stock" property="freeShareStock"
+			jdbcType="INTEGER" />
+		<result column="lock_stock" property="lockStock" jdbcType="INTEGER" />
+		<result column="safe_stock" property="safeStock" jdbcType="INTEGER" />
+		<result column="is_shop" property="isShop" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, wareh_id, prod_id, stk_on_hand,
+		qty_committed,free_share_stock,
+		lock_stock,safe_stock,
+		is_shop,
+		update_time
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProdExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from tmp_stock_wareh_prod_${tableNum}
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProd">
+		select
+		<include refid="Base_Column_List" />
+		from tmp_stock_wareh_prod_${tableNum}
+		where id =
+		#{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProd">
+		delete from
+		tmp_stock_wareh_prod_${tableNum}
+		where id =
+		#{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProdExample">
+		delete from tmp_stock_wareh_prod_${tableNum}
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProd">
+		insert into
+		tmp_stock_wareh_prod_${tableNum} (id,
+		wareh_id,
+		prod_id,
+		stk_on_hand, qty_committed,free_share_stock,
+		lock_stock,safe_stock,
+		is_shop,
+		update_time)
+		values
+		(#{id,jdbcType=INTEGER},
+		#{warehId,jdbcType=VARCHAR},
+		#{prodId,jdbcType=VARCHAR},
+		#{stkOnHand,jdbcType=INTEGER},
+		#{freeShareStock,jdbcType=INTEGER},
+		#{lockStock,jdbcType=INTEGER},
+		#{isShop,jdbcType=INTEGER},
+		#{updateTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProd">
+		insert into tmp_stock_wareh_prod_${tableNum}
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="warehId != null">
+				wareh_id,
+			</if>
+			<if test="prodId != null">
+				prod_id,
+			</if>
+			<if test="stkOnHand != null">
+				stk_on_hand,
+			</if>
+			<if test="qtyCommitted != null">
+				qty_committed,
+			</if>
+			<if test="freeShareStock != null">
+				free_share_stock,
+			</if>
+			<if test="lockStock != null">
+				lock_stock,
+			</if>
+			<if test="safeStock != null">
+				safe_stock,
+			</if>
+			<if test="isShop != null">
+				is_shop,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="warehId != null">
+				#{warehId,jdbcType=VARCHAR},
+			</if>
+			<if test="prodId != null">
+				#{prodId,jdbcType=VARCHAR},
+			</if>
+			<if test="stkOnHand != null">
+				#{stkOnHand,jdbcType=INTEGER},
+			</if>
+			<if test="qtyCommitted != null">
+				#{qtyCommitted,jdbcType=INTEGER},
+			</if>
+			<if test="freeShareStock != null">
+				#{freeShareStock,jdbcType=INTEGER},
+			</if>
+			<if test="lockStock != null">
+				#{lockStock,jdbcType=INTEGER},
+			</if>
+			<if test="safeStock != null">
+				#{safeStock,jdbcType=INTEGER},
+			</if>
+			<if test="isShop != null">
+				#{isShop,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProdExample"
+		resultType="java.lang.Integer">
+		select count(*) from tmp_stock_wareh_prod_${tableNum}
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update tmp_stock_wareh_prod_${tableNum}
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.warehId != null">
+				wareh_id = #{record.warehId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.prodId != null">
+				prod_id = #{record.prodId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.stkOnHand != null">
+				stk_on_hand = #{record.stkOnHand,jdbcType=INTEGER},
+			</if>
+			<if test="record.freeShareStock != null">
+				free_share_stock =
+				#{record.freeShareStock,jdbcType=INTEGER},
+			</if>
+			<if test="record.lockStock != null">
+				lock_stock = #{record.lockStock,jdbcType=INTEGER},
+			</if>
+			<if test="record.isShop != null">
+				is_shop = #{record.isShop,jdbcType=INTEGER},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update tmp_stock_wareh_prod_${tableNum}
+		set id =
+		#{record.id,jdbcType=INTEGER},
+		wareh_id =
+		#{record.warehId,jdbcType=VARCHAR},
+		prod_id =
+		#{record.prodId,jdbcType=VARCHAR},
+		stk_on_hand =
+		#{record.stkOnHand,jdbcType=INTEGER},
+		free_share_stock =
+		#{record.freeShareStock,jdbcType=INTEGER},
+		lock_stock =
+		#{record.lockStock,jdbcType=INTEGER},
+		is_shop =
+		#{record.isShop,jdbcType=INTEGER},
+		update_time =
+		#{record.updateTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProd">
+		update tmp_stock_wareh_prod_${tableNum}
+		<set>
+			<if test="warehId != null">
+				wareh_id = #{warehId,jdbcType=VARCHAR},
+			</if>
+			<if test="prodId != null">
+				prod_id = #{prodId,jdbcType=VARCHAR},
+			</if>
+			<if test="stkOnHand != null">
+				stk_on_hand = #{stkOnHand,jdbcType=INTEGER},
+			</if>
+			<if test="freeShareStock != null">
+				free_share_stock = #{freeShareStock,jdbcType=INTEGER},
+			</if>
+			<if test="lockStock != null">
+				lock_stock = #{lockStock,jdbcType=INTEGER},
+			</if>
+			<if test="isShop != null">
+				is_shop = #{isShop,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProd">
+		update
+		tmp_stock_wareh_prod_${tableNum}
+		set wareh_id =
+		#{warehId,jdbcType=VARCHAR},
+		prod_id = #{prodId,jdbcType=VARCHAR},
+		stk_on_hand = #{stkOnHand,jdbcType=INTEGER},
+		free_share_stock =
+		#{freeShareStock,jdbcType=INTEGER},
+		lock_stock =
+		#{lockStock,jdbcType=INTEGER},
+		is_shop = #{isShop,jdbcType=INTEGER},
+		update_time = #{updateTime,jdbcType=TIMESTAMP}
+		where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.sync.mapper.UrUnitReservedResultDefineMapper" >
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.UrUnitReservedResult" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="UNIT_ID" property="unitId" jdbcType="VARCHAR" />
+    <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
+    <result column="WAREH_ID" property="warehId" jdbcType="VARCHAR" />
+    <result column="RESERVED_QTY" property="reservedQty" jdbcType="DECIMAL" />
+    <result column="RESERVED_TYPE" property="reservedType" jdbcType="VARCHAR" />
+    <result column="ALLOCATED_QTY" property="allocatedQty" jdbcType="DECIMAL" />
+    <result column="LOCKED_QTY" property="lockedQty" jdbcType="DECIMAL" />
+    <result column="RESERVED_ALLOCATED_QTY" property="reservedAllocatedQty" jdbcType="DECIMAL" />
+    <result column="LAST_MODIFIED_DATE" property="lastModifiedDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="selectReservedStockByOthers" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+  <![CDATA[
+    SELECT
+	    U.UNIT_ID, U.PROD_ID, U.WAREH_ID, U.RESERVED_TYPE,
+	    SUM(
+	      (CASE WHEN U.RESERVED_QTY < 0 THEN 0 ELSE U.RESERVED_QTY END) 
+		- (CASE WHEN U.ALLOCATED_QTY < 0 THEN 0 ELSE U.ALLOCATED_QTY END) 
+	    - (CASE WHEN U.LOCKED_QTY < 0 THEN 0 ELSE U.LOCKED_QTY END)
+	    ) AS RESERVED_QTY
+    FROM UR_UNIT_RESERVED_RESULT U INNER JOIN ST_ACTIVITY_WAREH S
+    ON U.WAREH_ID=S.WAREH_ID
+    WHERE 
+   ]]>
+    U.UNIT_ID IN 
+    <foreach collection="unitList" item="item" index="index" open="(" separator=","  close=")">
+        #{item}
+    </foreach>
+    AND U.WAREH_ID IN 
+    <foreach collection="warehList" item="item" index="index" open="(" separator=","  close=")">
+        #{item}
+    </foreach>
+    AND U.RESERVED_TYPE IN
+    <foreach collection="reservedTypeList" item="item" index="index" open="(" separator=","  close=")">
+        #{item}
+    </foreach>
+    AND U.PROD_ID IN
+    <foreach collection="skuList" item="item" index="index" open="(" separator=","  close=")">
+        #{item}
+    </foreach>
+    GROUP BY U.UNIT_ID, U.PROD_ID, U.WAREH_ID, U.RESERVED_TYPE
+  </select>
+  
+</mapper>

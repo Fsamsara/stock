@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.sync.mapper.TmpChannelCellMinDefineMapper" >
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.TmpChannelCellMin" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="CHANNEL_CODE" property="channelCode" jdbcType="VARCHAR" />
+    <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
+    <result column="CHANNEL_CELL_MIN" property="channelCellMin" jdbcType="DECIMAL" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <insert id="insertList" parameterType="java.util.List" >
+    insert into TMP_CHANNEL_CELL_MIN (CHANNEL_CODE, PROD_ID, 
+      CHANNEL_CELL_MIN, UPDATE_TIME)
+    <foreach collection="list" open="(" close=")" index="index" item="item" separator="union all">
+        select 
+         #{item.channelCode,jdbcType=VARCHAR},
+         #{item.prodId,jdbcType=VARCHAR},
+         #{item.channelCellMin,jdbcType=DECIMAL},
+         #{item.updateTime,jdbcType=TIMESTAMP}
+       from dual
+    </foreach>
+  </insert>
+  
+  <!-- 根据渠道、SKU去重查询id、渠道号、商品号 -->
+  <select id="select" resultMap="BaseResultMap">
+	select max(id) as id ,
+	       channel_code,
+	       prod_id
+	from tmp_channel_cell_min 
+	group by channel_code,prod_id
+	order by id desc
+  </select>
+  
+  <delete id="deleteByMaxId" parameterType="map">
+     delete from tmp_channel_cell_min where id&lt;=#{maxId,jdbcType=INTEGER}
+  </delete>  
+  
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.core.mapper.TmpStockWmsDefineMapper">
+	<resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.core.TmpStockWms">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="wareh_id" property="warehId" jdbcType="VARCHAR" />
+		<result column="prod_id" property="prodId" jdbcType="VARCHAR" />
+		<result column="wms_stock" property="wmsStock" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<delete id="truncateTable">
+		truncate table tmp_stock_wms
+	</delete>
+
+	<insert id="insertToTmpStockWms" parameterType="java.util.HashMap">
+		insert into tmp_stock_wms(wareh_id,prod_id,wms_stock,update_time)
+		values
+		<foreach collection="tmpStockWmsList" item="item" index="index"
+			separator=",">
+			(#{item.warehId}, #{item.prodId}, #{item.wmsStock},now())
+		</foreach>
+	</insert>
+
+	<select id="selectDiffData" resultMap="BaseResultMap">
+		SELECT
+		a.wareh_id,a.prod_id,a.wms_stock
+		FROM tmp_stock_wms a
+		LEFT JOIN
+		tmp_stock_wms_bak b ON a.prod_id = b.prod_id
+		AND a.wareh_id =
+		b.wareh_id
+		WHERE IFNULL(a.wms_stock,0) != IFNULL(b.wms_stock,0)
+		UNION
+		ALL
+		select a1.wareh_id,a1.prod_id,a1.wms_stock
+		from tmp_stock_wms_bak a1
+		where not EXISTS
+		(SELECT 1 from tmp_stock_wms b1 where a1.prod_id = b1.prod_id
+		AND a1.wareh_id = b1.wareh_id)
+	</select>
+	
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+	    select wareh_id,prod_id,wms_stock,update_time from ${tableName}
+	    where 1=1
+	    <if test="warehId != null">
+            and wareh_id = #{warehId,jdbcType=VARCHAR}
+        </if>
+        <if test="prodId != null">
+            and prod_id = #{prodId,jdbcType=VARCHAR}
+        </if>
+	</select>
+	
+	<insert id="deleteWmsNoAttribute" parameterType="java.util.HashMap">
+        delete from ${tableName}
+        where wareh_id not in 
+        <foreach collection="warehlist" item="item" index="index" open="(" close=")" separator=","  > 
+             #{item.code,jdbcType=VARCHAR}
+        </foreach>
+    </insert>
+</mapper>

@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.metersbonwe.stock</groupId>
+		<artifactId>stock</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>stock_pom</artifactId>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.metersbonwe.stock</groupId>
+			<artifactId>stock_utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.metersbonwe.stock</groupId>
+			<artifactId>stock_configuration</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.metersbonwe.stock</groupId>
+			<artifactId>stock_log_api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.metersbonwe.stock</groupId>
+			<artifactId>stock_log_log4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.metersbonwe.stock</groupId>
+			<artifactId>stock_pojo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.metersbonwe.stock</groupId>
+			<artifactId>stock_po</artifactId>
+		</dependency>
+	</dependencies>
+</project>

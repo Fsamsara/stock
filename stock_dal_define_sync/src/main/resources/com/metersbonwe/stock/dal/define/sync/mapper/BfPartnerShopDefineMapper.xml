@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.define.sync.mapper.BfPartnerShopDefineMapper">
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.define.BfPartnerShopDefine">
+    <result column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="AGENT_ID" jdbcType="DECIMAL" property="agentId" />
+    <result column="SHOP_ID" jdbcType="DECIMAL" property="shopId" />
+    <result column="OWNER_ID" jdbcType="DECIMAL" property="ownerId" />
+    <result column="ACCOUNT_WAREH_ID" jdbcType="DECIMAL" property="accountWarehId" />
+    <result column="ACCOUNT_WAREH_CODE" jdbcType="VARCHAR" property="accountWarehCode" />
+    <result column="SHOP_MANAGER" jdbcType="VARCHAR" property="shopManager" />
+    <result column="SHOP_PHONE" jdbcType="VARCHAR" property="shopPhone" />
+    <result column="SHOP_ADDRESS" jdbcType="VARCHAR" property="shopAddress" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="COUNTY" jdbcType="VARCHAR" property="county" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="CREATE_USER" jdbcType="VARCHAR" property="createUser" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="LAST_MODIFIED_USER" jdbcType="VARCHAR" property="lastModifiedUser" />
+    <result column="LAST_MODIFIED_DATE" jdbcType="TIMESTAMP" property="lastModifiedDate" />
+  </resultMap>
+  
+  <select id="selectBfPartnerShopByShopCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  SELECT A.ID, A.AGENT_ID, A.SHOP_ID, A.OWNER_ID, A.ACCOUNT_WAREH_ID, 
+         A.SHOP_MANAGER, A.SHOP_PHONE, A.SHOP_ADDRESS, A.PROVINCE, 
+         A.CITY, A.COUNTY, A.REMARK, O1.CODE AS ACCOUNT_WAREH_CODE
+  FROM BF_PARTNER_SHOP A
+  INNER JOIN BF_ORG O ON A.SHOP_ID = O.ID
+  INNER JOIN BF_ORG O1 ON A.ACCOUNT_WAREH_ID = O1.ID
+  WHERE O.CODE = #{shopCode,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

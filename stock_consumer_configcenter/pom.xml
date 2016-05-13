@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.metersbonwe.stock</groupId>
+		<artifactId>stock</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>stock_consumer_configcenter</artifactId>
+	<name>stock_consumer_configcenter</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- 渠道最大值最小值 -->
+		<dependency>
+			<groupId>com.mtsbw.business</groupId>
+			<artifactId>business_configuration_inventory_dubbo_api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mtsbw.business</groupId>
+			<artifactId>business_configuration_common_dubbo_api</artifactId>
+		</dependency>
+		<!-- 权限 -->
+		<dependency>
+			<groupId>com.mtsbw.ump</groupId>
+			<artifactId>permission.service.dubbo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mtsbw.ump</groupId>
+			<artifactId>ump_cache_client</artifactId>
+		</dependency>
+	</dependencies>
+</project>

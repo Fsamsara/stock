@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+	default-lazy-init="false">
+
+
+
+	<!-- 预售调用预留Dubbo -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.prod.timeout}"
+		interface="com.metersbonwe.stock.facade.schedule.StockPreSaleFacadeService"
+		ref="stockPreSaleFacadeServiceImpl" />
+
+	<!-- 线上线下商品库存对比 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.prod.timeout}"
+		interface="com.metersbonwe.stock.facade.schedule.OnlinOfflineCompareService"
+		ref="onlinOfflineCompareServiceImpl" />
+
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.schedule.OrderReleaseStockFacadeService"
+		ref="orderReleaseStockFacadeServiceImpl" />
+	<!-- 预占明细和渠道信息表总量对比校验定时任务实现类 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.service.ChannelDetailCompareToCheckService"
+		ref="channelDetailCompareToCheckServiceImpl" />
+	<!-- 渠道+款上下架是否同步进货与否定时对比调度任务接口实现 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.schedule.ChannelProdIsSyncStockService"
+		ref="channelProdIsSyncStockServiceImpl" />
+
+	<!-- 定时开启关闭预售调度任务 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.service.CheckPreSaleService"
+		ref="checkPreSaleServiceImpl" />
+
+</beans>

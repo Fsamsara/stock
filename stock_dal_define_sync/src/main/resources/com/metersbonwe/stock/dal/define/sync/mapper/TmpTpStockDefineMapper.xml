@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.sync.mapper.TmpTpStockDefineMapper" >
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.TmpTpStock" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="WAREH_ID" property="warehId" jdbcType="VARCHAR" />
+    <result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
+    <result column="TP_STOCK" property="tpStock" jdbcType="DECIMAL" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <!-- 批量插入数据 -->
+  <insert id="insertList" parameterType="java.util.List" >
+    insert into TMP_TP_STOCK (WAREH_ID, PROD_ID, TP_STOCK, UPDATE_TIME)
+    <foreach collection="list" item="item" index="index" open="(" close=")" separator="union">
+        SELECT
+          #{item.warehId,jdbcType=VARCHAR}, 
+          #{item.prodId,jdbcType=VARCHAR}, 
+          #{item.tpStock,jdbcType=DECIMAL},
+          #{item.updateTime,jdbcType=TIMESTAMP}
+        FROM DUAL
+    </foreach>
+  </insert>
+  
+</mapper>

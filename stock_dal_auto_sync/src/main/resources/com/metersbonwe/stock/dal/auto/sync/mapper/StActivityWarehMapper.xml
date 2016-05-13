@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.auto.sync.mapper.StActivityWarehMapper">
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.StActivityWareh">
+    <id column="WAREH_ID" jdbcType="VARCHAR" property="warehId" />
+    <result column="IS_SHOP" jdbcType="CHAR" property="isShop" />
+    <result column="DATA_SOURCE" jdbcType="VARCHAR" property="dataSource" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    WAREH_ID, IS_SHOP, DATA_SOURCE, UPDATE_TIME
+  </sql>
+  <select id="selectByExample" parameterType="com.metersbonwe.stock.po.sync.StActivityWarehExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ST_ACTIVITY_WAREH
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ST_ACTIVITY_WAREH
+    where WAREH_ID = #{warehId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from ST_ACTIVITY_WAREH
+    where WAREH_ID = #{warehId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.metersbonwe.stock.po.sync.StActivityWarehExample">
+    delete from ST_ACTIVITY_WAREH
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.metersbonwe.stock.po.sync.StActivityWareh">
+    insert into ST_ACTIVITY_WAREH (WAREH_ID, IS_SHOP, DATA_SOURCE, 
+      UPDATE_TIME)
+    values (#{warehId,jdbcType=VARCHAR}, #{isShop,jdbcType=CHAR}, #{dataSource,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.metersbonwe.stock.po.sync.StActivityWareh">
+    insert into ST_ACTIVITY_WAREH
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="warehId != null">
+        WAREH_ID,
+      </if>
+      <if test="isShop != null">
+        IS_SHOP,
+      </if>
+      <if test="dataSource != null">
+        DATA_SOURCE,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="warehId != null">
+        #{warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="isShop != null">
+        #{isShop,jdbcType=CHAR},
+      </if>
+      <if test="dataSource != null">
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.metersbonwe.stock.po.sync.StActivityWarehExample" resultType="java.lang.Integer">
+    select count(*) from ST_ACTIVITY_WAREH
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ST_ACTIVITY_WAREH
+    <set>
+      <if test="record.warehId != null">
+        WAREH_ID = #{record.warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isShop != null">
+        IS_SHOP = #{record.isShop,jdbcType=CHAR},
+      </if>
+      <if test="record.dataSource != null">
+        DATA_SOURCE = #{record.dataSource,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ST_ACTIVITY_WAREH
+    set WAREH_ID = #{record.warehId,jdbcType=VARCHAR},
+      IS_SHOP = #{record.isShop,jdbcType=CHAR},
+      DATA_SOURCE = #{record.dataSource,jdbcType=VARCHAR},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.metersbonwe.stock.po.sync.StActivityWareh">
+    update ST_ACTIVITY_WAREH
+    <set>
+      <if test="isShop != null">
+        IS_SHOP = #{isShop,jdbcType=CHAR},
+      </if>
+      <if test="dataSource != null">
+        DATA_SOURCE = #{dataSource,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where WAREH_ID = #{warehId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.metersbonwe.stock.po.sync.StActivityWareh">
+    update ST_ACTIVITY_WAREH
+    set IS_SHOP = #{isShop,jdbcType=CHAR},
+      DATA_SOURCE = #{dataSource,jdbcType=VARCHAR},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where WAREH_ID = #{warehId,jdbcType=VARCHAR}
+  </update>
+</mapper>

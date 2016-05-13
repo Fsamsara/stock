@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.core.mapper.StockPreSaleResultHisDefineMapper" >
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.core.StockPreSaleResultHis" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="relation_id" jdbcType="BIGINT" property="relationId" />
+    <result column="channel_code" property="channelCode" jdbcType="VARCHAR" />
+    <result column="prod_id" property="prodId" jdbcType="VARCHAR" />
+    <result column="pre_private_stock" property="prePrivateStock" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+  <insert id="insertFromPreSale" parameterType="java.util.List" >
+    insert into stock_pre_sale_result_his (
+        relation_id,
+        channel_code, 
+        prod_id, 
+        pre_private_stock, 
+        start_time, 
+        end_time, 
+        update_time, 
+        update_by, 
+        create_time
+    )
+    <foreach collection="list" item="item" index="index" open="select p.* from (" close=")p" separator="union">
+        (
+            SELECT 
+                hst.relation_id,
+                hst.channel_code,
+                hst.prod_id,
+                hst.pre_private_stock,
+                hst.start_time,
+                hst.end_time,
+                hst.update_time,
+                hst.update_by,
+                NOW() 
+            FROM stock_pre_sale_result hst
+            WHERE hst.relation_id=#{item.relationId,jdbcType=BIGINT} AND hst.channel_code=#{item.channelCode,jdbcType=VARCHAR} AND hst.prod_id=#{item.prodId,jdbcType=VARCHAR} 
+        ) 
+    </foreach>
+  </insert>
+</mapper>

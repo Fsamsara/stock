@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.sync.mapper.FreeAndLockStockDefineMapper">
+
+	<select id="selectFreeAndLockedStockNewErp" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		SELECT
+		BO.CODE WAREH_CODE,
+		P.PROD_NUM AS SKU,
+		NVL(T.LOCK_NUM,0) AS LOCK_NUM,
+		SWP.STK_ON_HAND AS STK_ON_HAND,
+		(CASE WHEN NVL(SWP.QTY_COMMITTED,0) <![CDATA[ < ]]> 0 THEN 0 ELSE NVL(SWP.QTY_COMMITTED,0) END) AS COMMITTED_NUM,
+		UWP.ONLINE_SAFEQTY_TYPE AS SAFEQTY_TYPE,
+		UWP.SAFETY_STOCK AS SAFETY_STOCK,
+		NVL(SWP.STK_ON_HAND, 0) - (CASE WHEN NVL(SWP.QTY_COMMITTED,0) <![CDATA[ < ]]> 0 THEN 0 ELSE NVL(SWP.QTY_COMMITTED,0) END)
+		- (CASE WHEN NVL(SWP.QTY_ON_LOCK,0) <![CDATA[ < ]]> 0 THEN 0 ELSE NVL(SWP.QTY_ON_LOCK,0) END)
+		- (CASE WHEN NVL(SWP.LOCKED_QTY,0) <![CDATA[ < ]]>  0 THEN 0 ELSE NVL(SWP.LOCKED_QTY,0) END)
+		- (CASE WHEN NVL(SWP.B2B_LOCKED_QTY,0) <![CDATA[ < ]]> 0 THEN 0 ELSE NVL(SWP.B2B_LOCKED_QTY,0) END) AS FREE_NUM
+		FROM
+		BF_ORG BO
+		LEFT JOIN
+		SF_WAREH_PROD SWP
+		ON SWP.BF_ORG_ID=BO.ID
+		LEFT JOIN
+		(
+			select 
+				tl.BF_ORG_ID, 
+				tl.PROD_ID ,
+				SUM(tl.LOCKED_QTY) AS LOCK_NUM
+			from SF_WAREH_LOCKED_LST tl 
+			where tl.LOCKED_TYPE IN
+			(SELECT UCSD.UD_LOCKED_TYPE
+			FROM UD_CHANNLE_STOCK_SCOPE UCS
+			INNER JOIN UD_CHANNLE_STOCK_SCOPE_DTL UCSD
+			ON UCSD.UD_CW_ID = UCS.ID
+			WHERE UCS.CHANNLE_SORCE = 'ONLINE'
+			AND UCSD.STATUS = '1'
+			AND UCSD.IS_SYNC_OS = '1'
+			AND UCSD.ISMONOPOLIZE = 0
+			) GROUP BY tl.BF_ORG_ID, tl.PROD_ID
+		) T
+		ON T.BF_ORG_ID = BO.ID AND T.PROD_ID=SWP.BF_PRODUCT_ID
+		LEFT JOIN
+		ST_ACTIVITY_WAREH saw
+		ON saw.wareh_id = BO.CODE
+		LEFT JOIN
+		BF_PRODUCT P ON P.ID = SWP.BF_PRODUCT_ID
+		LEFT JOIN
+		UD_WAREH_PARAM UWP ON UWP.BF_ORG_ID=SWP.BF_ORG_ID
+		WHERE
+		saw.DATA_SOURCE = 'NERP'
+		AND P.PROD_NUM=#{sku, jdbcType=VARCHAR}
+		AND BO.CODE=#{warehId, jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectFreeAndLockedStockOldErp" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		<![CDATA[SELECT SWP.WAREH_ID AS WAREH_CODE,
+        SWP.PROD_ID AS SKU,
+        NVL(WL.LOCK_NUM,0) AS LOCK_NUM,
+        SWP.STK_ON_HAND AS STK_ON_HAND,
+        (CASE
+              WHEN NVL(SWP.QTY_COMMITTED, 0) < 0 THEN
+               0
+              ELSE
+               NVL(SWP.QTY_COMMITTED, 0)
+            END) AS COMMITTED_NUM,
+       UWP.ONLINE_SAFEQTY_TYPE AS SAFEQTY_TYPE,
+        UWP.SAFETY_STOCK AS SAFETY_STOCK,
+        (NVL(SWP.STK_ON_HAND, 0) - (CASE
+              WHEN NVL(SWP.QTY_COMMITTED, 0) < 0 THEN
+               0
+              ELSE
+               NVL(SWP.QTY_COMMITTED, 0)
+            END) - (CASE
+              WHEN NVL(SWP.LOCKED_QTY, 0) < 0 THEN
+               0
+              ELSE
+               NVL(SWP.LOCKED_QTY, 0)
+            END) - (CASE
+              WHEN NVL(SWP.QTY_FUC_COMM, 0) < 0 THEN
+               0
+              ELSE
+               NVL(SWP.QTY_FUC_COMM, 0)
+            END) - (CASE
+              WHEN NVL(SWP.QTY_CUR_COMM, 0) < 0 THEN
+               0
+              ELSE
+               NVL(SWP.QTY_CUR_COMM, 0)
+            END) - (CASE
+              WHEN NVL(SWP.BGR_STK, 0) < 0 THEN
+               0
+              ELSE
+               NVL(SWP.BGR_STK, 0)
+            END)) AS FREE_NUM
+   FROM WAREH_PROD SWP
+   LEFT JOIN (SELECT WL1.WAREH_ID,
+                     WL1.PROD_ID,
+                     SUM(WL1.LOCKED_QTY) AS LOCK_NUM
+                FROM WAREH_LOCKED_LST WL1
+               WHERE WL1.LOCKED_TYPE IN
+                     (SELECT UCSD.UD_LOCKED_TYPE
+                        FROM UD_CHANNLE_STOCK_SCOPE UCS
+                       INNER JOIN UD_CHANNLE_STOCK_SCOPE_DTL UCSD
+                          ON UCSD.UD_CW_ID = UCS.ID
+                       WHERE UCS.CHANNLE_SORCE = 'ONLINE'
+                         AND UCSD.STATUS = '1'
+                         AND UCSD.IS_SYNC_OS = '1'
+                         AND UCSD.ISMONOPOLIZE = 0)
+               GROUP BY WL1.WAREH_ID, WL1.PROD_ID) WL
+     ON SWP.WAREH_ID = WL.WAREH_ID
+    AND SWP.PROD_ID = WL.PROD_ID
+   LEFT JOIN BF_ORG BO
+     ON BO.CODE = SWP.WAREH_ID
+   LEFT JOIN UD_WAREH_PARAM UWP
+     ON UWP.BF_ORG_ID = BO.ID
+   LEFT JOIN ST_ACTIVITY_WAREH SAW
+     ON SAW.WAREH_ID = SWP.WAREH_ID
+  WHERE SAW.DATA_SOURCE = 'OERP'
+	AND SWP.PROD_ID=#{sku, jdbcType=VARCHAR}
+	AND SWP.WAREH_ID=#{warehId, jdbcType=VARCHAR}]]>
+	</select>
+</mapper>

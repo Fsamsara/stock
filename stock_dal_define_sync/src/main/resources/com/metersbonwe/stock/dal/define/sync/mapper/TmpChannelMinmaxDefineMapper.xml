@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.sync.mapper.TmpChannelMinmaxDefineMapper" >
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.TmpChannelMinmax" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="CHANNEL_CODE" property="channelCode" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="DATE" />
+  </resultMap>
+  
+  <!-- 多条数据插入 -->
+  <insert id="insertList" parameterType="java.util.List" >
+    insert into TMP_CHANNEL_MINMAX( CHANNEL_CODE,UPDATE_TIME)
+    <foreach collection="list" item="item" index="index" open="(" close=")" separator="union" >
+      SELECT 
+        #{item.channelCode,jdbcType=VARCHAR},
+        #{item.updateTime,jdbcType=TIMESTAMP}
+      FROM DUAL
+    </foreach>
+  </insert>
+  
+  <select id="select" resultMap="BaseResultMap">
+    select distinct max(tmp.id) as id,tmp.channel_code as channel_code  from tmp_channel_minmax tmp group by tmp.channel_code order by id desc 
+  </select>  
+  
+  <delete id="deleteByMaxId" parameterType="map">
+  delete from  tmp_channel_minmax where id&lt;=#{maxId,jdbcType=INTEGER}
+  </delete>
+  
+</mapper>

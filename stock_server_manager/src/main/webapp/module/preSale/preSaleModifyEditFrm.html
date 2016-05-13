@@ -1,0 +1,239 @@
+<div id="" style="height:50px;padding:6px;background-color: #eff3f8;">
+    <table border="0" cellspacing="0" cellpadding="0" class="EditTable" style="border-top: 0px !important;">
+        <tbody>
+	        <tr>
+	            <td colspan="2"><hr class="ui-widget-content" style="margin:1px"></td>
+	        </tr>
+	        <tr>
+	            <td class="navButton">
+	                <a class="fm-button ui-state-default ui-corner-left" style="display: none;">
+	                    <i class="fa-chevron-left"></i>
+	                </a>
+	                <a class="fm-button ui-state-default ui-corner-right" style="display: none;">
+	                    <i class="fa-chevron-right"></i>
+	                </a>
+	            </td>
+	            <td class="EditButton EditButtonCustom">
+	                <a id="preSaleModifyEditFrm_add" option="add" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-primary">
+	                    <i class=""></i>新增
+	                </a>
+	                <a id="preSaleModifyEditFrm_save" option="save" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-primary">
+	                    <i class=""></i>保存
+	                </a>
+	                <a id="preSaleModifyEditFrm_check" option="check" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-primary">
+	                    <i class="fa-check"></i>审批
+	                </a>
+	                <a id="preSaleModifyEditFrm_cancel" option="cancel" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-primary">
+	                    <i class=""></i>撤单
+	                </a>
+<!-- 	                <a id="cData" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm"> -->
+<!-- 	                    <i class="fa-times"></i>取消 -->
+<!-- 	                </a> -->
+	            </td>
+	        </tr>
+	        <tr style="display:none" class="binfo">
+	            <td class="bottominfo" colspan="2"></td>
+	        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div style="margin-top:5px;">
+<!--     <div class="tile-widget color transparent-black rounded-top-corners nopadding"> -->
+<!-- 		 -->
+<!-- 		<ul class="nav nav-tabs"> -->
+<!-- 		    <li class="dropdown pull-right tabdrop hide"> -->
+<!-- 		        <a class="dropdown-toggle" data-toggle="dropdown" href="#"> -->
+<!-- 			        <i class="fa fa-th-list"></i>  -->
+<!-- 			        <b class="caret"></b> -->
+<!-- 		        </a> -->
+<!-- 		        <ul class="dropdown-menu"> -->
+<!-- 		        </ul> -->
+<!-- 		    </li> -->
+<!-- 			<li class="active" style="text-align:center;"> -->
+<!-- 			    <a href="#content_M_601090_1_BASE" data-toggle="tab" id="li_content_M_601090_1_BASE" aria-expanded="true"> -->
+<!-- 			          基本信息 -->
+<!-- 			    </a> -->
+<!-- 			</li> -->
+<!-- 	    </ul> -->
+<!-- 	</div> -->
+	
+	<div class="tile-body tab-content1 nopadding rounded-bottom-corners" style="border-top: 1px solid rgb(197, 208, 220);">	    
+	    <ul id="content_M_601090_1_BASE" class="tab-pane fade active in">
+			<div style="height:100px;background-color: #eff3f8;">
+			    <div style="float:left;height:100%;">
+			        <table class="EditTable" cellspacing="0" cellpadding="0" border="0" style="margin-left:10px;border-top: 0px !important;">
+			            <tbody>
+				            <tr id="FormError" style="display:none">
+				                <td class="ui-state-error" colspan="2"></td>
+				            </tr>
+				            <tr style="display:none" class="tinfo">
+				                <td class="topinfo" colspan="2"></td>
+				            </tr>
+				            <tr rowpos="1" class="FormData" id="tr_id">
+				                <td class="CaptionTD">调整单号</td>
+				                <td class="DataTD" style="padding:3px;padding-top:6px;">
+				                &nbsp;<input type="text" id="id" name="id" class="FormElement ui-widget-content ui-corner-all" readonly="true" style="width:300px;background-color: gainsboro;">
+				                </td>
+				            </tr>
+				            <tr rowpos="2" class="FormData" id="tr_relationId">
+				                <td class="CaptionTD">预售单号</td>
+				                <td class="DataTD" style="padding:3px;">
+				                &nbsp;<input type="text" id="relationId" name="relationId" class="FormElement ui-widget-content ui-corner-all" readonly="true" style="width:200px;background-color: gainsboro;">
+				                <input id="selectPreSale" type="button" class="" value="选择预售单 " style="width:95px;" >
+				                </td>
+				            </tr>
+				            <tr rowpos="3" class="FormData" id="tr_modifyType">
+				                <td class="CaptionTD">调整类型</td><td class="DataTD" style="padding:3px;padding-left:0px;">&nbsp;
+				                    <select id="modifyType" name="modifyType" class="opsel" style="padding: 1px;height: 26px;line-height: 26px;width: 300px;max-width: 100%;margin-bottom: 0;margin-left: -1px;">
+					                    <option value="01" text="调整预售数量" selected="selected">调整预售数量</option>
+					                    <option value="02" text="调整结束日期">调整结束日期</option>
+				                    </select>
+				                </td>
+				            </tr>
+			            </tbody>
+			        </table>
+			    </div>
+			    <div style="float:right;height:100%;">
+			        <table class="EditTable" cellspacing="0" cellpadding="0" border="0" style="margin-right:10px;border-top: 0px !important;">
+			            <tbody>
+				            <tr id="FormError" style="display:none">
+				                <td class="ui-state-error" colspan="2"></td>
+				            </tr>
+				            <tr style="display:none" class="tinfo">
+				                <td class="topinfo" colspan="2"></td>
+				            </tr>
+				            <tr rowpos="1" class="FormData" id="tr_name">
+				                <td class="CaptionTD">调整名称</td><td class="DataTD" style="padding:3px;padding-top:6px;">&nbsp;<input type="text" id="name" name="name" class="FormElement ui-widget-content ui-corner-all" style="width:300px;"></td>
+				            </tr>
+				            <tr rowpos="2" class="FormData" id="tr_channelCode">
+				                <td class="CaptionTD">预售渠道</td><td class="DataTD" style="padding:3px;">&nbsp;<input type="text" id="channelCode" name="channelCode" class="FormElement ui-widget-content ui-corner-all" readonly="true" style="width:300px;background-color: gainsboro;"></td>
+				            </tr>
+				            <tr rowpos="3" class="FormData" id="tr_examineStatus">
+				                <td class="CaptionTD">进&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度</td><td class="DataTD" style="padding:3px;">&nbsp;<input type="text" id="examineStatus" name="examineStatus" class="FormElement ui-widget-content ui-corner-all" readonly="true" style="width:300px;background-color: gainsboro;"></td>
+				            </tr>
+			            </tbody>
+			        </table>
+			    </div>
+			</div>
+	    </ul>
+	</div>
+</div>
+
+<div style="margin-top:5px;">
+    <div class="tile-widget color transparent-black rounded-top-corners nopadding">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs">
+		    <li class="dropdown pull-right tabdrop hide">
+		        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+			        <i class="fa fa-th-list"></i> 
+			        <b class="caret"></b>
+		        </a>
+		        <ul class="dropdown-menu">
+		        </ul>
+		    </li>
+			<li class="active" style="text-align:center;">
+			    <a href="#content_M_601090_1_DETAIL" data-toggle="tab" id="li_content_M_601090" aria-expanded="false">
+			           预售明细信息
+			    </a>
+			</li>
+			<li class="" style="text-align:center;">
+			    <a href="#content_M_601090_1_OTHER" data-toggle="tab" id="li_content_M_601090_1" aria-expanded="true">
+			          其它
+			    </a>
+			</li>
+	    </ul>
+	</div>
+	
+	<div class="tile-body tab-content1 nopadding rounded-bottom-corners">
+	    <ul id="content_M_601090_1_DETAIL" class="tab-pane fade active in">
+	        <div id="preSaleModifyEditFrm">
+				<div id="preSaleModifyEditFrmSearch"></div>
+				<table id="preSaleModifyEditFrmTable"></table>
+				<div id="preSaleModifyEditFrmPager"></div>
+			</div>
+			<script src="module/preSale/js/preSaleModifyEditFrmGrid.js"></script>
+	    </ul>
+	    
+	    <ul id="content_M_601090_1_OTHER" class="tab-pane fade">
+			<div style="height:100px;margin-top:2px;background-color: #eff3f8;">
+			    <div style="float:left;height:100%;">
+			        <table class="EditTable" cellspacing="0" cellpadding="0" border="0" style="margin-left:10px;border-top: 0px !important;">
+			            <tbody>
+				            <tr id="FormError" style="display:none">
+				                <td class="ui-state-error" colspan="2"></td>
+				            </tr>
+				            <tr style="display:none" class="tinfo">
+				                <td class="topinfo" colspan="2"></td>
+				            </tr>
+				            <tr rowpos="1" class="FormData" id="tr_prodId">
+				                <td class="CaptionTD">首次创建人</td><td class="DataTD" style="padding:3px;padding-top:6px;">&nbsp;<input type="text" id="createBy" name="createBy" class="FormElement ui-widget-content ui-corner-all" readonly="true" style="width:300px;background-color: gainsboro;"></td>
+				            </tr>
+				            <tr rowpos="2" class="FormData" id="tr_warehId">
+				                <td class="CaptionTD">最后修改人</td><td class="DataTD" style="padding:3px;">&nbsp;<input type="text" id="updateBy" name="updateBy" class="FormElement ui-widget-content ui-corner-all" readonly="true" style="width:300px;background-color: gainsboro;"></td>
+				            </tr>
+			            </tbody>
+			        </table>
+			    </div>
+			    <div style="float:right;height:100%;">
+			        <table class="EditTable" cellspacing="0" cellpadding="0" border="0" style="margin-right:10px;border-top: 0px !important;">
+			            <tbody>
+				            <tr id="FormError" style="display:none">
+				                <td class="ui-state-error" colspan="2"></td>
+				            </tr>
+				            <tr style="display:none" class="tinfo">
+				                <td class="topinfo" colspan="2"></td>
+				            </tr>
+				            <tr rowpos="1" class="FormData" id="tr_prodId">
+				                <td class="CaptionTD">首次创建时间</td><td class="DataTD" style="padding:3px;padding-top:6px;">&nbsp;<input type="text" id="createTime" name="createTime" class="FormElement ui-widget-content ui-corner-all" readonly="true" style="width:300px;background-color: gainsboro;"></td>
+				            </tr>
+				            <tr rowpos="2" class="FormData" id="tr_warehId">
+				                <td class="CaptionTD">最后修改时间</td><td class="DataTD" style="padding:3px;">&nbsp;<input type="text" id="updateTime" name="updateTime" class="FormElement ui-widget-content ui-corner-all" readonly="true" style="width:300px;background-color: gainsboro;"></td>
+				            </tr>
+			            </tbody>
+			        </table>
+			    </div>
+			</div>
+	    </ul>
+	</div>
+</div>
+
+
+<!-- 选择商品预售单模态框（Modal）============================================start -->
+<div class="modal fade" id="popPreSale" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="padding-bottom:0px;">
+                <h4 class="modal-title" id="myModalLabel" style="color: black;">
+                    选择商品预售单
+                </h4>
+            </div>
+            <div class="modal-body" style="height:400px;">
+                
+                
+                <div id="popPreSale"  style="height:25%">
+					<div id="popPreSaleSearch"></div>
+					<table id="popPreSaleTable"></table>
+					<div id="popPreSalePager"></div>
+				</div>
+				<script src="module/preSale/js/popPreSaleGrid.js"></script>
+				</div>
+                
+                
+                <div class="modal-footer">
+	                <button id="popPreSaleCloseWindow" type="button" class="btn btn-default"
+	                        data-dismiss="modal">关闭
+	                </button>
+	                <button id="popPreSaleOk" type="button" class="btn btn-primary" onclick="returnPopWindow()">
+	                                                确定
+	                </button>
+	            </div>
+            </div>
+            
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- 模态框（Modal）============================================end -->

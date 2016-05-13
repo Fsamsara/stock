@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration 
+PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<!-- mybatis-generator:generate -->
+	<classPathEntry
+		location="d:/maven-3.3.3/localpath/mysql/mysql-connector-java/5.1.24/mysql-connector-java-5.1.24.jar" />
+	<context id="MysqlContext" defaultModelType="flat">
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+			<property name="suppressDate" value="true" />
+			<property name="beginningDelimiter" value="`" />
+			<property name="endingDelimiter" value="`" />
+		</commentGenerator>
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://10.100.22.236:3307/kc" userId="openmall"
+			password="123">
+		</jdbcConnection>
+
+		<!-- <jdbcConnection driverClass="com.mysql.jdbc.Driver" -->
+		<!-- connectionURL="jdbc:mysql://10.101.1.181:3306/stock_sale" userId="ry" -->
+		<!-- password="123456"> -->
+		<!-- </jdbcConnection> -->
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<javaModelGenerator targetPackage="com.metersbonwe.stock.po.core"
+			targetProject="src/main/java">
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="com.metersbonwe.stock.dal.auto.core.mapper"
+			targetProject="E:\\workspace\\stock\\stock_dal_auto_core\\src\\main\\resources">
+		</sqlMapGenerator>
+
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.metersbonwe.stock.dal.auto.core.mapper"
+			targetProject="E:\\workspace\\stock\\stock_dal_auto_core\\src\\main\\java">
+		</javaClientGenerator>
+
+		<!-- <table schema="kc" tableName="%"/> -->
+		<table tableName="stock_channel_increment" />
+		<table tableName="stock_channel_increment_sub" />
+		<!-- <table tableName="stock_shop_remail" /> -->
+		<!-- <table tableName="stock_channel_sended" /> -->
+		<!-- <table schema="kc" tableName="stock_pre_sale_detail" /> -->
+		<!-- <table schema="kc" tableName="stock_pre_sale_modified_detail" /> -->
+		<!-- <table schema="kc" tableName="stock_pre_sale_modify" /> -->
+		<!-- <table schema="kc" tableName="stock_pre_sale_modify_detail" /> -->
+	</context>
+</generatorConfiguration>

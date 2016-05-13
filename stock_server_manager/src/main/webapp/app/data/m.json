@@ -1,0 +1,254 @@
+{
+  "message": [
+    {
+      "id": "M_6000",
+      "url": "#",
+      "menuName": "统一平台",
+      "icon": "fa fa-bolt",
+      "children": [
+        {
+          "id": "M_6010",
+          "url": "#",
+          "menuName": "门店相关库存查询",
+          "icon": "fa fa-tasks",
+          "children": [
+            {
+              "id": "M_601010",
+              "url": "module/shopDame/shopDame.html",
+              "menuName": "门店污次少洗库存查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            },
+            {
+              "id": "M_601020",
+              "url": "module/shopRemail/shopRemail.html",
+              "menuName": "门店未日结小票查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            },
+            {
+              "id": "M_601030",
+              "url": "module/free/qryShopFreeShareStock.html",
+              "menuName": "门店自由量库存查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            },
+            {
+              "id": "M_601040",
+              "url": "module/shopSafe/shopSafe.html",
+              "menuName": "门店安全库存查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            },
+            {
+              "id": "M_601050",
+              "url": "module/shopQueryStock/shopQueryStock.html",
+              "menuName": "门店实际库存查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            },
+            {
+              "id": "M_601060",
+              "url": "#",
+              "menuName": "门店货位库存查询（未实现）",
+              "icon": "fa fa-tasks",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "M_6020",
+          "url": "#",
+          "menuName": "仓库相关库存查询",
+          "icon": "fa fa-tasks",
+          "children": [
+        {
+          "id": "M_602010",
+          "url": "module/free/qryFreeShareStock.html",
+          "menuName": "仓库自由量库存查询",
+          "icon": "fa fa-tasks",
+          "children": []
+        },
+            {
+              "id": "M_602020",
+              "url": "module/safeStock/querySafeStock.html",
+              "menuName": "仓库安全库存查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            },  {
+              "id": "M_602030",
+              "url": "#",
+              "menuName": "仓库实际库存查询（未实现）",
+              "icon": "fa fa-tasks",
+              "children": []
+            }, {
+              "id": "M_602040",
+              "url": "#",
+              "menuName": "仓库锁定库存查询（未实现）",
+              "icon": "fa fa-tasks",
+              "children": []
+            },{
+              "id": "M_602050",
+              "url": "module/stockWms/stockWms.html",
+              "menuName": "WMS仓库锁定库存查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "M_6030",
+          "url": "#",
+          "menuName": "渠道相关库存查询",
+          "icon": "fa fa-tasks",
+          "children": [
+        {
+          "id": "M_603010",
+          "url": "module/stockChannel/stockChannelOrder.html",
+          "menuName": "渠道同步实物库存查询",
+          "icon": "fa fa-tasks",
+          "children": []
+        },
+            {
+              "id": "M_603020",
+              "url": "module/stockChannel/stockChannelPreOrder.html",
+              "menuName": "渠道同步预售库存查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            },
+            {
+              "id": "M_603030",
+              "url": "module/channelStockSearch/privateStockSearch/privateStockSearch.html",
+              "menuName": "渠道独占预留库存查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            },{
+              "id": "M_603040",
+              "url": "module/channelStockSearch/productOnSale/productOnSale.html",
+              "menuName": "渠道在售商品清单查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            },
+            {
+              "id": "M_603050",
+              "url": "module/channelStockSearch/channelScope/channelScope.html",
+              "menuName": "渠道配发范围查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "M_6040",
+          "url": "#",
+          "menuName": "渠道商品预售管理",
+          "icon": "fa fa-tasks",
+          "children": [
+            {
+              "id": "M_604010",
+              "url": "module/preSale/preSale.html",
+              "menuName": "渠道商品预售录入",
+              "icon": "fa fa-tasks",
+              "children": []
+            },
+            {
+              "id": "M_604020",
+              "url": "module/preSale/preSaleModify.html",
+              "menuName": "渠道商品预售调整",
+              "icon": "fa fa-tasks",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "M_6050",
+          "url": "#",
+          "menuName": "渠道库存增量同步管理",
+          "icon": "fa fa-tasks",
+          "children": [
+            {
+              "id": "M_602070",
+              "url": "#",
+              "menuName": "渠道商品增量同步录入（未实现）",
+              "icon": "fa fa-tasks",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "M_6060",
+          "url": "#",
+          "menuName": "渠道商品状态管理",
+          "icon": "fa fa-tasks",
+          "children": [
+            {
+              "id": "M_606010",
+              "url": "module/stockChannel/stockChannelStatus.html",
+              "menuName": "渠道商品状态查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "M_6070",
+          "url": "#",
+          "menuName": "渠道库存同步日志",
+          "icon": "fa fa-tasks",
+          "children": [
+            {
+              "id": "M_607010",
+              "url": "module/syncLogDetail/syncLogDetail.html",
+              "menuName": "同步平台库存日志",
+              "icon": "fa fa-tasks",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "M_6080",
+          "url": "#",
+          "menuName": "全流通库存查询",
+          "icon": "fa fa-tasks",
+          "children": [
+            {
+              "id": "M_608010",
+              "url": "#",
+              "menuName": "订单分配库存查询（未实现）",
+              "icon": "fa fa-tasks",
+              "children": []
+            },
+            {
+              "id": "M_608020",
+              "url": "module/shopOnline/shopOnline.html",
+              "menuName": "POS全流通线上库存查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            }
+          ]
+        },{
+          "id": "M_6090",
+          "url": "#",
+          "menuName": "订单相关查询",
+          "icon": "fa fa-tasks",
+          "children": [
+            {
+              "id": "M_609010",
+              "url": "module/orderStock/orderOccupy.html",
+              "menuName": "订单预占信息查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            },
+            {
+              "id": "M_609020",
+              "url": "module/orderStock/orderOccupyHis.html",
+              "menuName": "订单实占信息查询",
+              "icon": "fa fa-tasks",
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

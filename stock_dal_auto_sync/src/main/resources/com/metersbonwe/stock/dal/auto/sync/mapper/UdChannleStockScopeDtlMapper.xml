@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.auto.sync.mapper.UdChannleStockScopeDtlMapper">
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.UdChannleStockScopeDtl">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="UD_CW_ID" jdbcType="DECIMAL" property="udCwId" />
+    <result column="UD_LOCKED_TYPE" jdbcType="VARCHAR" property="udLockedType" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="LAST_MODIFIED_USER" jdbcType="VARCHAR" property="lastModifiedUser" />
+    <result column="LAST_MODIFIED_DATE" jdbcType="TIMESTAMP" property="lastModifiedDate" />
+    <result column="FORCED_LOCKED_TYPE" jdbcType="VARCHAR" property="forcedLockedType" />
+    <result column="SEQ_NUM" jdbcType="DECIMAL" property="seqNum" />
+    <result column="ISMONOPOLIZE" jdbcType="CHAR" property="ismonopolize" />
+    <result column="IS_SYNC_OS" jdbcType="CHAR" property="isSyncOs" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, UD_CW_ID, UD_LOCKED_TYPE, STATUS, REMARK, LAST_MODIFIED_USER, LAST_MODIFIED_DATE, 
+    FORCED_LOCKED_TYPE, SEQ_NUM, ISMONOPOLIZE, IS_SYNC_OS
+  </sql>
+  <select id="selectByExample" parameterType="com.metersbonwe.stock.po.sync.UdChannleStockScopeDtlExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from UD_CHANNLE_STOCK_SCOPE_DTL
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from UD_CHANNLE_STOCK_SCOPE_DTL
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from UD_CHANNLE_STOCK_SCOPE_DTL
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.metersbonwe.stock.po.sync.UdChannleStockScopeDtlExample">
+    delete from UD_CHANNLE_STOCK_SCOPE_DTL
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.metersbonwe.stock.po.sync.UdChannleStockScopeDtl">
+    insert into UD_CHANNLE_STOCK_SCOPE_DTL (ID, UD_CW_ID, UD_LOCKED_TYPE, 
+      STATUS, REMARK, LAST_MODIFIED_USER, 
+      LAST_MODIFIED_DATE, FORCED_LOCKED_TYPE, SEQ_NUM, 
+      ISMONOPOLIZE, IS_SYNC_OS)
+    values (#{id,jdbcType=DECIMAL}, #{udCwId,jdbcType=DECIMAL}, #{udLockedType,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{lastModifiedUser,jdbcType=VARCHAR}, 
+      #{lastModifiedDate,jdbcType=TIMESTAMP}, #{forcedLockedType,jdbcType=VARCHAR}, #{seqNum,jdbcType=DECIMAL}, 
+      #{ismonopolize,jdbcType=CHAR}, #{isSyncOs,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.metersbonwe.stock.po.sync.UdChannleStockScopeDtl">
+    insert into UD_CHANNLE_STOCK_SCOPE_DTL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="udCwId != null">
+        UD_CW_ID,
+      </if>
+      <if test="udLockedType != null">
+        UD_LOCKED_TYPE,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="lastModifiedUser != null">
+        LAST_MODIFIED_USER,
+      </if>
+      <if test="lastModifiedDate != null">
+        LAST_MODIFIED_DATE,
+      </if>
+      <if test="forcedLockedType != null">
+        FORCED_LOCKED_TYPE,
+      </if>
+      <if test="seqNum != null">
+        SEQ_NUM,
+      </if>
+      <if test="ismonopolize != null">
+        ISMONOPOLIZE,
+      </if>
+      <if test="isSyncOs != null">
+        IS_SYNC_OS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="udCwId != null">
+        #{udCwId,jdbcType=DECIMAL},
+      </if>
+      <if test="udLockedType != null">
+        #{udLockedType,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedUser != null">
+        #{lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null">
+        #{lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="forcedLockedType != null">
+        #{forcedLockedType,jdbcType=VARCHAR},
+      </if>
+      <if test="seqNum != null">
+        #{seqNum,jdbcType=DECIMAL},
+      </if>
+      <if test="ismonopolize != null">
+        #{ismonopolize,jdbcType=CHAR},
+      </if>
+      <if test="isSyncOs != null">
+        #{isSyncOs,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.metersbonwe.stock.po.sync.UdChannleStockScopeDtlExample" resultType="java.lang.Integer">
+    select count(*) from UD_CHANNLE_STOCK_SCOPE_DTL
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update UD_CHANNLE_STOCK_SCOPE_DTL
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=DECIMAL},
+      </if>
+      <if test="record.udCwId != null">
+        UD_CW_ID = #{record.udCwId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.udLockedType != null">
+        UD_LOCKED_TYPE = #{record.udLockedType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        STATUS = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastModifiedUser != null">
+        LAST_MODIFIED_USER = #{record.lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastModifiedDate != null">
+        LAST_MODIFIED_DATE = #{record.lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.forcedLockedType != null">
+        FORCED_LOCKED_TYPE = #{record.forcedLockedType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.seqNum != null">
+        SEQ_NUM = #{record.seqNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.ismonopolize != null">
+        ISMONOPOLIZE = #{record.ismonopolize,jdbcType=CHAR},
+      </if>
+      <if test="record.isSyncOs != null">
+        IS_SYNC_OS = #{record.isSyncOs,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update UD_CHANNLE_STOCK_SCOPE_DTL
+    set ID = #{record.id,jdbcType=DECIMAL},
+      UD_CW_ID = #{record.udCwId,jdbcType=DECIMAL},
+      UD_LOCKED_TYPE = #{record.udLockedType,jdbcType=VARCHAR},
+      STATUS = #{record.status,jdbcType=VARCHAR},
+      REMARK = #{record.remark,jdbcType=VARCHAR},
+      LAST_MODIFIED_USER = #{record.lastModifiedUser,jdbcType=VARCHAR},
+      LAST_MODIFIED_DATE = #{record.lastModifiedDate,jdbcType=TIMESTAMP},
+      FORCED_LOCKED_TYPE = #{record.forcedLockedType,jdbcType=VARCHAR},
+      SEQ_NUM = #{record.seqNum,jdbcType=DECIMAL},
+      ISMONOPOLIZE = #{record.ismonopolize,jdbcType=CHAR},
+      IS_SYNC_OS = #{record.isSyncOs,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.metersbonwe.stock.po.sync.UdChannleStockScopeDtl">
+    update UD_CHANNLE_STOCK_SCOPE_DTL
+    <set>
+      <if test="udCwId != null">
+        UD_CW_ID = #{udCwId,jdbcType=DECIMAL},
+      </if>
+      <if test="udLockedType != null">
+        UD_LOCKED_TYPE = #{udLockedType,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedUser != null">
+        LAST_MODIFIED_USER = #{lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null">
+        LAST_MODIFIED_DATE = #{lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="forcedLockedType != null">
+        FORCED_LOCKED_TYPE = #{forcedLockedType,jdbcType=VARCHAR},
+      </if>
+      <if test="seqNum != null">
+        SEQ_NUM = #{seqNum,jdbcType=DECIMAL},
+      </if>
+      <if test="ismonopolize != null">
+        ISMONOPOLIZE = #{ismonopolize,jdbcType=CHAR},
+      </if>
+      <if test="isSyncOs != null">
+        IS_SYNC_OS = #{isSyncOs,jdbcType=CHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.metersbonwe.stock.po.sync.UdChannleStockScopeDtl">
+    update UD_CHANNLE_STOCK_SCOPE_DTL
+    set UD_CW_ID = #{udCwId,jdbcType=DECIMAL},
+      UD_LOCKED_TYPE = #{udLockedType,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      LAST_MODIFIED_USER = #{lastModifiedUser,jdbcType=VARCHAR},
+      LAST_MODIFIED_DATE = #{lastModifiedDate,jdbcType=TIMESTAMP},
+      FORCED_LOCKED_TYPE = #{forcedLockedType,jdbcType=VARCHAR},
+      SEQ_NUM = #{seqNum,jdbcType=DECIMAL},
+      ISMONOPOLIZE = #{ismonopolize,jdbcType=CHAR},
+      IS_SYNC_OS = #{isSyncOs,jdbcType=CHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+</mapper>

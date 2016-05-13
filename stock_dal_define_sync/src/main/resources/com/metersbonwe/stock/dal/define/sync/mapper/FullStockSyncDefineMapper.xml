@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.sync.mapper.FullStockSyncDefineMapper">
+
+	<select id="selectFreeStockNERP" resultType="java.util.HashMap">
+		select * from (
+		select ROWNUM as idx,tl.* from (
+		select
+		o.code as WAREH_CODE,
+		p.prod_num as SKU,
+		saw.is_shop as IS_SHOP,
+		SWP.stk_on_hand as STK_ON_HAND,
+		  <![CDATA[(CASE WHEN NVL(SWP.QTY_COMMITTED,0)  <  0 THEN 0 ELSE NVL(SWP.QTY_COMMITTED,0) END) AS COMMITTED_NUM,
+					UWP.ONLINE_SAFEQTY_TYPE AS SAFEQTY_TYPE,
+					UWP.SAFETY_STOCK AS SAFETY_STOCK,
+					NVL(SWP.STK_ON_HAND, 0) - (CASE WHEN NVL(SWP.QTY_COMMITTED,0) < 0 THEN 0 ELSE NVL(SWP.QTY_COMMITTED,0) END) 			
+				                 - (CASE WHEN NVL(SWP.QTY_ON_LOCK,0) < 0 THEN 0 ELSE NVL(SWP.QTY_ON_LOCK,0) END)
+				                 - (CASE WHEN NVL(SWP.LOCKED_QTY,0) < 0 THEN 0 ELSE NVL(SWP.LOCKED_QTY,0) END)
+				                 - (CASE WHEN NVL(SWP.B2B_LOCKED_QTY,0) < 0 THEN 0 ELSE NVL(SWP.B2B_LOCKED_QTY,0) END) AS FREE_NUM
+				from sf_wareh_prod SWP
+				LEFT join bf_product p on SWP.bf_product_id=p.id
+				LEFT join bf_org o on o.id=SWP.bf_org_id
+				LEFT join ST_ACTIVITY_WAREH saw on saw.wareh_id=o.code
+				LEFT join UD_WAREH_PARAM UWP ON UWP.BF_ORG_ID=SWP.BF_ORG_ID
+		where saw.data_source='NERP' ) tl  where ROWNUM<=${end}) tt where tt.idx>${begin}]]>
+	</select>
+
+
+	<select id="countFreeStockNERP" resultType="int">
+		select
+		count(1)
+		from sf_wareh_prod SWP
+				 <![CDATA[inner join bf_product p on SWP.bf_product_id=p.id
+				LEFT join bf_org o on o.id=SWP.bf_org_id
+				LEFT join ST_ACTIVITY_WAREH saw on saw.wareh_id=o.code
+				LEFT join UD_WAREH_PARAM UWP ON UWP.BF_ORG_ID=SWP.BF_ORG_ID
+				where 
+					saw.data_source='NERP' ]]>
+	</select>
+
+
+	<select id="selectFreeStockOERP" resultType="java.util.HashMap">
+		select * from (
+		 select ROWNUM as idx,tl.* from (
+			SELECT 
+				SWP.wareh_id as WAREH_CODE, 
+				SWP.prod_id as SKU, 
+				SWP.stk_on_hand as STK_ON_HAND,
+				saw.is_shop as IS_SHOP,
+		<![CDATA[(CASE WHEN NVL(SWP.QTY_COMMITTED,0)  <  0 THEN 0 ELSE NVL(SWP.QTY_COMMITTED,0) END) AS COMMITTED_NUM,
+					UWP.ONLINE_SAFEQTY_TYPE AS SAFEQTY_TYPE,
+					UWP.SAFETY_STOCK AS SAFETY_STOCK,
+					(NVL(SWP.STK_ON_HAND, 0)
+					 - (CASE WHEN NVL(SWP.QTY_COMMITTED, 0) < 0 THEN 0 ELSE NVL(SWP.QTY_COMMITTED, 0) END)
+					 - (CASE WHEN NVL(SWP.LOCKED_QTY, 0) < 0 THEN 0 ELSE NVL(SWP.LOCKED_QTY, 0) END)
+					 - (CASE WHEN NVL(SWP.QTY_FUC_COMM, 0) < 0 THEN 0 ELSE NVL(SWP.QTY_FUC_COMM, 0) END)
+					 - (CASE WHEN NVL(SWP.QTY_CUR_COMM, 0) < 0 THEN 0 ELSE NVL(SWP.QTY_CUR_COMM, 0) END)
+					 - (CASE WHEN NVL(SWP.BGR_STK, 0) < 0 THEN 0 ELSE NVL(SWP.BGR_STK, 0) END)) AS FREE_NUM
+			from
+				wareh_prod SWP 
+				LEFT JOIN ST_ACTIVITY_WAREH saw on saw.wareh_id = swp.wareh_id
+				LEFT JOIN bf_org o on o.CODE=SWP.WAREH_ID
+				LEFT JOIN UD_WAREH_PARAM UWP ON UWP.BF_ORG_ID=o.id
+			 where  SAW.DATA_SOURCE='OERP'
+		 ) tl where ROWNUM<=${end}) tt where tt.idx>${begin}]]>
+	</select>
+	
+	<select id="countFreeStockOERP" resultType="int">
+			<![CDATA[SELECT 
+				count(1)
+			from 
+				wareh_prod SWP
+				LEFT JOIN ST_ACTIVITY_WAREH saw on saw.wareh_id = swp.wareh_id
+				LEFT JOIN bf_org o on o.CODE=SWP.WAREH_ID
+				LEFT JOIN UD_WAREH_PARAM UWP ON UWP.BF_ORG_ID=o.id
+			 where  SAW.DATA_SOURCE='OERP'
+		]]>
+	</select>
+	
+	<select id="selectLockStockOERP" resultType="java.util.HashMap">
+		<![CDATA[select * from (
+			select ROWNUM as idx,tl.* from (
+			SELECT 
+				WL.WAREH_ID WAREH_CODE, 
+				WL.PROD_ID SKU, 
+				SUM(WL.LOCKED_QTY) LOCK_NUM
+			  FROM WAREH_LOCKED_LST WL,
+			   	   ST_ACTIVITY_WAREH saw
+			 WHERE
+				 saw.wareh_id=WL.WAREH_ID
+				 and  saw.data_source='OERP'
+				  and 
+				  LOCKED_TYPE IN
+				       (SELECT UCSD.UD_LOCKED_TYPE
+				          FROM UD_CHANNLE_STOCK_SCOPE UCS
+				         INNER JOIN UD_CHANNLE_STOCK_SCOPE_DTL UCSD
+				            ON UCSD.UD_CW_ID = UCS.ID
+				         WHERE UCS.CHANNLE_SORCE = 'ONLINE'
+				           AND UCSD.STATUS = '1'
+				           AND UCSD.IS_SYNC_OS = '1'
+				           AND UCSD.ISMONOPOLIZE = 0
+				         )
+				 GROUP BY WL.WAREH_ID, WL.PROD_ID	
+			 ) tl WHERE ROWNUM<=${end}) tt where tt.idx>${begin}
+		]]>
+	</select>	
+	
+	<select id="countLockStockOERP" resultType="int">
+		<![CDATA[
+		select count(1) from(
+			SELECT 
+				1
+			  FROM WAREH_LOCKED_LST WL,
+			   	   ST_ACTIVITY_WAREH saw
+			 WHERE
+				 saw.wareh_id=WL.WAREH_ID
+				 and  saw.data_source='OERP'
+				  and 
+				  LOCKED_TYPE IN
+				       (SELECT UCSD.UD_LOCKED_TYPE
+				          FROM UD_CHANNLE_STOCK_SCOPE UCS
+				         INNER JOIN UD_CHANNLE_STOCK_SCOPE_DTL UCSD
+				            ON UCSD.UD_CW_ID = UCS.ID
+				         WHERE UCS.CHANNLE_SORCE = 'ONLINE'
+				           AND UCSD.STATUS = '1'
+				           AND UCSD.IS_SYNC_OS = '1'
+				           AND UCSD.ISMONOPOLIZE = 0)
+				 GROUP BY WL.WAREH_ID, WL.PROD_ID)t
+		]]>
+	</select>
+	
+	<select id="selectLockStockNERP" resultType="java.util.HashMap">
+		<![CDATA[
+			select * from (
+			 select ROWNUM as idx,tl.* from (
+			 SELECT 
+			 	BO.CODE WAREH_CODE, 
+			 	P.PROD_NUM AS SKU, 
+			 	SUM(T.LOCKED_QTY) AS LOCK_NUM
+			 FROM BF_PRODUCT P,  
+			    	BF_ORG BO, 
+			    	SF_WAREH_LOCKED_LST T,
+			    	ST_ACTIVITY_WAREH saw
+			   WHERE 
+			   		P.ID = T.PROD_ID
+			     AND T.BF_ORG_ID = BO.ID
+			     AND saw.wareh_id = BO.CODE
+			     AND saw.DATA_SOURCE = 'NERP'
+			     AND T.LOCKED_TYPE IN
+			         (SELECT UCSD.UD_LOCKED_TYPE
+			            FROM UD_CHANNLE_STOCK_SCOPE UCS
+			           INNER JOIN UD_CHANNLE_STOCK_SCOPE_DTL UCSD
+			              ON UCSD.UD_CW_ID = UCS.ID
+			           WHERE UCS.CHANNLE_SORCE = 'ONLINE'
+			             AND UCSD.STATUS = '1'
+			             AND UCSD.IS_SYNC_OS = '1'
+			             AND UCSD.ISMONOPOLIZE = 0
+			 		)
+			   GROUP BY BO.CODE, P.PROD_NUM
+   			) tl where ROWNUM<=${end}) tt where tt.idx>${begin}
+		]]>
+	</select>
+	
+	<select id="countLockStockNERP" resultType="int">
+		<![CDATA[
+		select count(1) from (
+			 SELECT 
+			 	1
+			 FROM BF_PRODUCT P,  
+			    	BF_ORG BO, 
+			    	SF_WAREH_LOCKED_LST T,
+			    	ST_ACTIVITY_WAREH saw
+			   WHERE 
+			   		P.ID = T.PROD_ID
+			     AND T.BF_ORG_ID = BO.ID
+			     AND saw.wareh_id = BO.CODE
+			     AND saw.DATA_SOURCE = 'NERP'
+			     AND T.LOCKED_TYPE IN
+			         (SELECT UCSD.UD_LOCKED_TYPE
+			            FROM UD_CHANNLE_STOCK_SCOPE UCS
+			           INNER JOIN UD_CHANNLE_STOCK_SCOPE_DTL UCSD
+			              ON UCSD.UD_CW_ID = UCS.ID
+			           WHERE UCS.CHANNLE_SORCE = 'ONLINE'
+			             AND UCSD.STATUS = '1'
+			             AND UCSD.IS_SYNC_OS = '1'
+			             AND UCSD.ISMONOPOLIZE = 0
+			 		)
+			   GROUP BY BO.CODE, P.PROD_NUM
+   			) t
+		]]>
+	</select>	
+	
+	<select id="selectReservedStock" resultType="java.util.HashMap">
+		<![CDATA[
+			select * from (
+			 select ROWNUM as idx,tl.* from (
+				SELECT uurs.UNIT_ID CHANNEL,
+				       uurs.WAREH_ID WAREH_CODE,
+				       uurs.PROD_ID SKU,
+				       sum((CASE WHEN uurs.RESERVED_QTY < 0 THEN 0 ELSE uurs.RESERVED_QTY END) 
+				       - (CASE WHEN uurs.ALLOCATED_QTY < 0 THEN 0 ELSE uurs.ALLOCATED_QTY END) 
+				       - (CASE WHEN uurs.LOCKED_QTY < 0 THEN 0 ELSE uurs.LOCKED_QTY END)) AS STOCK
+				  FROM UR_UNIT_RESERVED_RESULT uurs,
+				  ST_ACTIVITY_WAREH saw
+				 WHERE 
+				 uurs.wareh_id=saw.wareh_id
+				 AND uurs.RESERVED_TYPE IN
+				       (SELECT UCSD.UD_LOCKED_TYPE
+				          FROM UD_CHANNLE_STOCK_SCOPE UCS
+				         INNER JOIN UD_CHANNLE_STOCK_SCOPE_DTL UCSD
+				            ON UCSD.UD_CW_ID = UCS.ID
+				         WHERE UCS.CHANNLE_SORCE = 'ONLINE'
+				           AND UCSD.STATUS = '1'
+				           AND UCSD.IS_SYNC_OS = '1'
+				           AND UCSD.ISMONOPOLIZE = 1
+				           AND UCSD.FORCED_LOCKED_TYPE = '01')
+			group by uurs.UNIT_ID, uurs.prod_id, uurs.wareh_id
+			   ) tl where ROWNUM<=${end}) tt where tt.idx>${begin}
+		]]>
+	</select>	
+	<select id="countReservedStock" resultType="java.util.HashMap">
+		<![CDATA[
+				select count(1) from (
+				SELECT 
+					1
+				  FROM UR_UNIT_RESERVED_RESULT uurs,
+				  ST_ACTIVITY_WAREH saw
+				 WHERE 
+				 uurs.wareh_id=saw.wareh_id
+				 AND uurs.RESERVED_TYPE IN
+				       (SELECT UCSD.UD_LOCKED_TYPE
+				          FROM UD_CHANNLE_STOCK_SCOPE UCS
+				         INNER JOIN UD_CHANNLE_STOCK_SCOPE_DTL UCSD
+				            ON UCSD.UD_CW_ID = UCS.ID
+				         WHERE UCS.CHANNLE_SORCE = 'ONLINE'
+				           AND UCSD.STATUS = '1'
+				           AND UCSD.IS_SYNC_OS = '1'
+				           AND UCSD.ISMONOPOLIZE = 1
+				           AND UCSD.FORCED_LOCKED_TYPE = '01')
+			group by uurs.UNIT_ID, uurs.prod_id, uurs.wareh_id
+			   ) tl 
+		]]>
+	</select>	
+
+</mapper>

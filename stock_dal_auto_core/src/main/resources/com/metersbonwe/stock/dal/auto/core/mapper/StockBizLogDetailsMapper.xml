@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.auto.core.mapper.StockBizLogDetailsMapper" >
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.core.StockBizLogDetails" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="serviceName" property="servicename" jdbcType="VARCHAR" />
+    <result column="className" property="classname" jdbcType="VARCHAR" />
+    <result column="methodName" property="methodname" jdbcType="VARCHAR" />
+    <result column="channelCode" property="channelcode" jdbcType="VARCHAR" />
+    <result column="warehId" property="warehid" jdbcType="VARCHAR" />
+    <result column="prodId" property="prodid" jdbcType="VARCHAR" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updatetime" jdbcType="DATE" />
+    <result column="createTime" property="createtime" jdbcType="DATE" />
+    <result column="logTime" property="logtime" jdbcType="DATE" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.metersbonwe.stock.po.core.StockBizLogDetails" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, serviceName, className, methodName, channelCode, warehId, prodId, ip, updateTime, 
+    createTime, logTime
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.metersbonwe.stock.po.core.StockBizLogDetailsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from stock_biz_log_details
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.metersbonwe.stock.po.core.StockBizLogDetailsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from stock_biz_log_details
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from stock_biz_log_details
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from stock_biz_log_details
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.metersbonwe.stock.po.core.StockBizLogDetailsExample" >
+    delete from stock_biz_log_details
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.metersbonwe.stock.po.core.StockBizLogDetails" >
+    insert into stock_biz_log_details (id, serviceName, className, 
+      methodName, channelCode, warehId, 
+      prodId, ip, updateTime, 
+      createTime, logTime, content
+      )
+    values (#{id,jdbcType=INTEGER}, #{servicename,jdbcType=VARCHAR}, #{classname,jdbcType=VARCHAR}, 
+      #{methodname,jdbcType=VARCHAR}, #{channelcode,jdbcType=VARCHAR}, #{warehid,jdbcType=VARCHAR}, 
+      #{prodid,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{updatetime,jdbcType=DATE}, 
+      #{createtime,jdbcType=DATE}, #{logtime,jdbcType=DATE}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.metersbonwe.stock.po.core.StockBizLogDetails" >
+    insert into stock_biz_log_details
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="servicename != null" >
+        serviceName,
+      </if>
+      <if test="classname != null" >
+        className,
+      </if>
+      <if test="methodname != null" >
+        methodName,
+      </if>
+      <if test="channelcode != null" >
+        channelCode,
+      </if>
+      <if test="warehid != null" >
+        warehId,
+      </if>
+      <if test="prodid != null" >
+        prodId,
+      </if>
+      <if test="ip != null" >
+        ip,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="logtime != null" >
+        logTime,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="servicename != null" >
+        #{servicename,jdbcType=VARCHAR},
+      </if>
+      <if test="classname != null" >
+        #{classname,jdbcType=VARCHAR},
+      </if>
+      <if test="methodname != null" >
+        #{methodname,jdbcType=VARCHAR},
+      </if>
+      <if test="channelcode != null" >
+        #{channelcode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehid != null" >
+        #{warehid,jdbcType=VARCHAR},
+      </if>
+      <if test="prodid != null" >
+        #{prodid,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=DATE},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=DATE},
+      </if>
+      <if test="logtime != null" >
+        #{logtime,jdbcType=DATE},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.metersbonwe.stock.po.core.StockBizLogDetailsExample" resultType="java.lang.Integer" >
+    select count(*) from stock_biz_log_details
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update stock_biz_log_details
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.servicename != null" >
+        serviceName = #{record.servicename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classname != null" >
+        className = #{record.classname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.methodname != null" >
+        methodName = #{record.methodname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelcode != null" >
+        channelCode = #{record.channelcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warehid != null" >
+        warehId = #{record.warehid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodid != null" >
+        prodId = #{record.prodid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ip != null" >
+        ip = #{record.ip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatetime != null" >
+        updateTime = #{record.updatetime,jdbcType=DATE},
+      </if>
+      <if test="record.createtime != null" >
+        createTime = #{record.createtime,jdbcType=DATE},
+      </if>
+      <if test="record.logtime != null" >
+        logTime = #{record.logtime,jdbcType=DATE},
+      </if>
+      <if test="record.content != null" >
+        content = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update stock_biz_log_details
+    set id = #{record.id,jdbcType=INTEGER},
+      serviceName = #{record.servicename,jdbcType=VARCHAR},
+      className = #{record.classname,jdbcType=VARCHAR},
+      methodName = #{record.methodname,jdbcType=VARCHAR},
+      channelCode = #{record.channelcode,jdbcType=VARCHAR},
+      warehId = #{record.warehid,jdbcType=VARCHAR},
+      prodId = #{record.prodid,jdbcType=VARCHAR},
+      ip = #{record.ip,jdbcType=VARCHAR},
+      updateTime = #{record.updatetime,jdbcType=DATE},
+      createTime = #{record.createtime,jdbcType=DATE},
+      logTime = #{record.logtime,jdbcType=DATE},
+      content = #{record.content,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update stock_biz_log_details
+    set id = #{record.id,jdbcType=INTEGER},
+      serviceName = #{record.servicename,jdbcType=VARCHAR},
+      className = #{record.classname,jdbcType=VARCHAR},
+      methodName = #{record.methodname,jdbcType=VARCHAR},
+      channelCode = #{record.channelcode,jdbcType=VARCHAR},
+      warehId = #{record.warehid,jdbcType=VARCHAR},
+      prodId = #{record.prodid,jdbcType=VARCHAR},
+      ip = #{record.ip,jdbcType=VARCHAR},
+      updateTime = #{record.updatetime,jdbcType=DATE},
+      createTime = #{record.createtime,jdbcType=DATE},
+      logTime = #{record.logtime,jdbcType=DATE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.metersbonwe.stock.po.core.StockBizLogDetails" >
+    update stock_biz_log_details
+    <set >
+      <if test="servicename != null" >
+        serviceName = #{servicename,jdbcType=VARCHAR},
+      </if>
+      <if test="classname != null" >
+        className = #{classname,jdbcType=VARCHAR},
+      </if>
+      <if test="methodname != null" >
+        methodName = #{methodname,jdbcType=VARCHAR},
+      </if>
+      <if test="channelcode != null" >
+        channelCode = #{channelcode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehid != null" >
+        warehId = #{warehid,jdbcType=VARCHAR},
+      </if>
+      <if test="prodid != null" >
+        prodId = #{prodid,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=DATE},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=DATE},
+      </if>
+      <if test="logtime != null" >
+        logTime = #{logtime,jdbcType=DATE},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.metersbonwe.stock.po.core.StockBizLogDetails" >
+    update stock_biz_log_details
+    set serviceName = #{servicename,jdbcType=VARCHAR},
+      className = #{classname,jdbcType=VARCHAR},
+      methodName = #{methodname,jdbcType=VARCHAR},
+      channelCode = #{channelcode,jdbcType=VARCHAR},
+      warehId = #{warehid,jdbcType=VARCHAR},
+      prodId = #{prodid,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      updateTime = #{updatetime,jdbcType=DATE},
+      createTime = #{createtime,jdbcType=DATE},
+      logTime = #{logtime,jdbcType=DATE},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.metersbonwe.stock.po.core.StockBizLogDetails" >
+    update stock_biz_log_details
+    set serviceName = #{servicename,jdbcType=VARCHAR},
+      className = #{classname,jdbcType=VARCHAR},
+      methodName = #{methodname,jdbcType=VARCHAR},
+      channelCode = #{channelcode,jdbcType=VARCHAR},
+      warehId = #{warehid,jdbcType=VARCHAR},
+      prodId = #{prodid,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      updateTime = #{updatetime,jdbcType=DATE},
+      createTime = #{createtime,jdbcType=DATE},
+      logTime = #{logtime,jdbcType=DATE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

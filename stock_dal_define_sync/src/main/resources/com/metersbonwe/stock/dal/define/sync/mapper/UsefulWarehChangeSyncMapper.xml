@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.sync.mapper.UsefulWarehChangeSyncMapper" >
+
+  <resultMap id="channelReservedMap" type="com.metersbonwe.stock.po.sync.define.ChannelReservedBean" >
+      <result column="wareh_id" property="warehId" jdbcType="VARCHAR" />
+      <result column="online_safeqty_type" property="safeType" jdbcType="VARCHAR" />
+      <result column="prod_id" property="prodId" jdbcType="VARCHAR" />
+      <result column="reserved_qty" property="reservedStock" jdbcType="INTEGER" />
+      <result column="src_reserved_qty" property="srcReservedStock" jdbcType="INTEGER" />
+      <result column="allocated_qty" property="allocatedQty" jdbcType="INTEGER" />
+      <result column="locked_qty" property="lockedQty" jdbcType="INTEGER" />
+      <result column="channelCode" property="channelCode" jdbcType="VARCHAR" />
+      <result column="name" property="reservedType" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="getChannelReservedData" parameterType="java.util.HashMap" resultMap="channelReservedMap">
+    select t.wareh_id,
+            t2.online_safeqty_type,
+            t.prod_id,
+            t.reserved_qty src_reserved_qty,
+            t.allocated_qty,
+            t.locked_qty,
+            t.reserved_qty - decode(sign(t.allocated_qty), 1, t.allocated_qty, 0) - decode(sign(t.locked_qty), 1, t.locked_qty, 0) reserved_qty,
+            unit_id channelCode,
+            t3.name
+       from ur_unit_reserved_result t,
+             ud_channle_stock_scope_dtl t1,
+             (
+              select t1.code, t.online_safeqty_type
+                 from ud_wareh_param t,
+                       bf_org t1
+                where t.bf_org_id = t1.id
+             ) t2,
+             (
+              select a.code,a.name
+                from bf_code_detail a
+                left join bf_code b on a.bf_code_id = b.id
+               where b.code = 'RESERVED_TYPE'
+              ) t3
+       where t1.status = '1'
+        and t1.forced_locked_type = '01'
+        and t1.ismonopolize = '1'
+        and t1.is_sync_os = '1'
+        and t.reserved_type = t3.code
+        <if test="channelCodeList != null and channelCodeList.size() > 0">
+             and t.unit_id in
+             <foreach collection="channelCodeList" item="item" index="index" open="(" separator=","  close=")">
+                 #{item}
+             </foreach>
+        </if>
+        <if test="usefulWarehList != null and usefulWarehList.size() > 0">
+             and t.wareh_id in
+             <foreach collection="usefulWarehList" item="item" index="index" open="(" separator=","  close=")">
+                  #{item}
+             </foreach>
+        </if>
+        and t.reserved_type = t1.ud_locked_type
+        and t.wareh_id = t2.code
+       <if test="prodId != null and prodId != ''">
+            and t.prod_id = #{prodId}
+       </if>
+       <if test="reservedStock != null and reservedStock != ''">
+           and (t.reserved_qty - decode(sign(t.allocated_qty), 1, t.allocated_qty, 0) - decode(sign(t.locked_qty), 1, t.locked_qty, 0)) ${op} #{reservedStock}
+       </if>
+  </select>
+
+    <resultMap id="tmpStockWarehMap" type="com.metersbonwe.stock.po.sync.define.TmpStockWareh" >
+        <result column="wareh_id" property="warehId" jdbcType="VARCHAR" />
+        <result column="is_b2b" property="isB2B" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="getAllWareh" resultMap="tmpStockWarehMap">
+         select t.wareh_id, decode(t1.code, null, 0, 1) is_b2b
+           from st_activity_wareh t,
+                (
+                  select t1.code
+                    from ud_wareh_param t,
+                          bf_org t1
+                   where t.bf_org_id = t1.id
+                     and t.is_tfo_dist_wareh = '1'
+                ) t1
+         where t.wareh_id = t1.code(+)
+           and t.is_shop = '0'
+    </select>
+</mapper>

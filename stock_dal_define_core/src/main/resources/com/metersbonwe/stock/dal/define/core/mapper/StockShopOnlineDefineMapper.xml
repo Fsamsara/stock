@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.core.mapper.StockShopOnlineDefineMapper">
+
+
+	<select id="selectShopOnlineStock" resultType="com.metersbonwe.stock.pojo.StockChannelBean">
+		SELECT
+		SUM(final_free_share_stock) online_stock,prod_id FROM (
+		<foreach collection="seqs" item="seq" separator="UNION ALL">
+			SELECT
+			final_free_share_stock,prod_id FROM stock_wareh_prod_${seq}
+			where is_shop = 1 AND online_safe_stock <![CDATA[<>]]>
+			-1
+			<if test="shopIds != null and shopIds.size() != 0">
+				and wareh_id in
+				<foreach collection="shopIds" item="shopId" open="("
+					separator="," close=")">
+					#{shopId}
+				</foreach>
+			</if>
+			<if test="prodIds != null and prodIds.size != 0">
+				and prod_id in
+				<foreach collection="prodIds" item="prodId" open="("
+					separator="," close=")">
+					#{prodId}
+				</foreach>
+			</if>
+		</foreach>
+		) a GROUP BY a.prod_id
+	</select>
+
+
+
+
+	<select id="selectStockForShops" resultType="com.metersbonwe.stock.pojo.StockChannelBean">
+		select prod_id,
+		sum(stock) online_stock
+		from (
+		select w.prod_id,
+		(case
+		when nvl(w.stk_on_hand, 0) > 0
+		then nvl(w.stk_on_hand, 0)
+		else 0
+		end)
+		-
+		(case when nvl(w.qty_committed, 0) > 0
+		then nvl(w.qty_committed, 0)
+		else 0
+		end)
+		-
+		(case when nvl(w.locked_qty, 0) > 0
+		then nvl(w.locked_qty,
+		0)
+		else 0
+		end)
+		-
+		(case when nvl(w.bgr_stk, 0) > 0
+		then nvl(w.bgr_stk, 0)
+		else 0
+		end)
+		-
+		s.safety_stock_qty
+		-
+		nvl(rlnstock, 0)
+		+
+		nvl(limitedstock, 0)
+		stock
+		from mtsbw.wareh_prod w
+		inner join mtsbw.prod_safety_stock s
+		on
+		(w.wareh_id = s.shop_id and w.prod_id = s.prod_id)
+		left join (select
+		t.shop_id,
+		t.prod_id,
+		sum(nvl(t.limited_stk, 0)) as limitedstock
+		from
+		mtsbw.sf_shop_limited_stock t
+		group by t.shop_id, t.prod_id) bb
+		on
+		(bb.shop_id = w.wareh_id and bb.prod_id = w.prod_id)
+		left join (select
+		tv.shop_id,
+		tv.prod_id,
+		sum(nvl(tv.quantity, 0)) as rlnstock
+		from
+		mtsbw.ud_rln tv
+		group by tv.shop_id, tv.prod_id) bb1
+		on bb1.shop_id =
+		w.wareh_id and bb1.prod_id = w.prod_id
+		where 1 = 1
+		<if test="shopIds != null and shopIds.size() != 0">
+			and w.wareh_id in
+			<foreach collection="shopIds" item="shopId" open="("
+				separator="," close=")">
+				#{shopId}
+			</foreach>
+		</if>
+		<if test="prodIds != null and prodIds.size != 0">
+			and w.prod_id in
+			<foreach collection="prodIds" item="prodId" open="("
+				separator="," close=")">
+				#{prodId}
+			</foreach>
+		</if>
+		)
+		where stock > 0
+		group by prod_id
+	</select>
+
+</mapper>

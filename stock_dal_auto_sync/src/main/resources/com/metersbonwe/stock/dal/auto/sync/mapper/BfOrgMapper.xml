@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.auto.sync.mapper.BfOrgMapper">
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.BfOrg">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="OLD_ID" jdbcType="VARCHAR" property="oldId" />
+    <result column="INPUT_CODE" jdbcType="VARCHAR" property="inputCode" />
+    <result column="SORT_CODE" jdbcType="VARCHAR" property="sortCode" />
+    <result column="BF_ORG_TYPE_ID" jdbcType="DECIMAL" property="bfOrgTypeId" />
+    <result column="COUNTRY" jdbcType="VARCHAR" property="country" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="POSTCODE" jdbcType="VARCHAR" property="postcode" />
+    <result column="PH_NUM" jdbcType="VARCHAR" property="phNum" />
+    <result column="FAX_NUM" jdbcType="VARCHAR" property="faxNum" />
+    <result column="EMAIL_ADDR" jdbcType="VARCHAR" property="emailAddr" />
+    <result column="WEBSITE" jdbcType="VARCHAR" property="website" />
+    <result column="REGION_CODE" jdbcType="VARCHAR" property="regionCode" />
+    <result column="SIMPLE_ADDR" jdbcType="VARCHAR" property="simpleAddr" />
+    <result column="DETA_ADDRESS" jdbcType="VARCHAR" property="detaAddress" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="OWNER_ID" jdbcType="DECIMAL" property="ownerId" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="LAST_MODIFIED_DATE" jdbcType="TIMESTAMP" property="lastModifiedDate" />
+    <result column="COUNTY" jdbcType="VARCHAR" property="county" />
+    <result column="ACT_PROVINCE" jdbcType="VARCHAR" property="actProvince" />
+    <result column="ACT_CITY" jdbcType="VARCHAR" property="actCity" />
+    <result column="ACT_COUNTY" jdbcType="VARCHAR" property="actCounty" />
+    <result column="ACT_DTL_ADDRESS" jdbcType="VARCHAR" property="actDtlAddress" />
+    <result column="TO_USER" jdbcType="VARCHAR" property="toUser" />
+    <result column="TO_USER_TEL" jdbcType="VARCHAR" property="toUserTel" />
+    <result column="TO_USER_PHONE" jdbcType="VARCHAR" property="toUserPhone" />
+    <result column="FROM_USER" jdbcType="VARCHAR" property="fromUser" />
+    <result column="FROM_USER_TEL" jdbcType="VARCHAR" property="fromUserTel" />
+    <result column="ACT_COUNTRY" jdbcType="VARCHAR" property="actCountry" />
+    <result column="BUSINESS_RANGE" jdbcType="VARCHAR" property="businessRange" />
+    <result column="PROFIT_CENTER" jdbcType="VARCHAR" property="profitCenter" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, NAME, CODE, OLD_ID, INPUT_CODE, SORT_CODE, BF_ORG_TYPE_ID, COUNTRY, PROVINCE, 
+    CITY, ADDRESS, POSTCODE, PH_NUM, FAX_NUM, EMAIL_ADDR, WEBSITE, REGION_CODE, SIMPLE_ADDR, 
+    DETA_ADDRESS, STATUS, OWNER_ID, REMARK, LAST_MODIFIED_DATE, COUNTY, ACT_PROVINCE, 
+    ACT_CITY, ACT_COUNTY, ACT_DTL_ADDRESS, TO_USER, TO_USER_TEL, TO_USER_PHONE, FROM_USER, 
+    FROM_USER_TEL, ACT_COUNTRY, BUSINESS_RANGE, PROFIT_CENTER
+  </sql>
+  <select id="selectByExample" parameterType="com.metersbonwe.stock.po.sync.BfOrgExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from BF_ORG
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from BF_ORG
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from BF_ORG
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.metersbonwe.stock.po.sync.BfOrgExample">
+    delete from BF_ORG
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.metersbonwe.stock.po.sync.BfOrg">
+    insert into BF_ORG (ID, NAME, CODE, 
+      OLD_ID, INPUT_CODE, SORT_CODE, 
+      BF_ORG_TYPE_ID, COUNTRY, PROVINCE, 
+      CITY, ADDRESS, POSTCODE, 
+      PH_NUM, FAX_NUM, EMAIL_ADDR, 
+      WEBSITE, REGION_CODE, SIMPLE_ADDR, 
+      DETA_ADDRESS, STATUS, OWNER_ID, 
+      REMARK, LAST_MODIFIED_DATE, COUNTY, 
+      ACT_PROVINCE, ACT_CITY, ACT_COUNTY, 
+      ACT_DTL_ADDRESS, TO_USER, TO_USER_TEL, 
+      TO_USER_PHONE, FROM_USER, FROM_USER_TEL, 
+      ACT_COUNTRY, BUSINESS_RANGE, PROFIT_CENTER
+      )
+    values (#{id,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{oldId,jdbcType=VARCHAR}, #{inputCode,jdbcType=VARCHAR}, #{sortCode,jdbcType=VARCHAR}, 
+      #{bfOrgTypeId,jdbcType=DECIMAL}, #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{postcode,jdbcType=VARCHAR}, 
+      #{phNum,jdbcType=VARCHAR}, #{faxNum,jdbcType=VARCHAR}, #{emailAddr,jdbcType=VARCHAR}, 
+      #{website,jdbcType=VARCHAR}, #{regionCode,jdbcType=VARCHAR}, #{simpleAddr,jdbcType=VARCHAR}, 
+      #{detaAddress,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{ownerId,jdbcType=DECIMAL}, 
+      #{remark,jdbcType=VARCHAR}, #{lastModifiedDate,jdbcType=TIMESTAMP}, #{county,jdbcType=VARCHAR}, 
+      #{actProvince,jdbcType=VARCHAR}, #{actCity,jdbcType=VARCHAR}, #{actCounty,jdbcType=VARCHAR}, 
+      #{actDtlAddress,jdbcType=VARCHAR}, #{toUser,jdbcType=VARCHAR}, #{toUserTel,jdbcType=VARCHAR}, 
+      #{toUserPhone,jdbcType=VARCHAR}, #{fromUser,jdbcType=VARCHAR}, #{fromUserTel,jdbcType=VARCHAR}, 
+      #{actCountry,jdbcType=VARCHAR}, #{businessRange,jdbcType=VARCHAR}, #{profitCenter,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.metersbonwe.stock.po.sync.BfOrg">
+    insert into BF_ORG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="code != null">
+        CODE,
+      </if>
+      <if test="oldId != null">
+        OLD_ID,
+      </if>
+      <if test="inputCode != null">
+        INPUT_CODE,
+      </if>
+      <if test="sortCode != null">
+        SORT_CODE,
+      </if>
+      <if test="bfOrgTypeId != null">
+        BF_ORG_TYPE_ID,
+      </if>
+      <if test="country != null">
+        COUNTRY,
+      </if>
+      <if test="province != null">
+        PROVINCE,
+      </if>
+      <if test="city != null">
+        CITY,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+      <if test="postcode != null">
+        POSTCODE,
+      </if>
+      <if test="phNum != null">
+        PH_NUM,
+      </if>
+      <if test="faxNum != null">
+        FAX_NUM,
+      </if>
+      <if test="emailAddr != null">
+        EMAIL_ADDR,
+      </if>
+      <if test="website != null">
+        WEBSITE,
+      </if>
+      <if test="regionCode != null">
+        REGION_CODE,
+      </if>
+      <if test="simpleAddr != null">
+        SIMPLE_ADDR,
+      </if>
+      <if test="detaAddress != null">
+        DETA_ADDRESS,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="ownerId != null">
+        OWNER_ID,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="lastModifiedDate != null">
+        LAST_MODIFIED_DATE,
+      </if>
+      <if test="county != null">
+        COUNTY,
+      </if>
+      <if test="actProvince != null">
+        ACT_PROVINCE,
+      </if>
+      <if test="actCity != null">
+        ACT_CITY,
+      </if>
+      <if test="actCounty != null">
+        ACT_COUNTY,
+      </if>
+      <if test="actDtlAddress != null">
+        ACT_DTL_ADDRESS,
+      </if>
+      <if test="toUser != null">
+        TO_USER,
+      </if>
+      <if test="toUserTel != null">
+        TO_USER_TEL,
+      </if>
+      <if test="toUserPhone != null">
+        TO_USER_PHONE,
+      </if>
+      <if test="fromUser != null">
+        FROM_USER,
+      </if>
+      <if test="fromUserTel != null">
+        FROM_USER_TEL,
+      </if>
+      <if test="actCountry != null">
+        ACT_COUNTRY,
+      </if>
+      <if test="businessRange != null">
+        BUSINESS_RANGE,
+      </if>
+      <if test="profitCenter != null">
+        PROFIT_CENTER,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="oldId != null">
+        #{oldId,jdbcType=VARCHAR},
+      </if>
+      <if test="inputCode != null">
+        #{inputCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sortCode != null">
+        #{sortCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bfOrgTypeId != null">
+        #{bfOrgTypeId,jdbcType=DECIMAL},
+      </if>
+      <if test="country != null">
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null">
+        #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="phNum != null">
+        #{phNum,jdbcType=VARCHAR},
+      </if>
+      <if test="faxNum != null">
+        #{faxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="emailAddr != null">
+        #{emailAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null">
+        #{website,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null">
+        #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="simpleAddr != null">
+        #{simpleAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="detaAddress != null">
+        #{detaAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null">
+        #{ownerId,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null">
+        #{lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="county != null">
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="actProvince != null">
+        #{actProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="actCity != null">
+        #{actCity,jdbcType=VARCHAR},
+      </if>
+      <if test="actCounty != null">
+        #{actCounty,jdbcType=VARCHAR},
+      </if>
+      <if test="actDtlAddress != null">
+        #{actDtlAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="toUser != null">
+        #{toUser,jdbcType=VARCHAR},
+      </if>
+      <if test="toUserTel != null">
+        #{toUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="toUserPhone != null">
+        #{toUserPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="fromUser != null">
+        #{fromUser,jdbcType=VARCHAR},
+      </if>
+      <if test="fromUserTel != null">
+        #{fromUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="actCountry != null">
+        #{actCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="businessRange != null">
+        #{businessRange,jdbcType=VARCHAR},
+      </if>
+      <if test="profitCenter != null">
+        #{profitCenter,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.metersbonwe.stock.po.sync.BfOrgExample" resultType="java.lang.Integer">
+    select count(*) from BF_ORG
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update BF_ORG
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=DECIMAL},
+      </if>
+      <if test="record.name != null">
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.code != null">
+        CODE = #{record.code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.oldId != null">
+        OLD_ID = #{record.oldId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inputCode != null">
+        INPUT_CODE = #{record.inputCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sortCode != null">
+        SORT_CODE = #{record.sortCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bfOrgTypeId != null">
+        BF_ORG_TYPE_ID = #{record.bfOrgTypeId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.country != null">
+        COUNTRY = #{record.country,jdbcType=VARCHAR},
+      </if>
+      <if test="record.province != null">
+        PROVINCE = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null">
+        CITY = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        ADDRESS = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postcode != null">
+        POSTCODE = #{record.postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phNum != null">
+        PH_NUM = #{record.phNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.faxNum != null">
+        FAX_NUM = #{record.faxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.emailAddr != null">
+        EMAIL_ADDR = #{record.emailAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.website != null">
+        WEBSITE = #{record.website,jdbcType=VARCHAR},
+      </if>
+      <if test="record.regionCode != null">
+        REGION_CODE = #{record.regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.simpleAddr != null">
+        SIMPLE_ADDR = #{record.simpleAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detaAddress != null">
+        DETA_ADDRESS = #{record.detaAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        STATUS = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ownerId != null">
+        OWNER_ID = #{record.ownerId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.remark != null">
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastModifiedDate != null">
+        LAST_MODIFIED_DATE = #{record.lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.county != null">
+        COUNTY = #{record.county,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actProvince != null">
+        ACT_PROVINCE = #{record.actProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actCity != null">
+        ACT_CITY = #{record.actCity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actCounty != null">
+        ACT_COUNTY = #{record.actCounty,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actDtlAddress != null">
+        ACT_DTL_ADDRESS = #{record.actDtlAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toUser != null">
+        TO_USER = #{record.toUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toUserTel != null">
+        TO_USER_TEL = #{record.toUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toUserPhone != null">
+        TO_USER_PHONE = #{record.toUserPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fromUser != null">
+        FROM_USER = #{record.fromUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fromUserTel != null">
+        FROM_USER_TEL = #{record.fromUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actCountry != null">
+        ACT_COUNTRY = #{record.actCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessRange != null">
+        BUSINESS_RANGE = #{record.businessRange,jdbcType=VARCHAR},
+      </if>
+      <if test="record.profitCenter != null">
+        PROFIT_CENTER = #{record.profitCenter,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update BF_ORG
+    set ID = #{record.id,jdbcType=DECIMAL},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      CODE = #{record.code,jdbcType=VARCHAR},
+      OLD_ID = #{record.oldId,jdbcType=VARCHAR},
+      INPUT_CODE = #{record.inputCode,jdbcType=VARCHAR},
+      SORT_CODE = #{record.sortCode,jdbcType=VARCHAR},
+      BF_ORG_TYPE_ID = #{record.bfOrgTypeId,jdbcType=DECIMAL},
+      COUNTRY = #{record.country,jdbcType=VARCHAR},
+      PROVINCE = #{record.province,jdbcType=VARCHAR},
+      CITY = #{record.city,jdbcType=VARCHAR},
+      ADDRESS = #{record.address,jdbcType=VARCHAR},
+      POSTCODE = #{record.postcode,jdbcType=VARCHAR},
+      PH_NUM = #{record.phNum,jdbcType=VARCHAR},
+      FAX_NUM = #{record.faxNum,jdbcType=VARCHAR},
+      EMAIL_ADDR = #{record.emailAddr,jdbcType=VARCHAR},
+      WEBSITE = #{record.website,jdbcType=VARCHAR},
+      REGION_CODE = #{record.regionCode,jdbcType=VARCHAR},
+      SIMPLE_ADDR = #{record.simpleAddr,jdbcType=VARCHAR},
+      DETA_ADDRESS = #{record.detaAddress,jdbcType=VARCHAR},
+      STATUS = #{record.status,jdbcType=VARCHAR},
+      OWNER_ID = #{record.ownerId,jdbcType=DECIMAL},
+      REMARK = #{record.remark,jdbcType=VARCHAR},
+      LAST_MODIFIED_DATE = #{record.lastModifiedDate,jdbcType=TIMESTAMP},
+      COUNTY = #{record.county,jdbcType=VARCHAR},
+      ACT_PROVINCE = #{record.actProvince,jdbcType=VARCHAR},
+      ACT_CITY = #{record.actCity,jdbcType=VARCHAR},
+      ACT_COUNTY = #{record.actCounty,jdbcType=VARCHAR},
+      ACT_DTL_ADDRESS = #{record.actDtlAddress,jdbcType=VARCHAR},
+      TO_USER = #{record.toUser,jdbcType=VARCHAR},
+      TO_USER_TEL = #{record.toUserTel,jdbcType=VARCHAR},
+      TO_USER_PHONE = #{record.toUserPhone,jdbcType=VARCHAR},
+      FROM_USER = #{record.fromUser,jdbcType=VARCHAR},
+      FROM_USER_TEL = #{record.fromUserTel,jdbcType=VARCHAR},
+      ACT_COUNTRY = #{record.actCountry,jdbcType=VARCHAR},
+      BUSINESS_RANGE = #{record.businessRange,jdbcType=VARCHAR},
+      PROFIT_CENTER = #{record.profitCenter,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.metersbonwe.stock.po.sync.BfOrg">
+    update BF_ORG
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="oldId != null">
+        OLD_ID = #{oldId,jdbcType=VARCHAR},
+      </if>
+      <if test="inputCode != null">
+        INPUT_CODE = #{inputCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sortCode != null">
+        SORT_CODE = #{sortCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bfOrgTypeId != null">
+        BF_ORG_TYPE_ID = #{bfOrgTypeId,jdbcType=DECIMAL},
+      </if>
+      <if test="country != null">
+        COUNTRY = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        PROVINCE = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        CITY = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null">
+        POSTCODE = #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="phNum != null">
+        PH_NUM = #{phNum,jdbcType=VARCHAR},
+      </if>
+      <if test="faxNum != null">
+        FAX_NUM = #{faxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="emailAddr != null">
+        EMAIL_ADDR = #{emailAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null">
+        WEBSITE = #{website,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null">
+        REGION_CODE = #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="simpleAddr != null">
+        SIMPLE_ADDR = #{simpleAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="detaAddress != null">
+        DETA_ADDRESS = #{detaAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null">
+        OWNER_ID = #{ownerId,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null">
+        LAST_MODIFIED_DATE = #{lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="county != null">
+        COUNTY = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="actProvince != null">
+        ACT_PROVINCE = #{actProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="actCity != null">
+        ACT_CITY = #{actCity,jdbcType=VARCHAR},
+      </if>
+      <if test="actCounty != null">
+        ACT_COUNTY = #{actCounty,jdbcType=VARCHAR},
+      </if>
+      <if test="actDtlAddress != null">
+        ACT_DTL_ADDRESS = #{actDtlAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="toUser != null">
+        TO_USER = #{toUser,jdbcType=VARCHAR},
+      </if>
+      <if test="toUserTel != null">
+        TO_USER_TEL = #{toUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="toUserPhone != null">
+        TO_USER_PHONE = #{toUserPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="fromUser != null">
+        FROM_USER = #{fromUser,jdbcType=VARCHAR},
+      </if>
+      <if test="fromUserTel != null">
+        FROM_USER_TEL = #{fromUserTel,jdbcType=VARCHAR},
+      </if>
+      <if test="actCountry != null">
+        ACT_COUNTRY = #{actCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="businessRange != null">
+        BUSINESS_RANGE = #{businessRange,jdbcType=VARCHAR},
+      </if>
+      <if test="profitCenter != null">
+        PROFIT_CENTER = #{profitCenter,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.metersbonwe.stock.po.sync.BfOrg">
+    update BF_ORG
+    set NAME = #{name,jdbcType=VARCHAR},
+      CODE = #{code,jdbcType=VARCHAR},
+      OLD_ID = #{oldId,jdbcType=VARCHAR},
+      INPUT_CODE = #{inputCode,jdbcType=VARCHAR},
+      SORT_CODE = #{sortCode,jdbcType=VARCHAR},
+      BF_ORG_TYPE_ID = #{bfOrgTypeId,jdbcType=DECIMAL},
+      COUNTRY = #{country,jdbcType=VARCHAR},
+      PROVINCE = #{province,jdbcType=VARCHAR},
+      CITY = #{city,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      POSTCODE = #{postcode,jdbcType=VARCHAR},
+      PH_NUM = #{phNum,jdbcType=VARCHAR},
+      FAX_NUM = #{faxNum,jdbcType=VARCHAR},
+      EMAIL_ADDR = #{emailAddr,jdbcType=VARCHAR},
+      WEBSITE = #{website,jdbcType=VARCHAR},
+      REGION_CODE = #{regionCode,jdbcType=VARCHAR},
+      SIMPLE_ADDR = #{simpleAddr,jdbcType=VARCHAR},
+      DETA_ADDRESS = #{detaAddress,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      OWNER_ID = #{ownerId,jdbcType=DECIMAL},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      LAST_MODIFIED_DATE = #{lastModifiedDate,jdbcType=TIMESTAMP},
+      COUNTY = #{county,jdbcType=VARCHAR},
+      ACT_PROVINCE = #{actProvince,jdbcType=VARCHAR},
+      ACT_CITY = #{actCity,jdbcType=VARCHAR},
+      ACT_COUNTY = #{actCounty,jdbcType=VARCHAR},
+      ACT_DTL_ADDRESS = #{actDtlAddress,jdbcType=VARCHAR},
+      TO_USER = #{toUser,jdbcType=VARCHAR},
+      TO_USER_TEL = #{toUserTel,jdbcType=VARCHAR},
+      TO_USER_PHONE = #{toUserPhone,jdbcType=VARCHAR},
+      FROM_USER = #{fromUser,jdbcType=VARCHAR},
+      FROM_USER_TEL = #{fromUserTel,jdbcType=VARCHAR},
+      ACT_COUNTRY = #{actCountry,jdbcType=VARCHAR},
+      BUSINESS_RANGE = #{businessRange,jdbcType=VARCHAR},
+      PROFIT_CENTER = #{profitCenter,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+</mapper>

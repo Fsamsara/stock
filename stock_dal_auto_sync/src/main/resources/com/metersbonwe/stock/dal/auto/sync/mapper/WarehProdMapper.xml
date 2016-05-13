@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.auto.sync.mapper.WarehProdMapper">
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.WarehProd">
+    <id column="WAREH_ID" jdbcType="VARCHAR" property="warehId" />
+    <id column="PROD_ID" jdbcType="CHAR" property="prodId" />
+    <result column="STK_ON_HAND" jdbcType="DECIMAL" property="stkOnHand" />
+    <result column="QTY_ON_ORDER" jdbcType="DECIMAL" property="qtyOnOrder" />
+    <result column="QTY_IN_TRANSIT" jdbcType="DECIMAL" property="qtyInTransit" />
+    <result column="QTY_COMMITTED" jdbcType="DECIMAL" property="qtyCommitted" />
+    <result column="QTY_IN_DOUBT" jdbcType="DECIMAL" property="qtyInDoubt" />
+    <result column="STK_PUBLISHED" jdbcType="DECIMAL" property="stkPublished" />
+    <result column="MIN_STK" jdbcType="DECIMAL" property="minStk" />
+    <result column="MAX_STK" jdbcType="DECIMAL" property="maxStk" />
+    <result column="ALERT_MIN_STK" jdbcType="DECIMAL" property="alertMinStk" />
+    <result column="ALERT_MAX_STK" jdbcType="DECIMAL" property="alertMaxStk" />
+    <result column="MIN_AD_STK" jdbcType="DECIMAL" property="minAdStk" />
+    <result column="MAX_AD_STK" jdbcType="DECIMAL" property="maxAdStk" />
+    <result column="DFLT_ZONE_ID" jdbcType="VARCHAR" property="dfltZoneId" />
+    <result column="STD_LOC_CAP" jdbcType="DECIMAL" property="stdLocCap" />
+    <result column="DFLT_LOC_ID" jdbcType="VARCHAR" property="dfltLocId" />
+    <result column="STK_JUST_TIME" jdbcType="DECIMAL" property="stkJustTime" />
+    <result column="QTY_FUC_COMM" jdbcType="DECIMAL" property="qtyFucComm" />
+    <result column="QTY_CUR_COMM" jdbcType="DECIMAL" property="qtyCurComm" />
+    <result column="STK_CHANGE_DATE" jdbcType="TIMESTAMP" property="stkChangeDate" />
+    <result column="BGR_STK" jdbcType="DECIMAL" property="bgrStk" />
+    <result column="IN_RCV_STK" jdbcType="DECIMAL" property="inRcvStk" />
+    <result column="LOCKED_QTY" jdbcType="DECIMAL" property="lockedQty" />
+    <result column="RESERVED_QTY" jdbcType="DECIMAL" property="reservedQty" />
+    <result column="LOCK_STOCKIN" jdbcType="DECIMAL" property="lockStockin" />
+    <result column="STOCKIN_FREE" jdbcType="DECIMAL" property="stockinFree" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    WAREH_ID, PROD_ID, STK_ON_HAND, QTY_ON_ORDER, QTY_IN_TRANSIT, QTY_COMMITTED, QTY_IN_DOUBT, 
+    STK_PUBLISHED, MIN_STK, MAX_STK, ALERT_MIN_STK, ALERT_MAX_STK, MIN_AD_STK, MAX_AD_STK, 
+    DFLT_ZONE_ID, STD_LOC_CAP, DFLT_LOC_ID, STK_JUST_TIME, QTY_FUC_COMM, QTY_CUR_COMM, 
+    STK_CHANGE_DATE, BGR_STK, IN_RCV_STK, LOCKED_QTY, RESERVED_QTY, LOCK_STOCKIN, STOCKIN_FREE
+  </sql>
+  <select id="selectByExample" parameterType="com.metersbonwe.stock.po.sync.WarehProdExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from WAREH_PROD
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from WAREH_PROD
+    where WAREH_ID = #{warehId,jdbcType=VARCHAR}
+      and PROD_ID = #{prodId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from WAREH_PROD
+    where WAREH_ID = #{warehId,jdbcType=VARCHAR}
+      and PROD_ID = #{prodId,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.metersbonwe.stock.po.sync.WarehProdExample">
+    delete from WAREH_PROD
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.metersbonwe.stock.po.sync.WarehProd">
+    insert into WAREH_PROD (WAREH_ID, PROD_ID, STK_ON_HAND, 
+      QTY_ON_ORDER, QTY_IN_TRANSIT, QTY_COMMITTED, 
+      QTY_IN_DOUBT, STK_PUBLISHED, MIN_STK, 
+      MAX_STK, ALERT_MIN_STK, ALERT_MAX_STK, 
+      MIN_AD_STK, MAX_AD_STK, DFLT_ZONE_ID, 
+      STD_LOC_CAP, DFLT_LOC_ID, STK_JUST_TIME, 
+      QTY_FUC_COMM, QTY_CUR_COMM, STK_CHANGE_DATE, 
+      BGR_STK, IN_RCV_STK, LOCKED_QTY, 
+      RESERVED_QTY, LOCK_STOCKIN, STOCKIN_FREE
+      )
+    values (#{warehId,jdbcType=VARCHAR}, #{prodId,jdbcType=CHAR}, #{stkOnHand,jdbcType=DECIMAL}, 
+      #{qtyOnOrder,jdbcType=DECIMAL}, #{qtyInTransit,jdbcType=DECIMAL}, #{qtyCommitted,jdbcType=DECIMAL}, 
+      #{qtyInDoubt,jdbcType=DECIMAL}, #{stkPublished,jdbcType=DECIMAL}, #{minStk,jdbcType=DECIMAL}, 
+      #{maxStk,jdbcType=DECIMAL}, #{alertMinStk,jdbcType=DECIMAL}, #{alertMaxStk,jdbcType=DECIMAL}, 
+      #{minAdStk,jdbcType=DECIMAL}, #{maxAdStk,jdbcType=DECIMAL}, #{dfltZoneId,jdbcType=VARCHAR}, 
+      #{stdLocCap,jdbcType=DECIMAL}, #{dfltLocId,jdbcType=VARCHAR}, #{stkJustTime,jdbcType=DECIMAL}, 
+      #{qtyFucComm,jdbcType=DECIMAL}, #{qtyCurComm,jdbcType=DECIMAL}, #{stkChangeDate,jdbcType=TIMESTAMP}, 
+      #{bgrStk,jdbcType=DECIMAL}, #{inRcvStk,jdbcType=DECIMAL}, #{lockedQty,jdbcType=DECIMAL}, 
+      #{reservedQty,jdbcType=DECIMAL}, #{lockStockin,jdbcType=DECIMAL}, #{stockinFree,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.metersbonwe.stock.po.sync.WarehProd">
+    insert into WAREH_PROD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="warehId != null">
+        WAREH_ID,
+      </if>
+      <if test="prodId != null">
+        PROD_ID,
+      </if>
+      <if test="stkOnHand != null">
+        STK_ON_HAND,
+      </if>
+      <if test="qtyOnOrder != null">
+        QTY_ON_ORDER,
+      </if>
+      <if test="qtyInTransit != null">
+        QTY_IN_TRANSIT,
+      </if>
+      <if test="qtyCommitted != null">
+        QTY_COMMITTED,
+      </if>
+      <if test="qtyInDoubt != null">
+        QTY_IN_DOUBT,
+      </if>
+      <if test="stkPublished != null">
+        STK_PUBLISHED,
+      </if>
+      <if test="minStk != null">
+        MIN_STK,
+      </if>
+      <if test="maxStk != null">
+        MAX_STK,
+      </if>
+      <if test="alertMinStk != null">
+        ALERT_MIN_STK,
+      </if>
+      <if test="alertMaxStk != null">
+        ALERT_MAX_STK,
+      </if>
+      <if test="minAdStk != null">
+        MIN_AD_STK,
+      </if>
+      <if test="maxAdStk != null">
+        MAX_AD_STK,
+      </if>
+      <if test="dfltZoneId != null">
+        DFLT_ZONE_ID,
+      </if>
+      <if test="stdLocCap != null">
+        STD_LOC_CAP,
+      </if>
+      <if test="dfltLocId != null">
+        DFLT_LOC_ID,
+      </if>
+      <if test="stkJustTime != null">
+        STK_JUST_TIME,
+      </if>
+      <if test="qtyFucComm != null">
+        QTY_FUC_COMM,
+      </if>
+      <if test="qtyCurComm != null">
+        QTY_CUR_COMM,
+      </if>
+      <if test="stkChangeDate != null">
+        STK_CHANGE_DATE,
+      </if>
+      <if test="bgrStk != null">
+        BGR_STK,
+      </if>
+      <if test="inRcvStk != null">
+        IN_RCV_STK,
+      </if>
+      <if test="lockedQty != null">
+        LOCKED_QTY,
+      </if>
+      <if test="reservedQty != null">
+        RESERVED_QTY,
+      </if>
+      <if test="lockStockin != null">
+        LOCK_STOCKIN,
+      </if>
+      <if test="stockinFree != null">
+        STOCKIN_FREE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="warehId != null">
+        #{warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        #{prodId,jdbcType=CHAR},
+      </if>
+      <if test="stkOnHand != null">
+        #{stkOnHand,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyOnOrder != null">
+        #{qtyOnOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyInTransit != null">
+        #{qtyInTransit,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyCommitted != null">
+        #{qtyCommitted,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyInDoubt != null">
+        #{qtyInDoubt,jdbcType=DECIMAL},
+      </if>
+      <if test="stkPublished != null">
+        #{stkPublished,jdbcType=DECIMAL},
+      </if>
+      <if test="minStk != null">
+        #{minStk,jdbcType=DECIMAL},
+      </if>
+      <if test="maxStk != null">
+        #{maxStk,jdbcType=DECIMAL},
+      </if>
+      <if test="alertMinStk != null">
+        #{alertMinStk,jdbcType=DECIMAL},
+      </if>
+      <if test="alertMaxStk != null">
+        #{alertMaxStk,jdbcType=DECIMAL},
+      </if>
+      <if test="minAdStk != null">
+        #{minAdStk,jdbcType=DECIMAL},
+      </if>
+      <if test="maxAdStk != null">
+        #{maxAdStk,jdbcType=DECIMAL},
+      </if>
+      <if test="dfltZoneId != null">
+        #{dfltZoneId,jdbcType=VARCHAR},
+      </if>
+      <if test="stdLocCap != null">
+        #{stdLocCap,jdbcType=DECIMAL},
+      </if>
+      <if test="dfltLocId != null">
+        #{dfltLocId,jdbcType=VARCHAR},
+      </if>
+      <if test="stkJustTime != null">
+        #{stkJustTime,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyFucComm != null">
+        #{qtyFucComm,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyCurComm != null">
+        #{qtyCurComm,jdbcType=DECIMAL},
+      </if>
+      <if test="stkChangeDate != null">
+        #{stkChangeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bgrStk != null">
+        #{bgrStk,jdbcType=DECIMAL},
+      </if>
+      <if test="inRcvStk != null">
+        #{inRcvStk,jdbcType=DECIMAL},
+      </if>
+      <if test="lockedQty != null">
+        #{lockedQty,jdbcType=DECIMAL},
+      </if>
+      <if test="reservedQty != null">
+        #{reservedQty,jdbcType=DECIMAL},
+      </if>
+      <if test="lockStockin != null">
+        #{lockStockin,jdbcType=DECIMAL},
+      </if>
+      <if test="stockinFree != null">
+        #{stockinFree,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.metersbonwe.stock.po.sync.WarehProdExample" resultType="java.lang.Integer">
+    select count(*) from WAREH_PROD
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update WAREH_PROD
+    <set>
+      <if test="record.warehId != null">
+        WAREH_ID = #{record.warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodId != null">
+        PROD_ID = #{record.prodId,jdbcType=CHAR},
+      </if>
+      <if test="record.stkOnHand != null">
+        STK_ON_HAND = #{record.stkOnHand,jdbcType=DECIMAL},
+      </if>
+      <if test="record.qtyOnOrder != null">
+        QTY_ON_ORDER = #{record.qtyOnOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="record.qtyInTransit != null">
+        QTY_IN_TRANSIT = #{record.qtyInTransit,jdbcType=DECIMAL},
+      </if>
+      <if test="record.qtyCommitted != null">
+        QTY_COMMITTED = #{record.qtyCommitted,jdbcType=DECIMAL},
+      </if>
+      <if test="record.qtyInDoubt != null">
+        QTY_IN_DOUBT = #{record.qtyInDoubt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.stkPublished != null">
+        STK_PUBLISHED = #{record.stkPublished,jdbcType=DECIMAL},
+      </if>
+      <if test="record.minStk != null">
+        MIN_STK = #{record.minStk,jdbcType=DECIMAL},
+      </if>
+      <if test="record.maxStk != null">
+        MAX_STK = #{record.maxStk,jdbcType=DECIMAL},
+      </if>
+      <if test="record.alertMinStk != null">
+        ALERT_MIN_STK = #{record.alertMinStk,jdbcType=DECIMAL},
+      </if>
+      <if test="record.alertMaxStk != null">
+        ALERT_MAX_STK = #{record.alertMaxStk,jdbcType=DECIMAL},
+      </if>
+      <if test="record.minAdStk != null">
+        MIN_AD_STK = #{record.minAdStk,jdbcType=DECIMAL},
+      </if>
+      <if test="record.maxAdStk != null">
+        MAX_AD_STK = #{record.maxAdStk,jdbcType=DECIMAL},
+      </if>
+      <if test="record.dfltZoneId != null">
+        DFLT_ZONE_ID = #{record.dfltZoneId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stdLocCap != null">
+        STD_LOC_CAP = #{record.stdLocCap,jdbcType=DECIMAL},
+      </if>
+      <if test="record.dfltLocId != null">
+        DFLT_LOC_ID = #{record.dfltLocId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stkJustTime != null">
+        STK_JUST_TIME = #{record.stkJustTime,jdbcType=DECIMAL},
+      </if>
+      <if test="record.qtyFucComm != null">
+        QTY_FUC_COMM = #{record.qtyFucComm,jdbcType=DECIMAL},
+      </if>
+      <if test="record.qtyCurComm != null">
+        QTY_CUR_COMM = #{record.qtyCurComm,jdbcType=DECIMAL},
+      </if>
+      <if test="record.stkChangeDate != null">
+        STK_CHANGE_DATE = #{record.stkChangeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.bgrStk != null">
+        BGR_STK = #{record.bgrStk,jdbcType=DECIMAL},
+      </if>
+      <if test="record.inRcvStk != null">
+        IN_RCV_STK = #{record.inRcvStk,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lockedQty != null">
+        LOCKED_QTY = #{record.lockedQty,jdbcType=DECIMAL},
+      </if>
+      <if test="record.reservedQty != null">
+        RESERVED_QTY = #{record.reservedQty,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lockStockin != null">
+        LOCK_STOCKIN = #{record.lockStockin,jdbcType=DECIMAL},
+      </if>
+      <if test="record.stockinFree != null">
+        STOCKIN_FREE = #{record.stockinFree,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update WAREH_PROD
+    set WAREH_ID = #{record.warehId,jdbcType=VARCHAR},
+      PROD_ID = #{record.prodId,jdbcType=CHAR},
+      STK_ON_HAND = #{record.stkOnHand,jdbcType=DECIMAL},
+      QTY_ON_ORDER = #{record.qtyOnOrder,jdbcType=DECIMAL},
+      QTY_IN_TRANSIT = #{record.qtyInTransit,jdbcType=DECIMAL},
+      QTY_COMMITTED = #{record.qtyCommitted,jdbcType=DECIMAL},
+      QTY_IN_DOUBT = #{record.qtyInDoubt,jdbcType=DECIMAL},
+      STK_PUBLISHED = #{record.stkPublished,jdbcType=DECIMAL},
+      MIN_STK = #{record.minStk,jdbcType=DECIMAL},
+      MAX_STK = #{record.maxStk,jdbcType=DECIMAL},
+      ALERT_MIN_STK = #{record.alertMinStk,jdbcType=DECIMAL},
+      ALERT_MAX_STK = #{record.alertMaxStk,jdbcType=DECIMAL},
+      MIN_AD_STK = #{record.minAdStk,jdbcType=DECIMAL},
+      MAX_AD_STK = #{record.maxAdStk,jdbcType=DECIMAL},
+      DFLT_ZONE_ID = #{record.dfltZoneId,jdbcType=VARCHAR},
+      STD_LOC_CAP = #{record.stdLocCap,jdbcType=DECIMAL},
+      DFLT_LOC_ID = #{record.dfltLocId,jdbcType=VARCHAR},
+      STK_JUST_TIME = #{record.stkJustTime,jdbcType=DECIMAL},
+      QTY_FUC_COMM = #{record.qtyFucComm,jdbcType=DECIMAL},
+      QTY_CUR_COMM = #{record.qtyCurComm,jdbcType=DECIMAL},
+      STK_CHANGE_DATE = #{record.stkChangeDate,jdbcType=TIMESTAMP},
+      BGR_STK = #{record.bgrStk,jdbcType=DECIMAL},
+      IN_RCV_STK = #{record.inRcvStk,jdbcType=DECIMAL},
+      LOCKED_QTY = #{record.lockedQty,jdbcType=DECIMAL},
+      RESERVED_QTY = #{record.reservedQty,jdbcType=DECIMAL},
+      LOCK_STOCKIN = #{record.lockStockin,jdbcType=DECIMAL},
+      STOCKIN_FREE = #{record.stockinFree,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.metersbonwe.stock.po.sync.WarehProd">
+    update WAREH_PROD
+    <set>
+      <if test="stkOnHand != null">
+        STK_ON_HAND = #{stkOnHand,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyOnOrder != null">
+        QTY_ON_ORDER = #{qtyOnOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyInTransit != null">
+        QTY_IN_TRANSIT = #{qtyInTransit,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyCommitted != null">
+        QTY_COMMITTED = #{qtyCommitted,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyInDoubt != null">
+        QTY_IN_DOUBT = #{qtyInDoubt,jdbcType=DECIMAL},
+      </if>
+      <if test="stkPublished != null">
+        STK_PUBLISHED = #{stkPublished,jdbcType=DECIMAL},
+      </if>
+      <if test="minStk != null">
+        MIN_STK = #{minStk,jdbcType=DECIMAL},
+      </if>
+      <if test="maxStk != null">
+        MAX_STK = #{maxStk,jdbcType=DECIMAL},
+      </if>
+      <if test="alertMinStk != null">
+        ALERT_MIN_STK = #{alertMinStk,jdbcType=DECIMAL},
+      </if>
+      <if test="alertMaxStk != null">
+        ALERT_MAX_STK = #{alertMaxStk,jdbcType=DECIMAL},
+      </if>
+      <if test="minAdStk != null">
+        MIN_AD_STK = #{minAdStk,jdbcType=DECIMAL},
+      </if>
+      <if test="maxAdStk != null">
+        MAX_AD_STK = #{maxAdStk,jdbcType=DECIMAL},
+      </if>
+      <if test="dfltZoneId != null">
+        DFLT_ZONE_ID = #{dfltZoneId,jdbcType=VARCHAR},
+      </if>
+      <if test="stdLocCap != null">
+        STD_LOC_CAP = #{stdLocCap,jdbcType=DECIMAL},
+      </if>
+      <if test="dfltLocId != null">
+        DFLT_LOC_ID = #{dfltLocId,jdbcType=VARCHAR},
+      </if>
+      <if test="stkJustTime != null">
+        STK_JUST_TIME = #{stkJustTime,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyFucComm != null">
+        QTY_FUC_COMM = #{qtyFucComm,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyCurComm != null">
+        QTY_CUR_COMM = #{qtyCurComm,jdbcType=DECIMAL},
+      </if>
+      <if test="stkChangeDate != null">
+        STK_CHANGE_DATE = #{stkChangeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bgrStk != null">
+        BGR_STK = #{bgrStk,jdbcType=DECIMAL},
+      </if>
+      <if test="inRcvStk != null">
+        IN_RCV_STK = #{inRcvStk,jdbcType=DECIMAL},
+      </if>
+      <if test="lockedQty != null">
+        LOCKED_QTY = #{lockedQty,jdbcType=DECIMAL},
+      </if>
+      <if test="reservedQty != null">
+        RESERVED_QTY = #{reservedQty,jdbcType=DECIMAL},
+      </if>
+      <if test="lockStockin != null">
+        LOCK_STOCKIN = #{lockStockin,jdbcType=DECIMAL},
+      </if>
+      <if test="stockinFree != null">
+        STOCKIN_FREE = #{stockinFree,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where WAREH_ID = #{warehId,jdbcType=VARCHAR}
+      and PROD_ID = #{prodId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.metersbonwe.stock.po.sync.WarehProd">
+    update WAREH_PROD
+    set STK_ON_HAND = #{stkOnHand,jdbcType=DECIMAL},
+      QTY_ON_ORDER = #{qtyOnOrder,jdbcType=DECIMAL},
+      QTY_IN_TRANSIT = #{qtyInTransit,jdbcType=DECIMAL},
+      QTY_COMMITTED = #{qtyCommitted,jdbcType=DECIMAL},
+      QTY_IN_DOUBT = #{qtyInDoubt,jdbcType=DECIMAL},
+      STK_PUBLISHED = #{stkPublished,jdbcType=DECIMAL},
+      MIN_STK = #{minStk,jdbcType=DECIMAL},
+      MAX_STK = #{maxStk,jdbcType=DECIMAL},
+      ALERT_MIN_STK = #{alertMinStk,jdbcType=DECIMAL},
+      ALERT_MAX_STK = #{alertMaxStk,jdbcType=DECIMAL},
+      MIN_AD_STK = #{minAdStk,jdbcType=DECIMAL},
+      MAX_AD_STK = #{maxAdStk,jdbcType=DECIMAL},
+      DFLT_ZONE_ID = #{dfltZoneId,jdbcType=VARCHAR},
+      STD_LOC_CAP = #{stdLocCap,jdbcType=DECIMAL},
+      DFLT_LOC_ID = #{dfltLocId,jdbcType=VARCHAR},
+      STK_JUST_TIME = #{stkJustTime,jdbcType=DECIMAL},
+      QTY_FUC_COMM = #{qtyFucComm,jdbcType=DECIMAL},
+      QTY_CUR_COMM = #{qtyCurComm,jdbcType=DECIMAL},
+      STK_CHANGE_DATE = #{stkChangeDate,jdbcType=TIMESTAMP},
+      BGR_STK = #{bgrStk,jdbcType=DECIMAL},
+      IN_RCV_STK = #{inRcvStk,jdbcType=DECIMAL},
+      LOCKED_QTY = #{lockedQty,jdbcType=DECIMAL},
+      RESERVED_QTY = #{reservedQty,jdbcType=DECIMAL},
+      LOCK_STOCKIN = #{lockStockin,jdbcType=DECIMAL},
+      STOCKIN_FREE = #{stockinFree,jdbcType=DECIMAL}
+    where WAREH_ID = #{warehId,jdbcType=VARCHAR}
+      and PROD_ID = #{prodId,jdbcType=CHAR}
+  </update>
+
+</mapper>

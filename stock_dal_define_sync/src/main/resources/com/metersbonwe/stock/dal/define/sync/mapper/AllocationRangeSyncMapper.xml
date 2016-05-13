@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.sync.mapper.AllocationRangeSyncMapper" >
+
+    <select id="getUsefulWareH" resultType="String">
+      select t.wareh_id
+        from st_activity_wareh t,
+             (
+               select t1.code
+                 from ud_wareh_param t, bf_org t1
+                where t.is_stk_sync2os = 1
+                  and t.bf_org_id = t1.id
+                union all
+               select t1.code
+                  from bf_org_shop t, bf_org t1
+                 where t.bf_org_id = t1.id
+                   and t.is_synctoos = '1'
+                   and exists (select 1
+                                   from ud_overall_paramelist
+                                  where code = 'SOA_SYNCHRONIZE_OS'
+                                    and para_value != 0)
+                                ) t1
+        where t.wareh_id = t1.code
+    </select>
+
+</mapper>

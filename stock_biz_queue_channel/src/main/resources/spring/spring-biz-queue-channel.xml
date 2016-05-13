@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+     http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd">
+
+	<!--自由量锁定量队列监听 -->
+	<bean id="freeLockQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="${CHANNEL_WAREH_PROD_FREE_LOCK}" />
+	</bean>
+
+	<aop:config>
+		<aop:aspect id="id_biz_queue_channel" ref="stockMethodArgsLogInterceptor">
+			<aop:pointcut id="channelQueueService"
+				expression="execution(* com.metersbonwe.stock.biz.queue.service.impl.*.*(..))" />
+			<aop:before method="doBefore" pointcut-ref="channelQueueService" />
+		</aop:aspect>
+	</aop:config>
+
+	<bean id="freeLockMqListenter"
+		class="com.metersbonwe.stock.biz.queue.service.impl.FreeLockChangeServiceImpl" />
+
+	<bean id="freeLockMessageListenerContainer"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="receiveConnectionPoolFactory" />
+		<property name="destination" ref="freeLockQueue" />
+		<property name="messageListener" ref="freeLockMqListenter" />
+		<property name="concurrency" value="10-100"></property>
+	</bean>
+
+	<!--预留量队列监听 -->
+	<bean id="reservedQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="${CHANNEL_WAREH_PROD_RESERVED}" />
+	</bean>
+
+	<bean id="reservedMqListenter"
+		class="com.metersbonwe.stock.biz.queue.service.impl.ReservedChangeServiceImpl" />
+
+	<bean id="reservedMessageListenerContainer"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="receiveConnectionPoolFactory" />
+		<property name="destination" ref="reservedQueue" />
+		<property name="messageListener" ref="reservedMqListenter" />
+		<property name="concurrency" value="5-10"></property>
+	</bean>
+
+	<!--推送线上指令监听 -->
+	<bean id="sendToLineFlagQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0" value="${SEND_TO_LINE_FLAG}" />
+	</bean>
+
+	<bean id="sendToLineFlagMqListenter"
+		class="com.metersbonwe.stock.biz.queue.service.impl.SendToLineMQServiceImpl" />
+
+	<bean id="sendTolineFlagMqListenerContainer"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="receiveConnectionPoolFactory" />
+		<property name="destination" ref="sendToLineFlagQueue" />
+		<property name="messageListener" ref="sendToLineFlagMqListenter" />
+		<property name="concurrency" value="5-10"></property>
+	</bean>
+
+	<!--店群预留量队列监听 -->
+	<bean id="channelGroupReservedQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+						 value="${CHANNEL_GROUP_RESERVED}" />
+	</bean>
+
+	<bean id="channelGroupReservedMqListenter"
+		  class="com.metersbonwe.stock.biz.queue.service.impl.ChannelGroupReservedChangeServiceImpl" />
+
+	<bean id="channelGroupReservedMessageListenerContainer"
+		  class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="receiveConnectionPoolFactory" />
+		<property name="destination" ref="channelGroupReservedQueue" />
+		<property name="messageListener" ref="channelGroupReservedMqListenter" />
+		<property name="concurrency" value="10-20"></property>
+	</bean>
+
+	<!--计算渠道所有库存量队列监听 -->
+	<bean id="channelChangeAllQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+						 value="${CHANNEL_ALL}" />
+	</bean>
+
+	<bean id="channelChangeAllMqListenter"
+		  class="com.metersbonwe.stock.biz.queue.service.impl.ChannelChangeAllServiceImpl" />
+
+	<bean id="channelAllMessageListenerContainer"
+		  class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="receiveConnectionPoolFactory" />
+		<property name="destination" ref="channelChangeAllQueue" />
+		<property name="messageListener" ref="channelChangeAllMqListenter" />
+		<property name="concurrency" value="10-20"></property>
+	</bean>
+
+</beans>

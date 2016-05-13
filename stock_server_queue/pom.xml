@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.metersbonwe.stock</groupId>
+		<artifactId>stock</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>stock_server_queue</artifactId>
+	<packaging>war</packaging>
+	<name>stock_server_queue Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+		<dependency>
+			<groupId>com.metersbonwe.stock</groupId>
+			<artifactId>stock_biz_queue</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.metersbonwe.stock</groupId>
+			<artifactId>stock_configuration</artifactId>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>stock_server_queue</finalName>
+	</build>
+</project>

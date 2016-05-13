@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.auto.core.mapper.StockChannelOrderDetailMapper">
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.core.StockChannelOrderDetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="channel_code" jdbcType="VARCHAR" property="channelCode" />
+    <result column="business_id" jdbcType="VARCHAR" property="businessId" />
+    <result column="os_order_id" jdbcType="VARCHAR" property="osOrderId" />
+    <result column="sub_order_id" jdbcType="VARCHAR" property="subOrderId" />
+    <result column="prod_id" jdbcType="VARCHAR" property="prodId" />
+    <result column="is_pre_occupy" jdbcType="INTEGER" property="isPreOccupy" />
+    <result column="order_private_stock" jdbcType="INTEGER" property="orderPrivateStock" />
+    <result column="order_share_stock" jdbcType="INTEGER" property="orderShareStock" />
+    <result column="order_shop_group_stock" jdbcType="INTEGER" property="orderShopGroupStock" />
+    <result column="relation_channel" jdbcType="VARCHAR" property="relationChannel" />
+    <result column="lazy_status" jdbcType="INTEGER" property="lazyStatus" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, channel_code, business_id, os_order_id, sub_order_id, prod_id, is_pre_occupy, 
+    order_private_stock, order_share_stock, order_shop_group_stock, relation_channel, 
+    lazy_status, update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.metersbonwe.stock.po.core.StockChannelOrderDetailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from stock_channel_order_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from stock_channel_order_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from stock_channel_order_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.metersbonwe.stock.po.core.StockChannelOrderDetailExample">
+    delete from stock_channel_order_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.metersbonwe.stock.po.core.StockChannelOrderDetail">
+    insert into stock_channel_order_detail (id, channel_code, business_id, 
+      os_order_id, sub_order_id, prod_id, 
+      is_pre_occupy, order_private_stock, order_share_stock, 
+      order_shop_group_stock, relation_channel, lazy_status, 
+      update_time)
+    values (#{id,jdbcType=INTEGER}, #{channelCode,jdbcType=VARCHAR}, #{businessId,jdbcType=VARCHAR}, 
+      #{osOrderId,jdbcType=VARCHAR}, #{subOrderId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, 
+      #{isPreOccupy,jdbcType=INTEGER}, #{orderPrivateStock,jdbcType=INTEGER}, #{orderShareStock,jdbcType=INTEGER}, 
+      #{orderShopGroupStock,jdbcType=INTEGER}, #{relationChannel,jdbcType=VARCHAR}, #{lazyStatus,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.metersbonwe.stock.po.core.StockChannelOrderDetail">
+    insert into stock_channel_order_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="channelCode != null">
+        channel_code,
+      </if>
+      <if test="businessId != null">
+        business_id,
+      </if>
+      <if test="osOrderId != null">
+        os_order_id,
+      </if>
+      <if test="subOrderId != null">
+        sub_order_id,
+      </if>
+      <if test="prodId != null">
+        prod_id,
+      </if>
+      <if test="isPreOccupy != null">
+        is_pre_occupy,
+      </if>
+      <if test="orderPrivateStock != null">
+        order_private_stock,
+      </if>
+      <if test="orderShareStock != null">
+        order_share_stock,
+      </if>
+      <if test="orderShopGroupStock != null">
+        order_shop_group_stock,
+      </if>
+      <if test="relationChannel != null">
+        relation_channel,
+      </if>
+      <if test="lazyStatus != null">
+        lazy_status,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="channelCode != null">
+        #{channelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="businessId != null">
+        #{businessId,jdbcType=VARCHAR},
+      </if>
+      <if test="osOrderId != null">
+        #{osOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="subOrderId != null">
+        #{subOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="isPreOccupy != null">
+        #{isPreOccupy,jdbcType=INTEGER},
+      </if>
+      <if test="orderPrivateStock != null">
+        #{orderPrivateStock,jdbcType=INTEGER},
+      </if>
+      <if test="orderShareStock != null">
+        #{orderShareStock,jdbcType=INTEGER},
+      </if>
+      <if test="orderShopGroupStock != null">
+        #{orderShopGroupStock,jdbcType=INTEGER},
+      </if>
+      <if test="relationChannel != null">
+        #{relationChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="lazyStatus != null">
+        #{lazyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.metersbonwe.stock.po.core.StockChannelOrderDetailExample" resultType="java.lang.Integer">
+    select count(*) from stock_channel_order_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update stock_channel_order_detail
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.channelCode != null">
+        channel_code = #{record.channelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessId != null">
+        business_id = #{record.businessId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.osOrderId != null">
+        os_order_id = #{record.osOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subOrderId != null">
+        sub_order_id = #{record.subOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodId != null">
+        prod_id = #{record.prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isPreOccupy != null">
+        is_pre_occupy = #{record.isPreOccupy,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderPrivateStock != null">
+        order_private_stock = #{record.orderPrivateStock,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderShareStock != null">
+        order_share_stock = #{record.orderShareStock,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderShopGroupStock != null">
+        order_shop_group_stock = #{record.orderShopGroupStock,jdbcType=INTEGER},
+      </if>
+      <if test="record.relationChannel != null">
+        relation_channel = #{record.relationChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lazyStatus != null">
+        lazy_status = #{record.lazyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update stock_channel_order_detail
+    set id = #{record.id,jdbcType=INTEGER},
+      channel_code = #{record.channelCode,jdbcType=VARCHAR},
+      business_id = #{record.businessId,jdbcType=VARCHAR},
+      os_order_id = #{record.osOrderId,jdbcType=VARCHAR},
+      sub_order_id = #{record.subOrderId,jdbcType=VARCHAR},
+      prod_id = #{record.prodId,jdbcType=VARCHAR},
+      is_pre_occupy = #{record.isPreOccupy,jdbcType=INTEGER},
+      order_private_stock = #{record.orderPrivateStock,jdbcType=INTEGER},
+      order_share_stock = #{record.orderShareStock,jdbcType=INTEGER},
+      order_shop_group_stock = #{record.orderShopGroupStock,jdbcType=INTEGER},
+      relation_channel = #{record.relationChannel,jdbcType=VARCHAR},
+      lazy_status = #{record.lazyStatus,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.metersbonwe.stock.po.core.StockChannelOrderDetail">
+    update stock_channel_order_detail
+    <set>
+      <if test="channelCode != null">
+        channel_code = #{channelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="businessId != null">
+        business_id = #{businessId,jdbcType=VARCHAR},
+      </if>
+      <if test="osOrderId != null">
+        os_order_id = #{osOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="subOrderId != null">
+        sub_order_id = #{subOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        prod_id = #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="isPreOccupy != null">
+        is_pre_occupy = #{isPreOccupy,jdbcType=INTEGER},
+      </if>
+      <if test="orderPrivateStock != null">
+        order_private_stock = #{orderPrivateStock,jdbcType=INTEGER},
+      </if>
+      <if test="orderShareStock != null">
+        order_share_stock = #{orderShareStock,jdbcType=INTEGER},
+      </if>
+      <if test="orderShopGroupStock != null">
+        order_shop_group_stock = #{orderShopGroupStock,jdbcType=INTEGER},
+      </if>
+      <if test="relationChannel != null">
+        relation_channel = #{relationChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="lazyStatus != null">
+        lazy_status = #{lazyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.metersbonwe.stock.po.core.StockChannelOrderDetail">
+    update stock_channel_order_detail
+    set channel_code = #{channelCode,jdbcType=VARCHAR},
+      business_id = #{businessId,jdbcType=VARCHAR},
+      os_order_id = #{osOrderId,jdbcType=VARCHAR},
+      sub_order_id = #{subOrderId,jdbcType=VARCHAR},
+      prod_id = #{prodId,jdbcType=VARCHAR},
+      is_pre_occupy = #{isPreOccupy,jdbcType=INTEGER},
+      order_private_stock = #{orderPrivateStock,jdbcType=INTEGER},
+      order_share_stock = #{orderShareStock,jdbcType=INTEGER},
+      order_shop_group_stock = #{orderShopGroupStock,jdbcType=INTEGER},
+      relation_channel = #{relationChannel,jdbcType=VARCHAR},
+      lazy_status = #{lazyStatus,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

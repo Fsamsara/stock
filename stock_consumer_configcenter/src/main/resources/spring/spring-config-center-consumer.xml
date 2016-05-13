@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+	default-lazy-init="false">
+
+	<dubbo:registry id="umpRegistry" protocol="zookeeper"
+		address="${dubbo.ump.registry}" timeout="${dubbo.registry.timeout}" />
+
+	<!-- 配置中心全局最大最小值服务 -->
+	<dubbo:reference id="stockChannelServiceDubbo"
+		protocol="dubbo"
+		interface="com.mtsbw.business.configuration.inventory.dubbo.api.IStockChannelServiceDubbo"
+		registry="umpRegistry" timeout="${dubbo.ump.timeout}" version="${dubbo.ump.version}" />
+
+	<!-- 配置中心单元最小值服务 -->
+	<dubbo:reference id="stockUnitChannelServiceDubbo"
+		protocol="dubbo"
+		interface="com.mtsbw.business.configuration.inventory.dubbo.api.IStockUnitChannelServiceDubbo"
+		registry="umpRegistry" timeout="${dubbo.ump.timeout}" version="${dubbo.ump.version}" />
+
+	<!-- 配置中心获取活动配置服务 -->
+	<dubbo:reference id="unitChannelActivityServiceDubbo"
+		protocol="dubbo"
+		interface="com.mtsbw.business.configuration.inventory.dubbo.api.IUnitChannelActivityServiceDubbo"
+		registry="umpRegistry" timeout="${dubbo.ump.timeout}" version="${dubbo.ump.version}" />
+
+	<!-- 配置获取菜单服务 -->
+	<dubbo:reference id="userMenuServiceDubbo" protocol="dubbo"
+		interface="com.mtsbw.ump.permission.dubbo.service.UserMenuService"
+		registry="umpRegistry" timeout="${dubbo.ump.timeout}" group="${dubbo.ump.group}" />
+
+	<!-- 配置验证登录服务 -->
+	<dubbo:reference id="userRoleServiceDubbo" protocol="dubbo"
+		interface="com.mtsbw.ump.permission.dubbo.service.UserRoleService"
+		registry="umpRegistry" timeout="${dubbo.ump.timeout}" group="${dubbo.ump.group}" />
+
+</beans>

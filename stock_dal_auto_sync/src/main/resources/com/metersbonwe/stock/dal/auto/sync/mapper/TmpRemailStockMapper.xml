@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.auto.sync.mapper.TmpRemailStockMapper">
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.TmpRemailStock">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="WAREH_ID" jdbcType="VARCHAR" property="warehId" />
+    <result column="PROD_ID" jdbcType="VARCHAR" property="prodId" />
+    <result column="REMAIL_STOCK" jdbcType="DECIMAL" property="remailStock" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="LOC_ID" jdbcType="VARCHAR" property="locId" />
+    <result column="RLL_NUM" jdbcType="VARCHAR" property="rllNum" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, WAREH_ID, PROD_ID, REMAIL_STOCK, UPDATE_TIME, LOC_ID, RLL_NUM
+  </sql>
+  <select id="selectByExample" parameterType="com.metersbonwe.stock.po.sync.TmpRemailStockExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from TMP_REMAIL_STOCK
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from TMP_REMAIL_STOCK
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from TMP_REMAIL_STOCK
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.metersbonwe.stock.po.sync.TmpRemailStockExample">
+    delete from TMP_REMAIL_STOCK
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.metersbonwe.stock.po.sync.TmpRemailStock">
+    insert into TMP_REMAIL_STOCK (ID, WAREH_ID, PROD_ID, 
+      REMAIL_STOCK, UPDATE_TIME, LOC_ID, 
+      RLL_NUM)
+    values (#{id,jdbcType=DECIMAL}, #{warehId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, 
+      #{remailStock,jdbcType=DECIMAL}, #{updateTime,jdbcType=TIMESTAMP}, #{locId,jdbcType=VARCHAR}, 
+      #{rllNum,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.metersbonwe.stock.po.sync.TmpRemailStock">
+    insert into TMP_REMAIL_STOCK
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="warehId != null">
+        WAREH_ID,
+      </if>
+      <if test="prodId != null">
+        PROD_ID,
+      </if>
+      <if test="remailStock != null">
+        REMAIL_STOCK,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="locId != null">
+        LOC_ID,
+      </if>
+      <if test="rllNum != null">
+        RLL_NUM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="warehId != null">
+        #{warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="remailStock != null">
+        #{remailStock,jdbcType=DECIMAL},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="locId != null">
+        #{locId,jdbcType=VARCHAR},
+      </if>
+      <if test="rllNum != null">
+        #{rllNum,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.metersbonwe.stock.po.sync.TmpRemailStockExample" resultType="java.lang.Integer">
+    select count(*) from TMP_REMAIL_STOCK
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update TMP_REMAIL_STOCK
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=DECIMAL},
+      </if>
+      <if test="record.warehId != null">
+        WAREH_ID = #{record.warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodId != null">
+        PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remailStock != null">
+        REMAIL_STOCK = #{record.remailStock,jdbcType=DECIMAL},
+      </if>
+      <if test="record.updateTime != null">
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.locId != null">
+        LOC_ID = #{record.locId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rllNum != null">
+        RLL_NUM = #{record.rllNum,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update TMP_REMAIL_STOCK
+    set ID = #{record.id,jdbcType=DECIMAL},
+      WAREH_ID = #{record.warehId,jdbcType=VARCHAR},
+      PROD_ID = #{record.prodId,jdbcType=VARCHAR},
+      REMAIL_STOCK = #{record.remailStock,jdbcType=DECIMAL},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      LOC_ID = #{record.locId,jdbcType=VARCHAR},
+      RLL_NUM = #{record.rllNum,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.metersbonwe.stock.po.sync.TmpRemailStock">
+    update TMP_REMAIL_STOCK
+    <set>
+      <if test="warehId != null">
+        WAREH_ID = #{warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        PROD_ID = #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="remailStock != null">
+        REMAIL_STOCK = #{remailStock,jdbcType=DECIMAL},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="locId != null">
+        LOC_ID = #{locId,jdbcType=VARCHAR},
+      </if>
+      <if test="rllNum != null">
+        RLL_NUM = #{rllNum,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.metersbonwe.stock.po.sync.TmpRemailStock">
+    update TMP_REMAIL_STOCK
+    set WAREH_ID = #{warehId,jdbcType=VARCHAR},
+      PROD_ID = #{prodId,jdbcType=VARCHAR},
+      REMAIL_STOCK = #{remailStock,jdbcType=DECIMAL},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      LOC_ID = #{locId,jdbcType=VARCHAR},
+      RLL_NUM = #{rllNum,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

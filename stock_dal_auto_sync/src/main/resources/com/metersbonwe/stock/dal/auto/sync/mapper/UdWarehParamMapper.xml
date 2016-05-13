@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.auto.sync.mapper.UdWarehParamMapper">
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.UdWarehParam">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="BF_ORG_ID" jdbcType="DECIMAL" property="bfOrgId" />
+    <result column="ORG_TYPE" jdbcType="VARCHAR" property="orgType" />
+    <result column="VIRTUAL_WAREHOUSE_ID" jdbcType="DECIMAL" property="virtualWarehouseId" />
+    <result column="B2C_STARTING_QTY" jdbcType="DECIMAL" property="b2cStartingQty" />
+    <result column="B2C_DIST_PEAK_VALUE" jdbcType="DECIMAL" property="b2cDistPeakValue" />
+    <result column="B2B_STARTING_QTY" jdbcType="DECIMAL" property="b2bStartingQty" />
+    <result column="B2B_DIST_PEAK_VALUE" jdbcType="DECIMAL" property="b2bDistPeakValue" />
+    <result column="ONLINE_SAFEQTY_TYPE" jdbcType="VARCHAR" property="onlineSafeqtyType" />
+    <result column="OFFLINE_SAFEQTY_TYPE" jdbcType="VARCHAR" property="offlineSafeqtyType" />
+    <result column="FLAG" jdbcType="CHAR" property="flag" />
+    <result column="UP_FLAG" jdbcType="CHAR" property="upFlag" />
+    <result column="UD_ONLINE" jdbcType="CHAR" property="udOnline" />
+    <result column="UD_OFFLINE" jdbcType="CHAR" property="udOffline" />
+    <result column="SHIPPING_ID" jdbcType="DECIMAL" property="shippingId" />
+    <result column="HAND_CREATE_DOC" jdbcType="CHAR" property="handCreateDoc" />
+    <result column="MIN_NUM" jdbcType="DECIMAL" property="minNum" />
+    <result column="PROD_SOURCE" jdbcType="VARCHAR" property="prodSource" />
+    <result column="SAFETY_STOCK" jdbcType="DECIMAL" property="safetyStock" />
+    <result column="IS_TFO_DIST_WAREH" jdbcType="CHAR" property="isTfoDistWareh" />
+    <result column="USED_MA" jdbcType="CHAR" property="usedMa" />
+    <result column="CANAD_ZONES" jdbcType="VARCHAR" property="canadZones" />
+    <result column="IS_STK_SYNC2OS" jdbcType="CHAR" property="isStkSync2os" />
+    <result column="IS_DOUBLE_LOCKED" jdbcType="CHAR" property="isDoubleLocked" />
+    <result column="RELEASE_ORDER" jdbcType="DECIMAL" property="releaseOrder" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, BF_ORG_ID, ORG_TYPE, VIRTUAL_WAREHOUSE_ID, B2C_STARTING_QTY, B2C_DIST_PEAK_VALUE, 
+    B2B_STARTING_QTY, B2B_DIST_PEAK_VALUE, ONLINE_SAFEQTY_TYPE, OFFLINE_SAFEQTY_TYPE, 
+    FLAG, UP_FLAG, UD_ONLINE, UD_OFFLINE, SHIPPING_ID, HAND_CREATE_DOC, MIN_NUM, PROD_SOURCE, 
+    SAFETY_STOCK, IS_TFO_DIST_WAREH, USED_MA, CANAD_ZONES, IS_STK_SYNC2OS, IS_DOUBLE_LOCKED, 
+    RELEASE_ORDER
+  </sql>
+  <select id="selectByExample" parameterType="com.metersbonwe.stock.po.sync.UdWarehParamExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from UD_WAREH_PARAM
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from UD_WAREH_PARAM
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from UD_WAREH_PARAM
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.metersbonwe.stock.po.sync.UdWarehParamExample">
+    delete from UD_WAREH_PARAM
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.metersbonwe.stock.po.sync.UdWarehParam">
+    insert into UD_WAREH_PARAM (ID, BF_ORG_ID, ORG_TYPE, 
+      VIRTUAL_WAREHOUSE_ID, B2C_STARTING_QTY, B2C_DIST_PEAK_VALUE, 
+      B2B_STARTING_QTY, B2B_DIST_PEAK_VALUE, ONLINE_SAFEQTY_TYPE, 
+      OFFLINE_SAFEQTY_TYPE, FLAG, UP_FLAG, 
+      UD_ONLINE, UD_OFFLINE, SHIPPING_ID, 
+      HAND_CREATE_DOC, MIN_NUM, PROD_SOURCE, 
+      SAFETY_STOCK, IS_TFO_DIST_WAREH, USED_MA, 
+      CANAD_ZONES, IS_STK_SYNC2OS, IS_DOUBLE_LOCKED, 
+      RELEASE_ORDER)
+    values (#{id,jdbcType=DECIMAL}, #{bfOrgId,jdbcType=DECIMAL}, #{orgType,jdbcType=VARCHAR}, 
+      #{virtualWarehouseId,jdbcType=DECIMAL}, #{b2cStartingQty,jdbcType=DECIMAL}, #{b2cDistPeakValue,jdbcType=DECIMAL}, 
+      #{b2bStartingQty,jdbcType=DECIMAL}, #{b2bDistPeakValue,jdbcType=DECIMAL}, #{onlineSafeqtyType,jdbcType=VARCHAR}, 
+      #{offlineSafeqtyType,jdbcType=VARCHAR}, #{flag,jdbcType=CHAR}, #{upFlag,jdbcType=CHAR}, 
+      #{udOnline,jdbcType=CHAR}, #{udOffline,jdbcType=CHAR}, #{shippingId,jdbcType=DECIMAL}, 
+      #{handCreateDoc,jdbcType=CHAR}, #{minNum,jdbcType=DECIMAL}, #{prodSource,jdbcType=VARCHAR}, 
+      #{safetyStock,jdbcType=DECIMAL}, #{isTfoDistWareh,jdbcType=CHAR}, #{usedMa,jdbcType=CHAR}, 
+      #{canadZones,jdbcType=VARCHAR}, #{isStkSync2os,jdbcType=CHAR}, #{isDoubleLocked,jdbcType=CHAR}, 
+      #{releaseOrder,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.metersbonwe.stock.po.sync.UdWarehParam">
+    insert into UD_WAREH_PARAM
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="bfOrgId != null">
+        BF_ORG_ID,
+      </if>
+      <if test="orgType != null">
+        ORG_TYPE,
+      </if>
+      <if test="virtualWarehouseId != null">
+        VIRTUAL_WAREHOUSE_ID,
+      </if>
+      <if test="b2cStartingQty != null">
+        B2C_STARTING_QTY,
+      </if>
+      <if test="b2cDistPeakValue != null">
+        B2C_DIST_PEAK_VALUE,
+      </if>
+      <if test="b2bStartingQty != null">
+        B2B_STARTING_QTY,
+      </if>
+      <if test="b2bDistPeakValue != null">
+        B2B_DIST_PEAK_VALUE,
+      </if>
+      <if test="onlineSafeqtyType != null">
+        ONLINE_SAFEQTY_TYPE,
+      </if>
+      <if test="offlineSafeqtyType != null">
+        OFFLINE_SAFEQTY_TYPE,
+      </if>
+      <if test="flag != null">
+        FLAG,
+      </if>
+      <if test="upFlag != null">
+        UP_FLAG,
+      </if>
+      <if test="udOnline != null">
+        UD_ONLINE,
+      </if>
+      <if test="udOffline != null">
+        UD_OFFLINE,
+      </if>
+      <if test="shippingId != null">
+        SHIPPING_ID,
+      </if>
+      <if test="handCreateDoc != null">
+        HAND_CREATE_DOC,
+      </if>
+      <if test="minNum != null">
+        MIN_NUM,
+      </if>
+      <if test="prodSource != null">
+        PROD_SOURCE,
+      </if>
+      <if test="safetyStock != null">
+        SAFETY_STOCK,
+      </if>
+      <if test="isTfoDistWareh != null">
+        IS_TFO_DIST_WAREH,
+      </if>
+      <if test="usedMa != null">
+        USED_MA,
+      </if>
+      <if test="canadZones != null">
+        CANAD_ZONES,
+      </if>
+      <if test="isStkSync2os != null">
+        IS_STK_SYNC2OS,
+      </if>
+      <if test="isDoubleLocked != null">
+        IS_DOUBLE_LOCKED,
+      </if>
+      <if test="releaseOrder != null">
+        RELEASE_ORDER,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="bfOrgId != null">
+        #{bfOrgId,jdbcType=DECIMAL},
+      </if>
+      <if test="orgType != null">
+        #{orgType,jdbcType=VARCHAR},
+      </if>
+      <if test="virtualWarehouseId != null">
+        #{virtualWarehouseId,jdbcType=DECIMAL},
+      </if>
+      <if test="b2cStartingQty != null">
+        #{b2cStartingQty,jdbcType=DECIMAL},
+      </if>
+      <if test="b2cDistPeakValue != null">
+        #{b2cDistPeakValue,jdbcType=DECIMAL},
+      </if>
+      <if test="b2bStartingQty != null">
+        #{b2bStartingQty,jdbcType=DECIMAL},
+      </if>
+      <if test="b2bDistPeakValue != null">
+        #{b2bDistPeakValue,jdbcType=DECIMAL},
+      </if>
+      <if test="onlineSafeqtyType != null">
+        #{onlineSafeqtyType,jdbcType=VARCHAR},
+      </if>
+      <if test="offlineSafeqtyType != null">
+        #{offlineSafeqtyType,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=CHAR},
+      </if>
+      <if test="upFlag != null">
+        #{upFlag,jdbcType=CHAR},
+      </if>
+      <if test="udOnline != null">
+        #{udOnline,jdbcType=CHAR},
+      </if>
+      <if test="udOffline != null">
+        #{udOffline,jdbcType=CHAR},
+      </if>
+      <if test="shippingId != null">
+        #{shippingId,jdbcType=DECIMAL},
+      </if>
+      <if test="handCreateDoc != null">
+        #{handCreateDoc,jdbcType=CHAR},
+      </if>
+      <if test="minNum != null">
+        #{minNum,jdbcType=DECIMAL},
+      </if>
+      <if test="prodSource != null">
+        #{prodSource,jdbcType=VARCHAR},
+      </if>
+      <if test="safetyStock != null">
+        #{safetyStock,jdbcType=DECIMAL},
+      </if>
+      <if test="isTfoDistWareh != null">
+        #{isTfoDistWareh,jdbcType=CHAR},
+      </if>
+      <if test="usedMa != null">
+        #{usedMa,jdbcType=CHAR},
+      </if>
+      <if test="canadZones != null">
+        #{canadZones,jdbcType=VARCHAR},
+      </if>
+      <if test="isStkSync2os != null">
+        #{isStkSync2os,jdbcType=CHAR},
+      </if>
+      <if test="isDoubleLocked != null">
+        #{isDoubleLocked,jdbcType=CHAR},
+      </if>
+      <if test="releaseOrder != null">
+        #{releaseOrder,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.metersbonwe.stock.po.sync.UdWarehParamExample" resultType="java.lang.Integer">
+    select count(*) from UD_WAREH_PARAM
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update UD_WAREH_PARAM
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=DECIMAL},
+      </if>
+      <if test="record.bfOrgId != null">
+        BF_ORG_ID = #{record.bfOrgId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orgType != null">
+        ORG_TYPE = #{record.orgType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.virtualWarehouseId != null">
+        VIRTUAL_WAREHOUSE_ID = #{record.virtualWarehouseId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.b2cStartingQty != null">
+        B2C_STARTING_QTY = #{record.b2cStartingQty,jdbcType=DECIMAL},
+      </if>
+      <if test="record.b2cDistPeakValue != null">
+        B2C_DIST_PEAK_VALUE = #{record.b2cDistPeakValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.b2bStartingQty != null">
+        B2B_STARTING_QTY = #{record.b2bStartingQty,jdbcType=DECIMAL},
+      </if>
+      <if test="record.b2bDistPeakValue != null">
+        B2B_DIST_PEAK_VALUE = #{record.b2bDistPeakValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.onlineSafeqtyType != null">
+        ONLINE_SAFEQTY_TYPE = #{record.onlineSafeqtyType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.offlineSafeqtyType != null">
+        OFFLINE_SAFEQTY_TYPE = #{record.offlineSafeqtyType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flag != null">
+        FLAG = #{record.flag,jdbcType=CHAR},
+      </if>
+      <if test="record.upFlag != null">
+        UP_FLAG = #{record.upFlag,jdbcType=CHAR},
+      </if>
+      <if test="record.udOnline != null">
+        UD_ONLINE = #{record.udOnline,jdbcType=CHAR},
+      </if>
+      <if test="record.udOffline != null">
+        UD_OFFLINE = #{record.udOffline,jdbcType=CHAR},
+      </if>
+      <if test="record.shippingId != null">
+        SHIPPING_ID = #{record.shippingId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.handCreateDoc != null">
+        HAND_CREATE_DOC = #{record.handCreateDoc,jdbcType=CHAR},
+      </if>
+      <if test="record.minNum != null">
+        MIN_NUM = #{record.minNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.prodSource != null">
+        PROD_SOURCE = #{record.prodSource,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safetyStock != null">
+        SAFETY_STOCK = #{record.safetyStock,jdbcType=DECIMAL},
+      </if>
+      <if test="record.isTfoDistWareh != null">
+        IS_TFO_DIST_WAREH = #{record.isTfoDistWareh,jdbcType=CHAR},
+      </if>
+      <if test="record.usedMa != null">
+        USED_MA = #{record.usedMa,jdbcType=CHAR},
+      </if>
+      <if test="record.canadZones != null">
+        CANAD_ZONES = #{record.canadZones,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isStkSync2os != null">
+        IS_STK_SYNC2OS = #{record.isStkSync2os,jdbcType=CHAR},
+      </if>
+      <if test="record.isDoubleLocked != null">
+        IS_DOUBLE_LOCKED = #{record.isDoubleLocked,jdbcType=CHAR},
+      </if>
+      <if test="record.releaseOrder != null">
+        RELEASE_ORDER = #{record.releaseOrder,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update UD_WAREH_PARAM
+    set ID = #{record.id,jdbcType=DECIMAL},
+      BF_ORG_ID = #{record.bfOrgId,jdbcType=DECIMAL},
+      ORG_TYPE = #{record.orgType,jdbcType=VARCHAR},
+      VIRTUAL_WAREHOUSE_ID = #{record.virtualWarehouseId,jdbcType=DECIMAL},
+      B2C_STARTING_QTY = #{record.b2cStartingQty,jdbcType=DECIMAL},
+      B2C_DIST_PEAK_VALUE = #{record.b2cDistPeakValue,jdbcType=DECIMAL},
+      B2B_STARTING_QTY = #{record.b2bStartingQty,jdbcType=DECIMAL},
+      B2B_DIST_PEAK_VALUE = #{record.b2bDistPeakValue,jdbcType=DECIMAL},
+      ONLINE_SAFEQTY_TYPE = #{record.onlineSafeqtyType,jdbcType=VARCHAR},
+      OFFLINE_SAFEQTY_TYPE = #{record.offlineSafeqtyType,jdbcType=VARCHAR},
+      FLAG = #{record.flag,jdbcType=CHAR},
+      UP_FLAG = #{record.upFlag,jdbcType=CHAR},
+      UD_ONLINE = #{record.udOnline,jdbcType=CHAR},
+      UD_OFFLINE = #{record.udOffline,jdbcType=CHAR},
+      SHIPPING_ID = #{record.shippingId,jdbcType=DECIMAL},
+      HAND_CREATE_DOC = #{record.handCreateDoc,jdbcType=CHAR},
+      MIN_NUM = #{record.minNum,jdbcType=DECIMAL},
+      PROD_SOURCE = #{record.prodSource,jdbcType=VARCHAR},
+      SAFETY_STOCK = #{record.safetyStock,jdbcType=DECIMAL},
+      IS_TFO_DIST_WAREH = #{record.isTfoDistWareh,jdbcType=CHAR},
+      USED_MA = #{record.usedMa,jdbcType=CHAR},
+      CANAD_ZONES = #{record.canadZones,jdbcType=VARCHAR},
+      IS_STK_SYNC2OS = #{record.isStkSync2os,jdbcType=CHAR},
+      IS_DOUBLE_LOCKED = #{record.isDoubleLocked,jdbcType=CHAR},
+      RELEASE_ORDER = #{record.releaseOrder,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.metersbonwe.stock.po.sync.UdWarehParam">
+    update UD_WAREH_PARAM
+    <set>
+      <if test="bfOrgId != null">
+        BF_ORG_ID = #{bfOrgId,jdbcType=DECIMAL},
+      </if>
+      <if test="orgType != null">
+        ORG_TYPE = #{orgType,jdbcType=VARCHAR},
+      </if>
+      <if test="virtualWarehouseId != null">
+        VIRTUAL_WAREHOUSE_ID = #{virtualWarehouseId,jdbcType=DECIMAL},
+      </if>
+      <if test="b2cStartingQty != null">
+        B2C_STARTING_QTY = #{b2cStartingQty,jdbcType=DECIMAL},
+      </if>
+      <if test="b2cDistPeakValue != null">
+        B2C_DIST_PEAK_VALUE = #{b2cDistPeakValue,jdbcType=DECIMAL},
+      </if>
+      <if test="b2bStartingQty != null">
+        B2B_STARTING_QTY = #{b2bStartingQty,jdbcType=DECIMAL},
+      </if>
+      <if test="b2bDistPeakValue != null">
+        B2B_DIST_PEAK_VALUE = #{b2bDistPeakValue,jdbcType=DECIMAL},
+      </if>
+      <if test="onlineSafeqtyType != null">
+        ONLINE_SAFEQTY_TYPE = #{onlineSafeqtyType,jdbcType=VARCHAR},
+      </if>
+      <if test="offlineSafeqtyType != null">
+        OFFLINE_SAFEQTY_TYPE = #{offlineSafeqtyType,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null">
+        FLAG = #{flag,jdbcType=CHAR},
+      </if>
+      <if test="upFlag != null">
+        UP_FLAG = #{upFlag,jdbcType=CHAR},
+      </if>
+      <if test="udOnline != null">
+        UD_ONLINE = #{udOnline,jdbcType=CHAR},
+      </if>
+      <if test="udOffline != null">
+        UD_OFFLINE = #{udOffline,jdbcType=CHAR},
+      </if>
+      <if test="shippingId != null">
+        SHIPPING_ID = #{shippingId,jdbcType=DECIMAL},
+      </if>
+      <if test="handCreateDoc != null">
+        HAND_CREATE_DOC = #{handCreateDoc,jdbcType=CHAR},
+      </if>
+      <if test="minNum != null">
+        MIN_NUM = #{minNum,jdbcType=DECIMAL},
+      </if>
+      <if test="prodSource != null">
+        PROD_SOURCE = #{prodSource,jdbcType=VARCHAR},
+      </if>
+      <if test="safetyStock != null">
+        SAFETY_STOCK = #{safetyStock,jdbcType=DECIMAL},
+      </if>
+      <if test="isTfoDistWareh != null">
+        IS_TFO_DIST_WAREH = #{isTfoDistWareh,jdbcType=CHAR},
+      </if>
+      <if test="usedMa != null">
+        USED_MA = #{usedMa,jdbcType=CHAR},
+      </if>
+      <if test="canadZones != null">
+        CANAD_ZONES = #{canadZones,jdbcType=VARCHAR},
+      </if>
+      <if test="isStkSync2os != null">
+        IS_STK_SYNC2OS = #{isStkSync2os,jdbcType=CHAR},
+      </if>
+      <if test="isDoubleLocked != null">
+        IS_DOUBLE_LOCKED = #{isDoubleLocked,jdbcType=CHAR},
+      </if>
+      <if test="releaseOrder != null">
+        RELEASE_ORDER = #{releaseOrder,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.metersbonwe.stock.po.sync.UdWarehParam">
+    update UD_WAREH_PARAM
+    set BF_ORG_ID = #{bfOrgId,jdbcType=DECIMAL},
+      ORG_TYPE = #{orgType,jdbcType=VARCHAR},
+      VIRTUAL_WAREHOUSE_ID = #{virtualWarehouseId,jdbcType=DECIMAL},
+      B2C_STARTING_QTY = #{b2cStartingQty,jdbcType=DECIMAL},
+      B2C_DIST_PEAK_VALUE = #{b2cDistPeakValue,jdbcType=DECIMAL},
+      B2B_STARTING_QTY = #{b2bStartingQty,jdbcType=DECIMAL},
+      B2B_DIST_PEAK_VALUE = #{b2bDistPeakValue,jdbcType=DECIMAL},
+      ONLINE_SAFEQTY_TYPE = #{onlineSafeqtyType,jdbcType=VARCHAR},
+      OFFLINE_SAFEQTY_TYPE = #{offlineSafeqtyType,jdbcType=VARCHAR},
+      FLAG = #{flag,jdbcType=CHAR},
+      UP_FLAG = #{upFlag,jdbcType=CHAR},
+      UD_ONLINE = #{udOnline,jdbcType=CHAR},
+      UD_OFFLINE = #{udOffline,jdbcType=CHAR},
+      SHIPPING_ID = #{shippingId,jdbcType=DECIMAL},
+      HAND_CREATE_DOC = #{handCreateDoc,jdbcType=CHAR},
+      MIN_NUM = #{minNum,jdbcType=DECIMAL},
+      PROD_SOURCE = #{prodSource,jdbcType=VARCHAR},
+      SAFETY_STOCK = #{safetyStock,jdbcType=DECIMAL},
+      IS_TFO_DIST_WAREH = #{isTfoDistWareh,jdbcType=CHAR},
+      USED_MA = #{usedMa,jdbcType=CHAR},
+      CANAD_ZONES = #{canadZones,jdbcType=VARCHAR},
+      IS_STK_SYNC2OS = #{isStkSync2os,jdbcType=CHAR},
+      IS_DOUBLE_LOCKED = #{isDoubleLocked,jdbcType=CHAR},
+      RELEASE_ORDER = #{releaseOrder,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+ 
+</mapper>

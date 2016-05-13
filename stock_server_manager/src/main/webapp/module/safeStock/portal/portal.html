@@ -1,0 +1,118 @@
+<style>
+    .column {
+        padding-bottom: 100px;
+    }
+    .portlet {
+        margin: 0 1em 1em 0;
+        padding: 0.3em;
+    }
+    .portlet .panel-heading:hover{
+        cursor:move;
+    }
+    .portlet-header {
+        padding: 0.2em 0.3em;
+        margin-bottom: 0.5em;
+        position: relative;
+    }
+    .portlet-toggle {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        margin-top: -8px;
+    }
+
+    .portlet-placeholder {
+        border: 1px dotted black;
+        margin: 0 1em 1em 0;
+        height: 250px;
+    }
+
+    .portlet .panel-transparent-black .panel-body{
+        min-height: 200px;
+    }
+</style>
+
+<div class="row portlet">
+    <div class="col-lg-4 col-sm-6 column">
+        <div class="panel panel-transparent-black">
+            <div class="panel-heading">
+                <h5 class="panel-title">订阅</h5>
+            </div>
+            <div class="panel-body">
+                <div >
+
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-transparent-black">
+            <div class="panel-heading">
+                <h5 class="panel-title">链接</h5>
+            </div>
+            <div class="panel-body">
+                <div >
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-6  column">
+        <div class="panel panel-transparent-black">
+            <div class="panel-heading">
+                <h5 class="panel-title">新闻</h5>
+            </div>
+            <div class="panel-body">
+                <div >
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-6 column">
+        <div class="panel panel-transparent-black">
+            <div class="panel-heading">
+                <h5 class="panel-title">购物</h5>
+            </div>
+            <div class="panel-body">
+                <div >
+
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-transparent-black">
+            <div class="panel-heading">
+                <h5 class="panel-title">图像</h5>
+            </div>
+            <div class="panel-body">
+                <div >
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        $( ".column" ).sortable({
+            connectWith: ".column",
+            handle: ".panel-heading",
+            cancel: ".portlet-toggle",
+            placeholder: "portlet-placeholder ui-corner-all"
+        });
+
+        $( ".panel" )
+                .addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+                .find( ".panel-heading" )
+                .addClass( "ui-widget-header ui-corner-all" )
+                .prepend( "<span class='icon-minusthick portlet-toggle'></span>");
+
+        $( ".portlet-toggle" ).click(function() {
+            var icon = $( this );
+            icon.toggleClass( "ui-icon-minusthick ui-icon-plusthick" );
+            icon.closest( ".panel" ).find( ".panel-body" ).toggle();
+        });
+    });
+</script>

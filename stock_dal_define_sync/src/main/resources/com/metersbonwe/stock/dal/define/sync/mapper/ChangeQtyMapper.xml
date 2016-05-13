@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.sync.mapper.ChangeQtyMapper">
+
+	<!-- 获取Oracle同步库临时表 自由量 变化信息 -->
+	<select id="selectTmpFreeQtyInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyGlobalBean"
+		resultType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+		SELECT ST.ID "id",
+		       ST.WAREH_ID "warehId",
+		       ST.warehCode "warehCode",
+		       ST.PROD_ID "prodId",
+		       ST.prodCode "prodCode",
+		       ST.STK_ON_HAND "stkOnHand",
+		       ST.QTY_COMMITTED "qtyCommitted",
+		       ST.FREE_STOCK "freeStock",
+		       ST.UPDATE_TIME "updateTime",
+		       ST.DATA_SOURCE "dataSource",
+		       ST.freeChangedCount "freeChangedCount"
+		  FROM (SELECT S.*,
+		               RANK() OVER(PARTITION BY S.WAREH_ID, S.PROD_ID ORDER BY S.ID DESC) SORTRANK,
+		               SUM(TO_NUMBER(S.IS_FREE_CHANGED)) OVER(PARTITION BY S.WAREH_ID, S.PROD_ID) freeChangedCount
+		          FROM (SELECT T.ID,
+		                       T.WAREH_ID,
+		                       T.WAREH_ID as warehCode,
+		                       T.PROD_ID,
+		                       T.PROD_ID as prodCode,
+		                       T.STK_ON_HAND,
+		                       T.QTY_COMMITTED,
+		                       T.FREE_STOCK,
+		                       T.UPDATE_TIME,
+		                       T.DATA_SOURCE,
+		                       T.IS_FREE_CHANGED
+		                  FROM TMP_FREE_STOCK T, ST_ACTIVITY_WAREH A
+		                 WHERE T.DATA_SOURCE = 'OERP'
+		                   AND T.WAREH_ID = A.WAREH_ID
+		                   AND T.DATA_SOURCE = A.DATA_SOURCE
+		                 UNION ALL
+		                SELECT T.ID,
+		                       T.WAREH_ID,
+		                       W.CODE as warehCode,
+		                       T.PROD_ID,
+		                       P.PROD_NUM as prodCode,
+		                       T.STK_ON_HAND,
+		                       T.QTY_COMMITTED,
+		                       T.FREE_STOCK,
+		                       T.UPDATE_TIME,
+		                       T.DATA_SOURCE,
+		                       T.IS_FREE_CHANGED
+		                  FROM TMP_FREE_STOCK T, BF_ORG W, BF_PRODUCT P, ST_ACTIVITY_WAREH A
+		                 WHERE TO_NUMBER(T.WAREH_ID) = W.ID
+		                   AND TO_NUMBER(T.PROD_ID) = P.ID
+		                   AND T.DATA_SOURCE = 'NERP'
+		                   AND W.CODE = A.WAREH_ID 
+		                   AND T.DATA_SOURCE = A.DATA_SOURCE) S ORDER BY ID) ST
+		 WHERE ST.SORTRANK = 1
+		 <if test="startId != null">
+		   AND ST.ID <![CDATA[>]]> #{startId,jdbcType=INTEGER}
+		 </if>
+           AND ROWNUM <![CDATA[<=]]> #{maxDataCount,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectTmpTpQtyInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyGlobalBean"
+        resultType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+        SELECT ST.ID       "id",
+	           ST.WAREH_ID "warehId",
+	           ST.WAREH_ID "warehCode",
+	           ST.PROD_ID  "prodId",
+	           ST.PROD_ID  "prodCode",
+	           ST.TP_STOCK "freeStock"
+	      FROM (SELECT S.*, RANK() OVER(PARTITION BY S.WAREH_ID, S.PROD_ID ORDER BY S.ID DESC) SORTRANK
+	              FROM TMP_TP_STOCK S
+	             ORDER BY ID) ST, ST_ACTIVITY_WAREH A
+	     WHERE ST.SORTRANK = 1
+	       AND ST.WAREH_ID = A.WAREH_ID
+        <if test="startId != null">
+           AND ST.ID <![CDATA[>]]> #{startId,jdbcType=INTEGER}
+        </if>
+           AND ROWNUM <![CDATA[<=]]> #{maxDataCount,jdbcType=INTEGER}
+    </select>
+    
+    <select id="selectTmpRemailQtyInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyGlobalBean"
+        resultType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+        SELECT ST.ID           "id",
+		       ST.WAREH_ID     "warehId",
+		       ST.WAREH_ID     "warehCode",
+		       ST.PROD_ID      "prodId",
+		       ST.PROD_ID      "prodCode",
+		       ST.LOC_ID       "locId",
+		       ST.REMAIL_STOCK "remailStock",
+		       ST.UPDATE_TIME  "updateTime",
+		       ST.RLL_NUM      "rllNum"
+		  FROM (SELECT S.*
+		          FROM TMP_REMAIL_STOCK S
+		         ORDER BY ID) ST, ST_ACTIVITY_WAREH A
+		 WHERE ST.WAREH_ID = A.WAREH_ID
+        <if test="startId != null">
+           AND ST.ID <![CDATA[>]]> #{startId,jdbcType=INTEGER}
+        </if>
+		   AND ROWNUM <![CDATA[<=]]> #{maxDataCount,jdbcType=INTEGER}
+    </select>
+    
+    <select id="selectTmpDameQtyInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyGlobalBean"
+        resultType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+	    SELECT ST.ID       "id",
+	           ST.WAREH_ID "warehId",
+	           ST.WAREH_ID "warehCode",
+	           ST.PROD_ID  "prodId",
+	           ST.PROD_ID  "prodCode",
+	           ST.DAME_STOCK "dameStock",
+	           ST.UPDATE_TIME "updateTime",
+	           ST.UPDATE_BY "updateBy",
+	           ST.CREATE_TIME "createTime",
+	           ST.CREATE_BY "createBy" 
+	      FROM (SELECT S.*, RANK() OVER(PARTITION BY S.WAREH_ID, S.PROD_ID ORDER BY S.ID DESC) SORTRANK
+	              FROM TMP_DAME_STOCK S
+                 ORDER BY ID) ST, ST_ACTIVITY_WAREH A
+         WHERE ST.SORTRANK = 1
+	       AND ST.WAREH_ID = A.WAREH_ID
+        <if test="startId != null">
+           AND ST.ID <![CDATA[>]]> #{startId,jdbcType=INTEGER}
+        </if>
+           AND ROWNUM <![CDATA[<=]]> #{maxDataCount,jdbcType=INTEGER}
+    </select>
+    
+    <select id="selectTmpShopSafeQtyInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyGlobalBean"
+        resultType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+	    SELECT ST.ID       "id",
+	           ST.WAREH_ID "warehId",
+	           ST.WAREH_ID "warehCode",
+	           ST.PROD_ID  "prodId",
+	           ST.PROD_ID  "prodCode",
+	           ST.SHOP_SAFE_STOCK "shopSafeStock"
+	      FROM (SELECT S.*, RANK() OVER(PARTITION BY S.WAREH_ID, S.PROD_ID ORDER BY S.ID DESC) SORTRANK
+	              FROM TMP_SHOP_SAFE_STOCK S
+	             ORDER BY ID) ST, ST_ACTIVITY_WAREH A
+         WHERE ST.SORTRANK = 1
+	       AND ST.WAREH_ID = A.WAREH_ID
+        <if test="startId != null">
+           AND ST.ID <![CDATA[>]]> #{startId,jdbcType=INTEGER}
+        </if>
+           AND ROWNUM <![CDATA[<=]]> #{maxDataCount,jdbcType=INTEGER}
+    </select>
+    
+    <select id="selectTmpChannelPordInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyGlobalBean"
+        resultType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+        SELECT ST.ID       "id",
+		       ST.CHANNEL_CODE "warehId",
+		       ST.CHANNEL_CODE "warehCode",
+		       ST.PROD_ID  "prodId",
+		       ST.PROD_ID  "prodCode"
+		  FROM (SELECT S.*, RANK() OVER(PARTITION BY S.CHANNEL_CODE, S.PROD_ID ORDER BY S.ID DESC) SORTRANK
+		          FROM TMP_ACTIVITY_STOCK S
+                 ORDER BY ID) ST
+		 WHERE ST.SORTRANK = 1
+        <if test="startId != null">
+           AND ST.ID <![CDATA[>]]> #{startId,jdbcType=INTEGER}
+        </if>
+           AND ROWNUM <![CDATA[<=]]> #{maxDataCount,jdbcType=INTEGER}
+    </select>
+
+	<!-- 获取Oracle同步库临时表 锁定量 变化信息 -->
+	<select id="selectTmpLockedQtyInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyGlobalBean"
+		resultType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+		SELECT ST.ID          "id",
+		       ST.WAREH_ID    "warehId",
+		       ST.WAREHCODE   "warehCode",
+		       ST.PROD_ID     "prodId",
+		       ST.PRODCODE    "prodCode",
+		       ST.DATA_SOURCE "dataSource",
+		       ST.SKU_NUM     "lockedStock"
+		FROM (SELECT S.*,
+		              RANK() OVER(PARTITION BY S.WAREH_ID, S.PROD_ID ORDER BY S.ID DESC) SORTRANK
+		         FROM (SELECT T.ID,
+	                          T.WAREH_ID,
+	                          T.WAREH_ID    AS WAREHCODE,
+	                          T.PROD_ID,
+	                          T.PROD_ID     AS PRODCODE,
+	                          T.DATA_SOURCE,
+	                          S.SKU_NUM
+	                     FROM TMP_LOCKED_STOCK T,
+	                          (SELECT WL.WAREH_ID,
+	                                  WL.PROD_ID,
+	                                  SUM(WL.LOCKED_QTY) SKU_NUM
+	                             FROM WAREH_LOCKED_LST WL, ST_ACTIVITY_WAREH SAW
+	                            WHERE SAW.WAREH_ID = WL.WAREH_ID
+	                              AND SAW.DATA_SOURCE = 'OERP'
+	                              AND LOCKED_TYPE IN
+	                                  (SELECT UCSD.UD_LOCKED_TYPE
+	                                     FROM UD_CHANNLE_STOCK_SCOPE UCS
+	                                    INNER JOIN UD_CHANNLE_STOCK_SCOPE_DTL UCSD
+	                                       ON UCSD.UD_CW_ID = UCS.ID
+	                                    WHERE UCS.CHANNLE_SORCE = 'ONLINE'
+	                                      AND UCSD.STATUS = '1'
+	                                      AND UCSD.IS_SYNC_OS = '1'
+	                                      AND NVL(UCSD.ISMONOPOLIZE,0) = 0)
+	                            GROUP BY WL.WAREH_ID, WL.PROD_ID) S
+	                    WHERE T.DATA_SOURCE = 'OERP'
+	                      AND T.WAREH_ID = S.WAREH_ID
+	                      AND T.PROD_ID = S.PROD_ID
+	                    UNION ALL
+	                   SELECT T.ID,
+	                          T.WAREH_ID,
+	                          F.CODE        AS WAREHCODE,
+	                          T.PROD_ID,
+	                          F.PROD_NUM    AS PRODCODE,
+	                          T.DATA_SOURCE,
+	                          F.SKU_NUM
+	                     FROM TMP_LOCKED_STOCK T,
+	                          (SELECT T.BF_ORG_ID WAREH_ID,
+	                                  BO.CODE,
+	                                  T.PROD_ID,
+	                                  P.PROD_NUM,
+	                                  SUM(T.LOCKED_QTY) AS SKU_NUM
+	                             FROM BF_PRODUCT          P,
+	                                  BF_ORG              BO,
+	                                  SF_WAREH_LOCKED_LST T,
+	                                  ST_ACTIVITY_WAREH   SAW
+	                            WHERE T.BF_ORG_ID = BO.ID
+	                              AND T.PROD_ID = P.ID
+	                              AND SAW.WAREH_ID = BO.CODE
+	                              AND SAW.DATA_SOURCE = 'NERP'
+	                              AND T.LOCKED_TYPE IN
+	                                  (SELECT UCSD.UD_LOCKED_TYPE
+	                                     FROM UD_CHANNLE_STOCK_SCOPE UCS
+	                                    INNER JOIN UD_CHANNLE_STOCK_SCOPE_DTL UCSD
+	                                       ON UCSD.UD_CW_ID = UCS.ID
+	                                    WHERE UCS.CHANNLE_SORCE = 'ONLINE'
+	                                      AND UCSD.STATUS = '1'
+	                                      AND UCSD.IS_SYNC_OS = '1'
+	                                      AND NVL(UCSD.ISMONOPOLIZE,0) = 0)
+	                            GROUP BY T.BF_ORG_ID, BO.CODE, T.PROD_ID, P.PROD_NUM) F
+	                    WHERE T.DATA_SOURCE = 'NERP'
+	                      AND T.WAREH_ID = F.WAREH_ID
+	                      AND T.PROD_ID = F.PROD_ID) S ORDER BY ID) ST
+         WHERE ST.SORTRANK = 1
+        <if test="startId != null">
+           AND ST.ID <![CDATA[>]]> #{startId,jdbcType=INTEGER}
+        </if>
+           AND ROWNUM <![CDATA[<=]]> #{maxDataCount,jdbcType=INTEGER}
+      ORDER BY ID
+	</select>
+
+	<!-- 获取Oracle同步库临时表 预留量 变化信息 -->
+	<select id="selectTmpReservedQtyInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyGlobalBean"
+		resultType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+	    SELECT ST.ID           "id",
+	           ST.WAREH_ID     "warehId",
+	           ST.WAREH_ID     "warehCode",
+	           ST.PROD_ID      "prodId",
+	           ST.PROD_ID      "prodCode",
+	           ST.CHANNEL_CODE "channelCode"
+	      FROM (SELECT S.*,RANK() OVER(PARTITION BY S.PROD_ID,S.CHANNEL_CODE ORDER BY S.ID DESC) SORTRANK
+	              FROM TMP_RESERVED_STOCK S
+                 ORDER BY ID) ST, ST_ACTIVITY_WAREH A
+         WHERE ST.SORTRANK = 1
+           AND ST.WAREH_ID = A.WAREH_ID
+        <if test="startId != null">
+           AND ST.ID <![CDATA[>]]> #{startId,jdbcType=INTEGER}
+        </if>
+           AND ROWNUM <![CDATA[<=]]> #{maxDataCount,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 删除Oracle同步库临时表 自由量 变化信息 -->
+	<delete id="deleteTmpFreeQtyInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+        DELETE FROM TMP_FREE_STOCK T
+		 WHERE 1 = 1
+		 <if test="startId != null">
+           AND T.ID <![CDATA[>=]]> #{startId,jdbcType=DECIMAL}
+         </if>
+         <if test="id != null">
+		   AND T.ID <![CDATA[<=]]> #{id,jdbcType=DECIMAL}
+         </if>
+         <if test="deleteAll != null">
+           AND NOT EXISTS (SELECT 1 FROM ST_ACTIVITY_WAREH A WHERE T.WAREH_ID = A.WAREH_ID AND T.DATA_SOURCE = A.DATA_SOURCE)
+         </if>
+	</delete>
+	
+	<!-- 删除Oracle同步库临时表 锁定量 变化信息 -->
+	<delete id="deleteTmpLockedQtyInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+        DELETE FROM TMP_LOCKED_STOCK T
+         WHERE 1 = 1
+         <if test="startId != null">
+           AND T.ID <![CDATA[>=]]> #{startId,jdbcType=DECIMAL}
+         </if>
+         <if test="id != null">
+           AND T.ID <![CDATA[<=]]> #{id,jdbcType=DECIMAL}
+         </if>
+         <if test="deleteAll != null">
+           AND NOT EXISTS (SELECT 1 FROM ST_ACTIVITY_WAREH A WHERE T.WAREH_ID = A.WAREH_ID AND T.DATA_SOURCE = A.DATA_SOURCE)
+         </if>
+    </delete>
+    
+    <!-- 删除Oracle同步库临时表 预留量 变化信息 -->
+    <delete id="deleteTmpReservedQtyInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+        DELETE FROM TMP_RESERVED_STOCK T
+         WHERE 1 = 1
+         <if test="startId != null">
+           AND T.ID <![CDATA[>=]]> #{startId,jdbcType=DECIMAL}
+         </if>
+         <if test="id != null">
+           AND T.ID <![CDATA[<=]]> #{id,jdbcType=DECIMAL}
+         </if>
+        <if test="deleteAll != null">
+           AND NOT EXISTS (SELECT 1 FROM ST_ACTIVITY_WAREH A WHERE T.WAREH_ID = A.WAREH_ID)
+         </if>
+    </delete>
+    
+    <!-- 删除Oracle同步库临时表 第三方自由量 变化信息 -->
+    <delete id="deleteTmpTpQtyInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+        DELETE FROM TMP_TP_STOCK T
+         WHERE 1 = 1
+         <if test="startId != null">
+           AND T.ID <![CDATA[>=]]> #{startId,jdbcType=DECIMAL}
+         </if>
+         <if test="id != null">
+           AND T.ID <![CDATA[<=]]> #{id,jdbcType=DECIMAL}
+         </if>
+         <if test="deleteAll != null">
+           AND NOT EXISTS (SELECT 1 FROM ST_ACTIVITY_WAREH A WHERE T.WAREH_ID = A.WAREH_ID)
+         </if>
+    </delete>
+    
+    <!-- 删除Oracle同步库临时表 门店未日结 变化信息 -->
+    <delete id="deleteTmpRemailQtyInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+        DELETE FROM TMP_REMAIL_STOCK T
+         WHERE 1 = 1
+         <if test="startId != null">
+           AND T.ID <![CDATA[>=]]> #{startId,jdbcType=DECIMAL}
+         </if>
+         <if test="id != null">
+           AND T.ID <![CDATA[<=]]> #{id,jdbcType=DECIMAL}
+         </if>
+         <if test="deleteAll != null">
+           AND NOT EXISTS (SELECT 1 FROM ST_ACTIVITY_WAREH A WHERE T.WAREH_ID = A.WAREH_ID)
+         </if>
+    </delete>
+    
+    <!-- 删除Oracle同步库临时表 门店污损值 变化信息 -->
+    <delete id="deleteTmpDameQtyInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+        DELETE FROM TMP_DAME_STOCK T
+         WHERE 1 = 1
+         <if test="startId != null">
+           AND T.ID <![CDATA[>=]]> #{startId,jdbcType=DECIMAL}
+         </if>
+         <if test="id != null">
+           AND T.ID <![CDATA[<=]]> #{id,jdbcType=DECIMAL}
+         </if>
+         <if test="deleteAll != null">
+           AND NOT EXISTS (SELECT 1 FROM ST_ACTIVITY_WAREH A WHERE T.WAREH_ID = A.WAREH_ID)
+         </if>
+    </delete>
+    
+    <!-- 删除Oracle同步库临时表 门店安全库存 变化信息 -->
+    <delete id="deleteTmpShopSafeQtyInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+        DELETE FROM TMP_SHOP_SAFE_STOCK T
+         WHERE 1 = 1
+         <if test="startId != null">
+           AND T.ID <![CDATA[>=]]> #{startId,jdbcType=DECIMAL}
+         </if>
+         <if test="id != null">
+           AND T.ID <![CDATA[<=]]> #{id,jdbcType=DECIMAL}
+         </if>
+         <if test="deleteAll != null">
+           AND NOT EXISTS (SELECT 1 FROM ST_ACTIVITY_WAREH A WHERE T.WAREH_ID = A.WAREH_ID)
+         </if>
+    </delete>
+    
+    <!-- 删除Oracle同步库临时表 活动期间渠道商品配置 变化信息 -->
+    <delete id="deleteTmpChannelPordInfo" parameterType="com.metersbonwe.stock.pojo.ChangeQtyInfoBean">
+        DELETE FROM TMP_ACTIVITY_STOCK T
+         WHERE 1 = 1
+         <if test="startId != null">
+           AND T.ID <![CDATA[>=]]> #{startId,jdbcType=DECIMAL}
+         </if>
+         <if test="id != null">
+           AND T.ID <![CDATA[<=]]> #{id,jdbcType=DECIMAL}
+         </if>
+    </delete>
+    
+</mapper>

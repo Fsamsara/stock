@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.auto.sync.mapper.SfWarehouseLocMapper">
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.SfWarehouseLoc">
+    <result column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="SF_WAREHOUSE_ZONE_ID" jdbcType="DECIMAL" property="sfWarehouseZoneId" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="LOC_PROP" jdbcType="VARCHAR" property="locProp" />
+    <result column="DIMENSION" jdbcType="DECIMAL" property="dimension" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+    <result column="LOC_DESC" jdbcType="VARCHAR" property="locDesc" />
+    <result column="LOC_TRANS_LOC_ID" jdbcType="DECIMAL" property="locTransLocId" />
+    <result column="FLOOR_NUM" jdbcType="VARCHAR" property="floorNum" />
+    <result column="LOCK_STATUS" jdbcType="VARCHAR" property="lockStatus" />
+    <result column="LANEWAY" jdbcType="VARCHAR" property="laneway" />
+    <result column="SEQUENCE_NUM" jdbcType="DECIMAL" property="sequenceNum" />
+    <result column="ROW_CODE" jdbcType="VARCHAR" property="rowCode" />
+    <result column="PICK_TRACE_NUM" jdbcType="DECIMAL" property="pickTraceNum" />
+    <result column="FLOW_TYPE" jdbcType="VARCHAR" property="flowType" />
+    <result column="ON_SHELF_NUM" jdbcType="VARCHAR" property="onShelfNum" />
+    <result column="LAST_CTRLR_TIME" jdbcType="TIMESTAMP" property="lastCtrlrTime" />
+    <result column="LOCK_TYPE" jdbcType="VARCHAR" property="lockType" />
+    <result column="BOX_ADOPTED" jdbcType="CHAR" property="boxAdopted" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, SF_WAREHOUSE_ZONE_ID, CODE, LOC_PROP, DIMENSION, DESCRIPTION, LOC_DESC, LOC_TRANS_LOC_ID, 
+    FLOOR_NUM, LOCK_STATUS, LANEWAY, SEQUENCE_NUM, ROW_CODE, PICK_TRACE_NUM, FLOW_TYPE, 
+    ON_SHELF_NUM, LAST_CTRLR_TIME, LOCK_TYPE, BOX_ADOPTED
+  </sql>
+  <select id="selectByExample" parameterType="com.metersbonwe.stock.po.sync.SfWarehouseLocExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from SF_WAREHOUSE_LOC
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.metersbonwe.stock.po.sync.SfWarehouseLocExample">
+    delete from SF_WAREHOUSE_LOC
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.metersbonwe.stock.po.sync.SfWarehouseLoc">
+    insert into SF_WAREHOUSE_LOC (ID, SF_WAREHOUSE_ZONE_ID, CODE, 
+      LOC_PROP, DIMENSION, DESCRIPTION, 
+      LOC_DESC, LOC_TRANS_LOC_ID, FLOOR_NUM, 
+      LOCK_STATUS, LANEWAY, SEQUENCE_NUM, 
+      ROW_CODE, PICK_TRACE_NUM, FLOW_TYPE, 
+      ON_SHELF_NUM, LAST_CTRLR_TIME, LOCK_TYPE, 
+      BOX_ADOPTED)
+    values (#{id,jdbcType=DECIMAL}, #{sfWarehouseZoneId,jdbcType=DECIMAL}, #{code,jdbcType=VARCHAR}, 
+      #{locProp,jdbcType=VARCHAR}, #{dimension,jdbcType=DECIMAL}, #{description,jdbcType=VARCHAR}, 
+      #{locDesc,jdbcType=VARCHAR}, #{locTransLocId,jdbcType=DECIMAL}, #{floorNum,jdbcType=VARCHAR}, 
+      #{lockStatus,jdbcType=VARCHAR}, #{laneway,jdbcType=VARCHAR}, #{sequenceNum,jdbcType=DECIMAL}, 
+      #{rowCode,jdbcType=VARCHAR}, #{pickTraceNum,jdbcType=DECIMAL}, #{flowType,jdbcType=VARCHAR}, 
+      #{onShelfNum,jdbcType=VARCHAR}, #{lastCtrlrTime,jdbcType=TIMESTAMP}, #{lockType,jdbcType=VARCHAR}, 
+      #{boxAdopted,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.metersbonwe.stock.po.sync.SfWarehouseLoc">
+    insert into SF_WAREHOUSE_LOC
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="sfWarehouseZoneId != null">
+        SF_WAREHOUSE_ZONE_ID,
+      </if>
+      <if test="code != null">
+        CODE,
+      </if>
+      <if test="locProp != null">
+        LOC_PROP,
+      </if>
+      <if test="dimension != null">
+        DIMENSION,
+      </if>
+      <if test="description != null">
+        DESCRIPTION,
+      </if>
+      <if test="locDesc != null">
+        LOC_DESC,
+      </if>
+      <if test="locTransLocId != null">
+        LOC_TRANS_LOC_ID,
+      </if>
+      <if test="floorNum != null">
+        FLOOR_NUM,
+      </if>
+      <if test="lockStatus != null">
+        LOCK_STATUS,
+      </if>
+      <if test="laneway != null">
+        LANEWAY,
+      </if>
+      <if test="sequenceNum != null">
+        SEQUENCE_NUM,
+      </if>
+      <if test="rowCode != null">
+        ROW_CODE,
+      </if>
+      <if test="pickTraceNum != null">
+        PICK_TRACE_NUM,
+      </if>
+      <if test="flowType != null">
+        FLOW_TYPE,
+      </if>
+      <if test="onShelfNum != null">
+        ON_SHELF_NUM,
+      </if>
+      <if test="lastCtrlrTime != null">
+        LAST_CTRLR_TIME,
+      </if>
+      <if test="lockType != null">
+        LOCK_TYPE,
+      </if>
+      <if test="boxAdopted != null">
+        BOX_ADOPTED,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="sfWarehouseZoneId != null">
+        #{sfWarehouseZoneId,jdbcType=DECIMAL},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="locProp != null">
+        #{locProp,jdbcType=VARCHAR},
+      </if>
+      <if test="dimension != null">
+        #{dimension,jdbcType=DECIMAL},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="locDesc != null">
+        #{locDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="locTransLocId != null">
+        #{locTransLocId,jdbcType=DECIMAL},
+      </if>
+      <if test="floorNum != null">
+        #{floorNum,jdbcType=VARCHAR},
+      </if>
+      <if test="lockStatus != null">
+        #{lockStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="laneway != null">
+        #{laneway,jdbcType=VARCHAR},
+      </if>
+      <if test="sequenceNum != null">
+        #{sequenceNum,jdbcType=DECIMAL},
+      </if>
+      <if test="rowCode != null">
+        #{rowCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pickTraceNum != null">
+        #{pickTraceNum,jdbcType=DECIMAL},
+      </if>
+      <if test="flowType != null">
+        #{flowType,jdbcType=VARCHAR},
+      </if>
+      <if test="onShelfNum != null">
+        #{onShelfNum,jdbcType=VARCHAR},
+      </if>
+      <if test="lastCtrlrTime != null">
+        #{lastCtrlrTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lockType != null">
+        #{lockType,jdbcType=VARCHAR},
+      </if>
+      <if test="boxAdopted != null">
+        #{boxAdopted,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.metersbonwe.stock.po.sync.SfWarehouseLocExample" resultType="java.lang.Integer">
+    select count(*) from SF_WAREHOUSE_LOC
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update SF_WAREHOUSE_LOC
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sfWarehouseZoneId != null">
+        SF_WAREHOUSE_ZONE_ID = #{record.sfWarehouseZoneId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.code != null">
+        CODE = #{record.code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.locProp != null">
+        LOC_PROP = #{record.locProp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dimension != null">
+        DIMENSION = #{record.dimension,jdbcType=DECIMAL},
+      </if>
+      <if test="record.description != null">
+        DESCRIPTION = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.locDesc != null">
+        LOC_DESC = #{record.locDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.locTransLocId != null">
+        LOC_TRANS_LOC_ID = #{record.locTransLocId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.floorNum != null">
+        FLOOR_NUM = #{record.floorNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lockStatus != null">
+        LOCK_STATUS = #{record.lockStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.laneway != null">
+        LANEWAY = #{record.laneway,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sequenceNum != null">
+        SEQUENCE_NUM = #{record.sequenceNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.rowCode != null">
+        ROW_CODE = #{record.rowCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pickTraceNum != null">
+        PICK_TRACE_NUM = #{record.pickTraceNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.flowType != null">
+        FLOW_TYPE = #{record.flowType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.onShelfNum != null">
+        ON_SHELF_NUM = #{record.onShelfNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastCtrlrTime != null">
+        LAST_CTRLR_TIME = #{record.lastCtrlrTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lockType != null">
+        LOCK_TYPE = #{record.lockType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.boxAdopted != null">
+        BOX_ADOPTED = #{record.boxAdopted,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update SF_WAREHOUSE_LOC
+    set ID = #{record.id,jdbcType=DECIMAL},
+      SF_WAREHOUSE_ZONE_ID = #{record.sfWarehouseZoneId,jdbcType=DECIMAL},
+      CODE = #{record.code,jdbcType=VARCHAR},
+      LOC_PROP = #{record.locProp,jdbcType=VARCHAR},
+      DIMENSION = #{record.dimension,jdbcType=DECIMAL},
+      DESCRIPTION = #{record.description,jdbcType=VARCHAR},
+      LOC_DESC = #{record.locDesc,jdbcType=VARCHAR},
+      LOC_TRANS_LOC_ID = #{record.locTransLocId,jdbcType=DECIMAL},
+      FLOOR_NUM = #{record.floorNum,jdbcType=VARCHAR},
+      LOCK_STATUS = #{record.lockStatus,jdbcType=VARCHAR},
+      LANEWAY = #{record.laneway,jdbcType=VARCHAR},
+      SEQUENCE_NUM = #{record.sequenceNum,jdbcType=DECIMAL},
+      ROW_CODE = #{record.rowCode,jdbcType=VARCHAR},
+      PICK_TRACE_NUM = #{record.pickTraceNum,jdbcType=DECIMAL},
+      FLOW_TYPE = #{record.flowType,jdbcType=VARCHAR},
+      ON_SHELF_NUM = #{record.onShelfNum,jdbcType=VARCHAR},
+      LAST_CTRLR_TIME = #{record.lastCtrlrTime,jdbcType=TIMESTAMP},
+      LOCK_TYPE = #{record.lockType,jdbcType=VARCHAR},
+      BOX_ADOPTED = #{record.boxAdopted,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+</mapper>

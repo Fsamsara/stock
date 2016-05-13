@@ -1,0 +1,325 @@
+<style type="text/css">
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{ vertical-align: middle;}
+.menu-header{ height: 36px; line-height: 36px; background:#307ecc; color: #fff; font-size: 15px; font-weight: lighter; padding-left: 12px;}
+#searchPage .control-label{ font-weight: 400;}
+#searchPage .btn{ padding: 4px 8px;}
+#searchPage .pagination>li.active>a,#searchPage .pagination>li.active>a:hover{ background-color:#6faed9!important; border-color:#6faed9!important; color:#fff!important;}
+#searchPage .modal-title{ color:#2679b5;}
+#searchPage .modal-header{ padding: 11px 15px; background: rgba(0, 0, 0, 0.03); border-bottom: 1px solid #e5e5e5;}
+#searchPage .form-group{ margin-bottom: 14px;}
+#searchPage .apply-list{line-height:21px;}
+</style>
+<div id="searchPage">
+    <div class="menu-header">查询条件</div>
+    <table class="mh-table table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th width="33%">
+                参数编码：<input type="text">
+            </th>
+            <th width="33%">
+                参数内容：<input type="text">
+            </th>
+            <th width="33%">
+                <button type="button" class="btn btn-info">
+                    <i class="fa fa-search"></i> 查询
+                </button>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr style="display: none;"><td></td></tr>
+            <tr>
+                <td colspan="3">
+                    <table style="width: 100%" class="mh-table table table-striped table-bordered">
+                        <tr>
+                            <td colspan="5"><span class="apply-list">查询列表</span></td>
+                        </tr>
+                        <tr>
+                            <td width="6%" align="center"><input type="checkbox" class="searchCheckbox"></td>
+                            <td width="25%">参数编码</td>
+                            <td width="25%">参数值</td>
+                            <td width="8%" align="center">是否全局</td>
+                            <td width="36%">描述</td>
+                        </tr>
+                        <tbody id="searchDataList">
+                            <tr>
+                                <td align="center"><input type="checkbox"></td>
+                                <td>参数编码1</td>
+                                <td>参数值</td>
+                                <td align="center">是</td>
+                                <td>描述</td>
+                            </tr>
+                            <tr>
+                                <td align="center"><input type="checkbox"></td>
+                                <td>参数编码2</td>
+                                <td>参数值</td>
+                                <td align="center">是</td>
+                                <td>描述</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <button type="button" class="btn btn-success" href="#add" data-toggle="modal">
+                                <i class="fa fa-plus"></i> 新增
+                            </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-warning" href="#edit" data-toggle="modal">
+                                <i class="fa fa-pencil"></i> 修改
+                            </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-danger" onclick="removeData()">
+                                <i class="fa fa-trash-o"></i> 删除
+                            </button>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="dataTables_paginate paging_simple_numbers" style="text-align:right;">
+                                <ul class="pagination" style="margin: 0;">
+                                    <li class="paginate_button previous disabled"id="tablePrevious"><a href="#">上一页</a></li>
+                                    <li class="paginate_button active"><a href="#">1</a></li><li class="paginate_button " aria-controls="sample-table-2" tabindex="0"><a href="#">2</a></li>
+                                    <li class="paginate_button "><a href="#">3</a></li>
+                                    <li class="paginate_button next" id="tableNext"><a href="#">下一页</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- 新增 begin -->
+    <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="addLabel" aria-hidden="true" style="min-width: 600px;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <h5 class="modal-title" id="addLabel"><strong>新增系统参数</strong></h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                参数编码
+                            </label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control">
+                            </div>
+                            <label class="col-sm-2 control-label">
+                                参数内容
+                            </label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                参数描述
+                            </label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control">
+                            </div>
+                            <label class="col-sm-2 control-label">
+                                局部参数
+                            </label>
+                            <div class="col-sm-4">
+                                <div class="onoffswitch labeled blue" style="margin-top:6px;">
+                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch1">
+                                    <label class="onoffswitch-label" for="myonoffswitch1">
+                                        <span class="onoffswitch-inner"></span>
+                                        <span class="onoffswitch-switch"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table style="width: 100%; display: none;" class="mh-table table table-striped table-bordered parmaDetail">
+                            <tr>
+                                <td colspan="4">
+                                    <span class="apply-list">参数明细设置</span>
+                                    <input type="button" value="新增明细" style="float: right;" onclick="addLine()">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="25%" align="center">明细编码</td>
+                                <td width="25%" align="center">明细值</td>
+                                <td width="40%">描述</td>
+                                <td width="10%"></td>
+                            </tr>
+                            <tbody id="addParame">
+                                <tr>
+                                    <td align="center">1001</td>
+                                    <td align="center">1001</td>
+                                    <td>描述</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-red btn-sm" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    <button class="btn btn-green btn-sm">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 新增 end -->
+
+    <!-- 修改 begin -->
+    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="editLabel" aria-hidden="true" style="min-width: 600px;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <h5 class="modal-title" id="editLabel"><strong>修改系统参数</strong></h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                参数编码
+                            </label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control">
+                            </div>
+                            <label class="col-sm-2 control-label">
+                                参数内容
+                            </label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                参数描述
+                            </label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control">
+                            </div>
+                            <label class="col-sm-2 control-label">
+                                局部参数
+                            </label>
+                            <div class="col-sm-4">
+                                <div class="onoffswitch labeled blue" style="margin-top:6px;">
+                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch2">
+                                    <label class="onoffswitch-label" for="myonoffswitch2">
+                                        <span class="onoffswitch-inner"></span>
+                                        <span class="onoffswitch-switch"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table style="width: 100%; display: none;" class="mh-table table table-striped table-bordered parmaDetail">
+                            <tr>
+                                <td colspan="5">
+                                    <span class="apply-list" style="">参数明细设置</span>
+                                    <input type="button" value="删除明细" style="float: right;">
+                                    <input type="button" value="新增明细" style="float: right; margin-right: 8px;" onclick="editLine()">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="5%" align="center"><input type="checkbox" class="searchCheckbox"></td>
+                                <td width="25%" align="center">明细编码</td>
+                                <td width="25%" align="center">明细值</td>
+                                <td width="35%">描述</td>
+                                <td width="10%"></td>
+                            </tr>
+                            <tbody id="editParame">
+                                <tr>
+                                    <td align="center"><input type="checkbox"></td>
+                                    <td align="center">1001</td>
+                                    <td align="center">1001</td>
+                                    <td>描述</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-red btn-sm" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    <button class="btn btn-green btn-sm">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 修改 end -->
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var all_checked = false;
+        $(":checkbox").click(function() {
+            var table = $(this).parents("table");
+            if($(this).attr("class") === "searchCheckbox") {
+                table.find(":checkbox").prop("checked", !all_checked);
+                all_checked = !all_checked;
+            }
+            else {
+                table.find(":checkbox[class!=searchCheckbox]").each(function (i) {
+                    if(!$(this).is(":checked")) {
+                        table.find(".searchCheckbox").prop("checked", false);
+                        all_checked = false;
+                        return false;
+                    }
+                    $(".searchCheckbox").prop("checked", true);
+                    all_checked = true;
+                });
+            }
+        });
+
+        $("#searchPage").parent(".tab-pane").css("overflow-x","hidden");
+    });
+
+    $("#edit").on("hidden.bs.modal", function() {
+        $(this).removeData("bs.modal");
+        $(this).find(".form-horizontal .form-control").each(function(){
+            $(this).val("");
+        });
+        $("#myonoffswitch2").attr("checked",false);
+        $(this).find("table").hide().children("#editParame").children("tr").remove();
+    });
+
+    function addLine() {
+        var lineHtml = '<tr><td><input type="text" style="width: 125px;"></td><td><input type="text" style="width: 125px;"></td><td><input type="text" style="width: 208px;"></td><td><input type="button" value="删 除" onclick="delLine(this)"></td></tr>';
+        $("#addParame").append(lineHtml);
+    }
+
+    function editLine() {
+        var lineHtml = '<tr><td align="center"><input type="checkbox"></td><td><input type="text" style="width: 125px;"></td><td><input type="text" style="width: 125px;"></td><td><input type="text" style="width: 178px;"></td><td><input type="button" value="删 除" onclick="delLine(this)"></td></tr>';
+        $("#editParame").append(lineHtml);
+    }
+
+    function delLine(btn) {
+        btn.parentNode.parentNode.remove();
+    }
+
+    function removeData(){
+        var num = $("#searchDataList input[type=checkbox]:checked").length;
+        if(num == 0){
+            alert("请选择数据！");
+        }else{
+            $("#searchDataList input:checkbox").each(function() {
+                if ($(this).is(":checked")) {
+                    delLine(this);
+                }
+                $(".searchCheckbox").attr("checked",false);
+            });
+        }
+    }
+
+    $("input.onoffswitch-checkbox").click(function(){
+        if($(this).is(":checked")){
+            $(this).parent().parent().parent().siblings("table").fadeIn();
+        }else{
+            $(this).parent().parent().parent().siblings("table").fadeOut();
+        }
+    })
+</script>

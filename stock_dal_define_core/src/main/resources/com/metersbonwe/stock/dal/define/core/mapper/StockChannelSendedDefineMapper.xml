@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.core.mapper.StockChannelSendedDefineMapper">
+
+	<select id="selectForChannelsAndProds" parameterType="com.metersbonwe.stock.pojo.StockChannelSendedBean"
+		resultType="com.metersbonwe.stock.po.core.StockChannelSended">
+		<foreach collection="channelCodes" item="item" index="index"
+			separator="union">
+			SELECT T.id "id",
+			T.prod_id "prodId",
+			T.channel_code "channelCode",
+			T.stock_sended "stockSended",
+			T.status "status",
+			T.acc_time "accTime",
+			T.error_detail "errorDetail",
+			T.update_time "updateTime"
+			FROM
+			stock_channel_sended_${item} AS T,stock_channel_prod_sub_${item} D
+			WHERE 1 = 1
+			AND T.channel_code = D.channel_code
+			AND T.prod_id =
+			D.prod_id
+			<if test="isPres != null">
+				AND D.is_pre in
+				<foreach collection="isPres" item="item" index="index" open="("
+					close=")" separator=",">
+					#{item,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+			<if test="prodIds != null">
+				AND T.prod_id in
+				<foreach collection="prodIds" item="item" index="index"
+					open="(" close=")" separator=",">
+					#{item,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+		</foreach>
+	</select>
+
+	<!-- 单条数据的更新 -->
+	<update id="update" parameterType="com.metersbonwe.stock.po.core.StockChannelSended">
+		update stock_channel_sended_${tableSuffix}
+		<set>
+			<if test="accTime != null">
+				acc_time=#{accTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status=#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="errorDetail != null">
+				error_detail=#{errorDetail,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime!=null">
+				update_time=#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<where>
+			channel_code=#{channelCode,jdbcType=VARCHAR}
+			AND
+			prod_id=#{prodId,jdbcType=VARCHAR}
+		</where>
+	</update>
+</mapper>

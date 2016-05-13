@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+	default-lazy-init="false">
+
+
+	<!-- ===========com.metersbonwe.stock.biz.schedule.* 部分的dubbo配置=========== -->
+
+	<!-- 库存变化调度服务Dubbo服务接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.prod.timeout}"
+		interface="com.metersbonwe.stock.facade.schedule.ChangeQtyDubboSerivce"
+		ref="changeQtyDubboSerivce" />
+	<!-- 渠道配发范围变化DUBBO服务接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.prod.timeout}"
+		interface="com.metersbonwe.stock.facade.schedule.UsefulWarehChangeService"
+		ref="usefulWarehChangeServiceImpl" />
+	<!-- WS安全库存变化dubbo服务接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.prod.timeout}"
+		interface="com.metersbonwe.stock.facade.schedule.TmpWsStockService"
+		ref="tmpWsStockServiceImpl" />
+	<!-- WP安全库存变化dubbo服务接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.prod.timeout}"
+		interface="com.metersbonwe.stock.facade.schedule.TmpWpStockService"
+		ref="tmpWpStockServiceImpl" />
+	<!-- 安全库存类型变化dubbo服务接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.prod.timeout}"
+		interface="com.metersbonwe.stock.facade.schedule.WarehSafeTypeChangeService"
+		ref="warehSafeTypeChangeServiceImpl" />
+	<!-- WMS USEMA属性变化dubbo服务接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.prod.timeout}"
+		interface="com.metersbonwe.stock.facade.schedule.WmsAttributeChangesService"
+		ref="wmsAttributeChangesServiceImpl" />
+	<!-- ST_ACTITY_WAREH表维护dubbo服务接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.prod.timeout}"
+		interface="com.metersbonwe.stock.facade.schedule.StActivityWarehService"
+		ref="stActivityWarehServiceImpl" />
+	<!-- 门店日结调度任务接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.prod.timeout}"
+		interface="com.metersbonwe.stock.facade.schedule.TmpRemailedStockService"
+		ref="tmpRemailedStockServiceImpl" />
+	<!-- 门店安全库存调度接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+        retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.prod.timeout}"
+        interface="com.metersbonwe.stock.facade.schedule.TmpShopSafeStockService"
+        ref="tmpShopSafeStockServiceImpl" />
+	<!-- ===========com.metersbonwe.stock.biz.schedule.* 部分的dubbo配置 END=========== -->
+</beans>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.core.mapper.TmallChannelManagerDefineMapper">
+	
+    <select id="selectTmallChannelManagerInfos" parameterType="com.metersbonwe.stock.pojo.TmallChannelManagerQueryBean"
+        resultType="com.metersbonwe.stock.po.core.StockChannelIncrement">
+         SELECT t.id,
+				t.increment_id,
+				t.increment_name,
+				t.channel_code,
+				t.channel_name,
+				t.i_status,
+				t.update_time,
+				t.update_by,
+				t.create_time,
+				t.create_by
+		   FROM stock_channel_increment AS t 
+		  WHERE 1 = 1
+        <if test="incrementIds != null">
+			AND t.increment_id in 
+			<foreach collection="incrementIds" item="item" index="index" open="(" close=")" separator="," >
+			    #{item,jdbcType=VARCHAR}
+			</foreach>
+        </if>
+        <if test="incrementNames != null">
+            AND t.increment_name in 
+            <foreach collection="incrementNames" item="item" index="index" open="(" close=")" separator="," >
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="channelCodes != null">
+            AND t.channel_code in 
+            <foreach collection="channelCodes" item="item" index="index" open="(" close=")" separator="," >
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="iStatus != null">
+            AND t.i_status in 
+            <foreach collection="iStatus" item="item" index="index" open="(" close=")" separator="," >
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+    </select>
+    
+    <select id="selectTmallChannelManagerDetailInfos" parameterType="com.metersbonwe.stock.pojo.TmallChannelManagerSubQueryBean"
+        resultType="com.metersbonwe.stock.po.core.StockChannelIncrementSub">
+		 SELECT t.id,
+				t.reletion_id,
+				t.prod_id,
+				t.stock,
+				t.exe_status,
+				t.note
+		   FROM stock_channel_increment_sub AS t
+          WHERE 1 = 1
+        <if test="reletionId != null">
+            AND t.reletion_id = #{reletionId,jdbcType=VARCHAR}
+        </if>
+        <if test="prodId != null">
+            AND t.prod_id = #{prodId,jdbcType=VARCHAR}
+        </if>
+    </select>
+    
+</mapper>

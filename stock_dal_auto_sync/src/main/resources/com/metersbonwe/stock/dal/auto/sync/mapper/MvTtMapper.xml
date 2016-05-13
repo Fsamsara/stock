@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.auto.sync.mapper.MvTtMapper">
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.MvTt">
+    <result column="IDX" jdbcType="DECIMAL" property="idx" />
+    <result column="WAREH_ID" jdbcType="VARCHAR" property="warehId" />
+    <result column="PROD_ID" jdbcType="CHAR" property="prodId" />
+    <result column="STK_ON_HAND" jdbcType="DECIMAL" property="stkOnHand" />
+    <result column="SKU_NUM" jdbcType="DECIMAL" property="skuNum" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    IDX, WAREH_ID, PROD_ID, STK_ON_HAND, SKU_NUM
+  </sql>
+  <select id="selectByExample" parameterType="com.metersbonwe.stock.po.sync.MvTtExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from MV_TT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.metersbonwe.stock.po.sync.MvTtExample">
+    delete from MV_TT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.metersbonwe.stock.po.sync.MvTt">
+    insert into MV_TT (IDX, WAREH_ID, PROD_ID, 
+      STK_ON_HAND, SKU_NUM)
+    values (#{idx,jdbcType=DECIMAL}, #{warehId,jdbcType=VARCHAR}, #{prodId,jdbcType=CHAR}, 
+      #{stkOnHand,jdbcType=DECIMAL}, #{skuNum,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.metersbonwe.stock.po.sync.MvTt">
+    insert into MV_TT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="idx != null">
+        IDX,
+      </if>
+      <if test="warehId != null">
+        WAREH_ID,
+      </if>
+      <if test="prodId != null">
+        PROD_ID,
+      </if>
+      <if test="stkOnHand != null">
+        STK_ON_HAND,
+      </if>
+      <if test="skuNum != null">
+        SKU_NUM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="idx != null">
+        #{idx,jdbcType=DECIMAL},
+      </if>
+      <if test="warehId != null">
+        #{warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        #{prodId,jdbcType=CHAR},
+      </if>
+      <if test="stkOnHand != null">
+        #{stkOnHand,jdbcType=DECIMAL},
+      </if>
+      <if test="skuNum != null">
+        #{skuNum,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.metersbonwe.stock.po.sync.MvTtExample" resultType="java.lang.Integer">
+    select count(*) from MV_TT
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update MV_TT
+    <set>
+      <if test="record.idx != null">
+        IDX = #{record.idx,jdbcType=DECIMAL},
+      </if>
+      <if test="record.warehId != null">
+        WAREH_ID = #{record.warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodId != null">
+        PROD_ID = #{record.prodId,jdbcType=CHAR},
+      </if>
+      <if test="record.stkOnHand != null">
+        STK_ON_HAND = #{record.stkOnHand,jdbcType=DECIMAL},
+      </if>
+      <if test="record.skuNum != null">
+        SKU_NUM = #{record.skuNum,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update MV_TT
+    set IDX = #{record.idx,jdbcType=DECIMAL},
+      WAREH_ID = #{record.warehId,jdbcType=VARCHAR},
+      PROD_ID = #{record.prodId,jdbcType=CHAR},
+      STK_ON_HAND = #{record.stkOnHand,jdbcType=DECIMAL},
+      SKU_NUM = #{record.skuNum,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+</mapper>

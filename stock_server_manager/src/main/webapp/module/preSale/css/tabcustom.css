@@ -1,0 +1,17 @@
+.tab-content1 > ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 5px 0;
+}
+.tab-content1>.tab-pane {
+    display: none;
+    visibility: hidden;
+}
+.tab-content1>.active {
+    display: block;
+    visibility: visible;
+}
+.tab-content1 ul.tab-pane {
+    padding: 5px;
+    overflow-x: auto;
+}

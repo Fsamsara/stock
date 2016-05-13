@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.sync.mapper.TmpActivityStockDefineMapper">
+
+	<!-- 批量插入数据到 临时表 -->
+	<insert id="insertList" parameterType="java.util.List">
+		insert into TMP_ACTIVITY_STOCK (CHANNEL_CODE, PROD_ID,
+		UPDATE_TIME)
+		<foreach collection="list" item="item" index="index" open="("
+			close=")" separator="union all">
+			select
+			#{item.channelCode,jdbcType=VARCHAR},
+			#{item.prodId,jdbcType=VARCHAR},
+			#{item.updateTime,jdbcType=TIMESTAMP}
+			from dual
+		</foreach>
+	</insert>
+
+</mapper>

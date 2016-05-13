@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.sync.mapper.BfOrgShopDefineMapper">
+	<resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.define.BfOrgShopDefine">
+		<id column="BF_ORG_ID" property="bfOrgId" jdbcType="DECIMAL" />
+		<result column="CODE" property="code" jdbcType="VARCHAR" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="SHOP_TYPE" property="shopType" jdbcType="VARCHAR" />
+		<result column="MAN_CODE" property="manCode" jdbcType="VARCHAR" />
+		<result column="OPEN_DATE" property="openDate" jdbcType="DATE" />
+		<result column="CLOSE_DATE" property="closeDate" jdbcType="DATE" />
+		<result column="ACREAGE" property="acreage" jdbcType="DECIMAL" />
+		<result column="SETTLE_DATE" property="settleDate" jdbcType="DATE" />
+		<result column="RENT_RATE" property="rentRate" jdbcType="DECIMAL" />
+		<result column="COMPANY_CODE" property="companyCode" jdbcType="VARCHAR" />
+		<result column="PROFIT_CENTER" property="profitCenter"
+			jdbcType="VARCHAR" />
+		<result column="ACCOUNT_GROUP" property="accountGroup"
+			jdbcType="VARCHAR" />
+		<result column="SAP_ID" property="sapId" jdbcType="DECIMAL" />
+		<result column="LAST_MODIFIED_DATE" property="lastModifiedDate"
+			jdbcType="TIMESTAMP" />
+		<result column="OWNER_ID" property="ownerId" jdbcType="DECIMAL" />
+		<result column="DEFAULT_WAREH_ID" property="defaultWarehId"
+			jdbcType="DECIMAL" />
+		<result column="STORE_SCOPE" property="storeScope" jdbcType="VARCHAR" />
+		<result column="CUSTOMER_LEVEL" property="customerLevel"
+			jdbcType="VARCHAR" />
+		<result column="OFFLINESHIP" property="offlineship" jdbcType="CHAR" />
+		<result column="OFFLINCAC" property="offlincac" jdbcType="CHAR" />
+		<result column="OFFLINE_ORDER_SHIP" property="offlineOrderShip"
+			jdbcType="CHAR" />
+		<result column="IS_SYNCTOOS" property="isSynctoos" jdbcType="CHAR" />
+		<result column="OWNER_ID" property="ownerId" jdbcType="DECIMAL" />
+	</resultMap>
+
+	<select id="selectAllForB2C" resultMap="BaseResultMap">
+		SELECT A.BF_ORG_ID,
+		A.SHOP_TYPE, A.MAN_CODE, A.OPEN_DATE, A.CLOSE_DATE, A.ACREAGE,
+		A.SETTLE_DATE,
+		A.RENT_RATE, A.COMPANY_CODE, A.PROFIT_CENTER, A.ACCOUNT_GROUP, A.SAP_ID,
+		A.LAST_MODIFIED_DATE,
+		A.OWNER_ID, A.DEFAULT_WAREH_ID, A.STORE_SCOPE, A.CUSTOMER_LEVEL, A.OFFLINESHIP,
+		A.OFFLINCAC,
+		A.OFFLINE_ORDER_SHIP, A.IS_SYNCTOOS,B.CODE,B.NAME,B.OWNER_ID
+		FROM BF_ORG_SHOP A
+		INNER JOIN BF_ORG B ON
+		A.BF_ORG_ID = B.ID
+		WHERE A.OFFLINESHIP = '1'
+		OR A.OFFLINE_ORDER_SHIP = '1'
+	</select>
+</mapper>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.core.mapper.StockWarehProdDefineMapper">
+    
+    <update id="updateFinalFreeShareStockGTZero" parameterType="com.metersbonwe.stock.po.core.StockWarehProd">
+        update stock_wareh_prod_${tableNum} t
+           set  <if test="freeShareStock != null">
+                    free_share_stock = #{freeShareStock,jdbcType=INTEGER},
+                </if>
+                <if test="onlineSafeStock != null">
+                    online_safe_stock = #{onlineSafeStock,jdbcType=INTEGER},
+                </if>
+                <if test="shopRemail != null">
+                    shop_remail = #{shopRemail,jdbcType=INTEGER},
+                </if>
+                <if test="shopDame != null">
+                    shop_dame = #{shopDame,jdbcType=INTEGER},
+                </if>
+                <if test="wmsStock != null">
+                    wms_stock = #{wmsStock,jdbcType=INTEGER},
+                </if>
+                <if test="stkOnHand != null">
+                    STK_ON_HAND = #{stkOnHand,jdbcType=INTEGER},
+                </if>
+                <if test="qtyCommitted != null">
+                    QTY_COMMITTED = #{qtyCommitted,jdbcType=INTEGER},
+                </if>
+                <if test="lockStock != null">
+                    LOCK_STOCK = #{lockStock,jdbcType=INTEGER},
+                </if>
+                update_time = current_timestamp,
+                t.final_free_share_stock = 
+                    if (CASE t.is_shop
+                        WHEN 0 THEN 
+                             IFNULL(#{freeShareStock,jdbcType=INTEGER},t.free_share_stock)
+                           - if(IFNULL(#{onlineSafeStock,jdbcType=INTEGER},t.online_safe_stock) <![CDATA[<]]> 0,0,IFNULL(#{onlineSafeStock,jdbcType=INTEGER},t.online_safe_stock))
+                           - IFNULL(#{wmsStock,jdbcType=INTEGER},t.wms_stock)
+                        WHEN 1 THEN 
+                             IFNULL(#{freeShareStock,jdbcType=INTEGER},t.free_share_stock)
+                           - if(IFNULL(#{onlineSafeStock,jdbcType=INTEGER},t.online_safe_stock) <![CDATA[<]]> 0,0,IFNULL(#{onlineSafeStock,jdbcType=INTEGER},t.online_safe_stock))
+                           - IFNULL(#{shopRemail,jdbcType=INTEGER},t.shop_remail)
+                           - IFNULL(#{shopDame,jdbcType=INTEGER},t.shop_dame)
+                        ELSE t.free_share_stock
+                         END <![CDATA[<]]> 0, 0,
+                        CASE t.is_shop
+                        WHEN 0 THEN 
+                             IFNULL(#{freeShareStock,jdbcType=INTEGER},t.free_share_stock)
+                           - if(IFNULL(#{onlineSafeStock,jdbcType=INTEGER},t.online_safe_stock) <![CDATA[<]]> 0,0,IFNULL(#{onlineSafeStock,jdbcType=INTEGER},t.online_safe_stock))
+                           - IFNULL(#{wmsStock,jdbcType=INTEGER},t.wms_stock)
+                        WHEN 1 THEN 
+                             IFNULL(#{freeShareStock,jdbcType=INTEGER},t.free_share_stock)
+                           - if(IFNULL(#{onlineSafeStock,jdbcType=INTEGER},t.online_safe_stock) <![CDATA[<]]> 0,0,IFNULL(#{onlineSafeStock,jdbcType=INTEGER},t.online_safe_stock))
+                           - IFNULL(#{shopRemail,jdbcType=INTEGER},t.shop_remail)
+                           - IFNULL(#{shopDame,jdbcType=INTEGER},t.shop_dame)
+                        ELSE t.free_share_stock
+                         END)
+        WHERE IFNULL(#{freeShareStock,jdbcType=INTEGER},t.free_share_stock) <![CDATA[>]]> 0
+            <if test="warehId != null">
+            and wareh_id = #{warehId,jdbcType=VARCHAR}
+            </if>
+            <if test="prodId != null">
+            and prod_id = #{prodId,jdbcType=VARCHAR}
+            </if>
+            <if test="id != null">
+            and id = #{id,jdbcType=INTEGER}
+            </if>
+    </update>
+    
+    <update id="updateFinalFreeShareStockLSZero" parameterType="com.metersbonwe.stock.po.core.StockWarehProd">
+        update stock_wareh_prod_${tableNum} t
+           set  <if test="freeShareStock != null">
+                    free_share_stock = #{freeShareStock,jdbcType=INTEGER},
+                </if>
+                <if test="onlineSafeStock != null">
+                    online_safe_stock = #{onlineSafeStock,jdbcType=INTEGER},
+                </if>
+                <if test="shopRemail != null">
+                    shop_remail = #{shopRemail,jdbcType=INTEGER},
+                </if>
+                <if test="shopDame != null">
+                    shop_dame = #{shopDame,jdbcType=INTEGER},
+                </if>
+                <if test="wmsStock != null">
+                    wms_stock = #{wmsStock,jdbcType=INTEGER},
+                </if>
+                <if test="stkOnHand != null">
+                    STK_ON_HAND = #{stkOnHand,jdbcType=INTEGER},
+                </if>
+                <if test="qtyCommitted != null">
+                    QTY_COMMITTED = #{qtyCommitted,jdbcType=INTEGER},
+                </if>
+                <if test="lockStock != null">
+                    LOCK_STOCK = #{lockStock,jdbcType=INTEGER},
+                </if>
+                update_time = current_timestamp,
+                t.final_free_share_stock = 
+                        CASE t.is_shop
+                        WHEN 0 THEN 
+                             IFNULL(#{freeShareStock,jdbcType=INTEGER},t.free_share_stock)
+                        WHEN 1 THEN
+                             if (IFNULL(#{freeShareStock,jdbcType=INTEGER},t.free_share_stock)
+                               - if(IFNULL(#{onlineSafeStock,jdbcType=INTEGER},t.online_safe_stock) <![CDATA[<]]> 0,0,IFNULL(#{onlineSafeStock,jdbcType=INTEGER},t.online_safe_stock))
+                               - IFNULL(#{shopRemail,jdbcType=INTEGER},t.shop_remail)
+                               - IFNULL(#{shopDame,jdbcType=INTEGER},t.shop_dame)
+                             <![CDATA[<]]> 0, 0,
+                                 IFNULL(#{freeShareStock,jdbcType=INTEGER},t.free_share_stock)
+                               - if(IFNULL(#{onlineSafeStock,jdbcType=INTEGER},t.online_safe_stock) <![CDATA[<]]> 0,0,IFNULL(#{onlineSafeStock,jdbcType=INTEGER},t.online_safe_stock))
+                               - IFNULL(#{shopRemail,jdbcType=INTEGER},t.shop_remail)
+                               - IFNULL(#{shopDame,jdbcType=INTEGER},t.shop_dame))
+                        ELSE t.free_share_stock
+                         END
+        WHERE IFNULL(#{freeShareStock,jdbcType=INTEGER},t.free_share_stock) <![CDATA[<=]]> 0
+        <if test="warehId != null">
+        AND wareh_id = #{warehId,jdbcType=VARCHAR}
+        </if>
+        <if test="prodId != null">
+        and prod_id = #{prodId,jdbcType=VARCHAR}
+        </if>
+        <if test="id != null">
+        and id = #{id,jdbcType=INTEGER}
+        </if>
+    </update>
+    
+    <update id="updateShopDame" parameterType="map">
+        UPDATE stock_wareh_prod_${suffix} 
+        SET shop_dame=0
+        WHERE wareh_id=#{warehId,jdbcType=VARCHAR} AND prod_id=#{prodId,jdbcType=VARCHAR}
+    </update>
+    
+    <update id="updateShopSafe" parameterType="map">
+        UPDATE stock_wareh_prod_${suffix} 
+        SET online_safe_stock=-1
+        WHERE wareh_id=#{warehId,jdbcType=VARCHAR} AND prod_id=#{prodId,jdbcType=VARCHAR}
+    </update>
+    
+    <sql id="Base_Column_List_Define" >
+    id, wareh_id, six_prod_id, eight_prod_id, prod_id, stk_on_hand, qty_committed, free_share_stock, 
+    final_free_share_stock, online_safe_stock, shop_remail, shop_dame, 
+    lock_stock, wms_stock, is_shop, update_time
+    </sql>
+    
+    <select id="selectStockWarehProdListByOthers" resultType="com.metersbonwe.stock.po.core.StockWarehProd" parameterType="map" >
+        <foreach collection="tableNumList" item="tableNumBean" separator="union all" >
+            select
+            <include refid="Base_Column_List_Define" />
+            from stock_wareh_prod_${tableNumBean.tableNum}
+            where wareh_id in
+            <foreach collection="tableNumBean.warehList" item="item" index="index" open="(" separator=","  close=")">
+            #{item}
+            </foreach>
+            and prod_id in
+            <foreach collection="skuList" item="item" index="index" open="(" separator=","  close=")">
+            #{item}
+            </foreach>
+        </foreach>
+    </select>
+    
+    <select id="selectStockWarehProd" resultType="com.metersbonwe.stock.po.core.StockWarehProd"
+        parameterType="com.metersbonwe.stock.po.core.StockWarehProd">
+	       SELECT <include refid="Base_Column_List_Define" />
+             FROM stock_wareh_prod_${tableNum}
+            WHERE 1 = 1
+		      AND wareh_id = #{warehId,jdbcType=VARCHAR}
+	          AND prod_id = #{prodId,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="selectStockWarehProdListByLenProdAndOthers" resultType="com.metersbonwe.stock.po.core.StockWarehProd" parameterType="map" >
+        <foreach collection="tableNumList" item="tableNumBean" separator="union all" >
+            select
+            <include refid="Base_Column_List_Define" />
+            from stock_wareh_prod_${tableNumBean.tableNum}
+            where wareh_id in
+            <foreach collection="tableNumBean.warehList" item="item" index="index" open="(" separator=","  close=")">
+            #{item}
+            </foreach>
+            <if test="sku6List != null">
+	            and six_prod_id in
+	            <foreach collection="sku6List" item="item" index="index" open="(" separator=","  close=")">
+	            #{item}
+	            </foreach>
+            </if>
+            <if test="sku8List != null">
+	            and eight_prod_id in
+	            <foreach collection="sku8List" item="item" index="index" open="(" separator=","  close=")">
+	            #{item}
+	            </foreach>
+            </if>
+            <if test="skuList != null">
+	            and prod_id in
+	            <foreach collection="skuList" item="item" index="index" open="(" separator=","  close=")">
+	            #{item}
+	            </foreach>
+            </if>
+        </foreach>
+    </select>
+    
+</mapper>

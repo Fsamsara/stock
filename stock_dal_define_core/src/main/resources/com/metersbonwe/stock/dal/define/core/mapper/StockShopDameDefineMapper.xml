@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.core.mapper.StockShopDameDefineMapper">
+
+
+	<delete id="deleteInvalid" parameterType="map">
+		DELETE FROM
+		stock_shop_dame WHERE
+		wareh_id=#{warehId} AND prod_id=#{prodId}
+	</delete>
+
+	<select id="selectStockShopDame" resultType="com.metersbonwe.stock.po.core.StockShopDame">
+		SELECT
+		t.id,t.prod_id,t.wareh_id,t.dame_stock FROM stock_shop_dame t
+		WHERE 1 = 1
+		<if test="shopDame.prodId != null">
+			AND t.prod_id = #{shopDame.prodId}
+		</if>
+		<if test="shopDame.warehId != null">
+			AND t.wareh_id = #{shopDame.warehId}
+		</if>
+	</select>
+	
+	<insert id="insertDameStock" parameterType="com.metersbonwe.stock.po.core.StockShopDame">
+	    INSERT INTO stock_shop_dame ( 
+	                wareh_id,
+				    prod_id,
+				    dame_stock,
+				    update_time,
+				    update_by,
+				    create_time,
+				    create_by
+				    )
+			 VALUES (
+			         #{warehId,jdbcType=VARCHAR},
+				     #{prodId,jdbcType=VARCHAR},
+				     #{dameStock,jdbcType=INTEGER},
+				     #{updateTime,jdbcType=TIMESTAMP},
+				     #{updateBy,jdbcType=VARCHAR},
+				     #{createTime,jdbcType=TIMESTAMP},
+				     #{createBy,jdbcType=VARCHAR}
+				    )
+	</insert>
+	
+	<update id="updateDameStock" parameterType="com.metersbonwe.stock.po.core.StockShopDame">
+        UPDATE stock_shop_dame t
+		   SET t.dame_stock = #{dameStock,jdbcType=INTEGER},
+			   t.update_time = #{updateTime,jdbcType=TIMESTAMP},
+			   t.update_by = #{updateBy,jdbcType=VARCHAR},
+			   t.create_time = #{createTime,jdbcType=TIMESTAMP},
+			   t.create_by = #{createBy,jdbcType=TIMESTAMP}
+	     WHERE t.wareh_id = #{warehId,jdbcType=VARCHAR}
+		   AND t.prod_id = #{prodId,jdbcType=VARCHAR}
+	</update>
+
+</mapper>

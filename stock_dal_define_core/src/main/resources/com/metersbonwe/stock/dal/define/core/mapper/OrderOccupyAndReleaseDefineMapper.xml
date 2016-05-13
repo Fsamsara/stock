@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.core.mapper.OrderOccupyAndReleaseDefineMapper">
+	<!-- 查询渠道商品信息表 -->
+	<select id="selectChannelProdDetail"
+		resultType="com.metersbonwe.stock.po.core.define.ChannelProdBean">
+		SELECT
+		scp.private_stock,
+		scp.channel_group_private_stock as
+		shop_group_stock,
+		scps.order_private_total_stock,
+		scps.is_pre,
+		scps.order_share_total_stock,
+		scps.pre_order_total_stock,
+		scps.pre_private_stock ,
+		scps.order_shop_group_stock,
+		scp.private_stock,
+		scp.lock_stock,
+		scp.final_free_stock,
+		scp.channel_code,
+		scp.prod_id
+		FROM
+		stock_channel_prod_${channelBean.tableSuffix} scp,
+		stock_channel_prod_sub_${channelBean.tableSuffix} scps
+		WHERE
+		scp.channel_code =
+		scps.channel_code
+		AND scp.prod_id =
+		scps.prod_id
+		AND
+		scp.channel_code = #{channelBean.channelCode}
+		AND
+		scp.prod_id
+		=
+		#{channelBean.prodId}
+	</select>
+
+
+	<select id="selectChannelProdDetails"
+		resultType="com.metersbonwe.stock.po.core.define.ChannelProdBean">
+		SELECT
+		scp.private_stock,
+		scp.channel_group_private_stock as
+		shop_group_stock,
+		scps.order_private_total_stock,
+		scps.is_pre,
+		scps.order_share_total_stock,
+		scps.pre_order_total_stock,
+		scps.pre_private_stock ,
+		scps.order_shop_group_stock,
+		scp.private_stock,
+		scp.lock_stock,
+		scp.final_free_stock,
+		scp.channel_code,
+		scp.prod_id
+		FROM
+		stock_channel_prod_${channel} scp,
+		stock_channel_prod_sub_${channel}
+		scps
+		WHERE
+		scp.channel_code =
+		scps.channel_code
+		AND scp.prod_id =
+		scps.prod_id
+		AND
+		scp.channel_code =
+		#{channel}
+		AND
+		scps.six_prod_id in
+		<foreach collection="prodIds" open="(" close=")" separator=","
+			item="item">
+			#{item}
+		</foreach>
+	</select>
+
+
+	<!-- 更新渠道商品子表 -->
+	<update id="updateChannelSubDetailForOccupy">
+		UPDATE stock_channel_prod_sub_${channelBean.tableSuffix} scps
+		<set>
+			<if test="channelBean.occupyShareStock != null">
+				scps.order_share_total_stock =
+				IFNULL(scps.order_share_total_stock,0) +
+				${channelBean.occupyShareStock},
+			</if>
+			<if test="channelBean.occupyPrivateStock != null">
+				scps.order_private_total_stock =
+				IFNULL(scps.order_private_total_stock,0) +
+				${channelBean.occupyPrivateStock},
+			</if>
+			<if test="channelBean.occupyPrePrivateStock != null">
+				scps.pre_order_total_stock =
+				IFNULL(scps.pre_order_total_stock,0) +
+				${channelBean.occupyPrePrivateStock},
+			</if>
+			<if test="channelBean.occupyShopGroupStock != null">
+				scps.order_shop_group_stock =
+				IFNULL(scps.order_shop_group_stock,0) +
+				${channelBean.occupyShopGroupStock},
+			</if>
+			scps.update_time = NOW()
+		</set>
+		WHERE
+		scps.channel_code =
+		#{channelBean.channelCode}
+		AND scps.prod_id
+		=
+		#{channelBean.prodId}
+	</update>
+
+
+
+
+	<update id="updateChannelSubDetailForRelease">
+		UPDATE stock_channel_prod_sub_${channelBean.tableSuffix} scps
+		<set>
+			<if test="channelBean.occupyShareStock != null">
+				scps.order_share_total_stock =
+				IFNULL(scps.order_share_total_stock,0) -
+				${channelBean.occupyShareStock},
+			</if>
+			<if test="channelBean.occupyPrivateStock != null">
+				scps.order_private_total_stock =
+				IFNULL(scps.order_private_total_stock,0) -
+				${channelBean.occupyPrivateStock},
+			</if>
+			<if test="channelBean.occupyPrePrivateStock != null">
+				scps.pre_order_total_stock =
+				IFNULL(scps.pre_order_total_stock,0) -
+				${channelBean.occupyPrePrivateStock},
+			</if>
+			<if test="channelBean.occupyShopGroupStock != null">
+				scps.order_shop_group_stock =
+				IFNULL(scps.order_shop_group_stock,0) -
+				${channelBean.occupyShopGroupStock},
+			</if>
+			scps.update_time = NOW()
+		</set>
+		WHERE
+		scps.channel_code =
+		#{channelBean.channelCode}
+		AND scps.prod_id =
+		#{channelBean.prodId}
+	</update>
+
+
+	<update id="updateChannelSubDetailForReleaseOverWrite">
+		UPDATE stock_channel_prod_sub_${channelBean.tableSuffix} scps
+		<set>
+			<if test="channelBean.occupyShareStock != null">
+				scps.order_share_total_stock =
+				${channelBean.occupyShareStock},
+			</if>
+			<if test="channelBean.occupyPrivateStock != null">
+				scps.order_private_total_stock =
+				${channelBean.occupyPrivateStock},
+			</if>
+			<if test="channelBean.occupyShopGroupStock != null">
+				scps.order_shop_group_stock =
+				${channelBean.occupyShopGroupStock},
+			</if>
+			scps.update_time = NOW()
+		</set>
+		WHERE
+		scps.channel_code =
+		#{channelBean.channelCode}
+		AND scps.prod_id =
+		#{channelBean.prodId}
+	</update>
+
+	<select id="selectReleaseChannelSubDetails"
+		resultType="com.metersbonwe.stock.po.core.StockChannelOrderDetail">
+		SELECT scod.*
+		FROM
+		stock_channel_order_detail scod
+		WHERE
+		scod.lazy_status = 1
+	</select>
+
+
+	<select id="selectReleaseChannelSubOrderIds" resultType="String">
+		SELECT
+		distinct scod.sub_order_id FROM
+		stock_channel_order_detail scod
+		WHERE
+		scod.lazy_status = 1
+	</select>
+
+	<select id="selectReleaseProdIdsByChannelBean" resultType="String">
+		SELECT
+		distinct
+		scod.prod_id FROM
+		stock_channel_order_detail scod
+		WHERE
+		IFNULL(scod.is_pre_occupy,0) = 0
+		<if
+			test="channelBean != null and channelBean.subOrderId != null and channelBean.subOrderId != ''">
+			and scod.sub_order_id =
+			#{channelBean.subOrderId}
+		</if>
+		<if
+			test="channelBean != null and (channelBean.subOrderId == null or channelBean.subOrderId == '') and channelBean.businessId != null and channelBean.channelCode != null">
+			and scod.business_id =
+			#{channelBean.businessId}
+			and
+			scod.channel_code = #{channelBean.channelCode}
+		</if>
+
+
+	</select>
+
+	<select id="selectReleaseProdIds" resultType="String">
+		SELECT
+		distinct
+		scod.prod_id FROM
+		stock_channel_order_detail scod
+		WHERE
+		scod.lazy_status
+		= 1
+	</select>
+
+	<select id="selectReleaseProdStocks"
+		resultType="com.metersbonwe.stock.po.core.StockChannelOrderDetail">
+		SELECT
+		t.relation_channel channel_code,
+		t.prod_id,
+		SUM(t.order_private_stock)
+		order_private_stock,
+		SUM(t.order_share_stock) order_share_stock,
+		SUM(t.order_shop_group_stock) order_shop_group_stock
+		FROM
+		stock_channel_order_detail t
+		WHERE t.relation_channel =
+		#{channelCode}
+		AND t.prod_id = #{prodId}
+		AND
+		t.lazy_status != 1 and
+		IFNULL(t.is_pre_occupy,0) = 0
+		GROUP BY
+		t.relation_channel,
+		t.prod_id
+	</select>
+
+	<update id="updateReleaseChannelSubDetail">
+		update
+		stock_channel_order_detail scod set
+		scod.lazy_status = 1 WHERE
+		IFNULL(scod.lazy_status,0) = 0 and IFNULL(scod.is_pre_occupy,0) = 0
+		and scod.prod_id =
+		#{channelBean.prodId}
+		<if
+			test="channelBean != null and channelBean.subOrderId != null and channelBean.subOrderId != ''">
+			and scod.sub_order_id =
+			#{channelBean.subOrderId}
+		</if>
+		<if
+			test="channelBean != null and (channelBean.subOrderId == null or channelBean.subOrderId == '') and channelBean.businessId != null and channelBean.channelCode != null">
+			and scod.business_id =
+			#{channelBean.businessId}
+			and
+			scod.channel_code =
+			#{channelBean.channelCode}
+		</if>
+	</update>
+
+
+	<insert id="insertToOrderHis">
+		INSERT INTO stock_channel_order_detail_his (
+		id,
+		channel_code,
+		business_id,
+		os_order_id,
+		sub_order_id,
+		prod_id,
+		is_pre_occupy,
+		order_private_stock,
+		order_share_stock,
+		order_shop_group_stock,
+		relation_channel,
+		update_time,
+		release_time
+		)
+		SELECT
+		0 AS id,
+		scod.channel_code,
+		scod.business_id,
+		scod.os_order_id,
+		scod.sub_order_id,
+		scod.prod_id,
+		scod.is_pre_occupy,
+		scod.order_private_stock,
+		scod.order_share_stock,
+		scod.order_shop_group_stock,
+		scod.relation_channel,
+		scod.update_time,
+		NOW() release_time
+		FROM
+		stock_channel_order_detail
+		scod
+		WHERE
+		scod.relation_channel =
+		#{channelBean.channelCode}
+		AND scod.prod_id =
+		#{channelBean.prodId}
+		<if
+			test="channelBean != null and channelBean.subOrderId != null and channelBean.subOrderId != ''">
+			and scod.sub_order_id =
+			#{channelBean.subOrderId}
+		</if>
+		<if
+			test="channelBean != null and (channelBean.subOrderId == null or channelBean.subOrderId == '') and channelBean.businessId != null">
+			and scod.business_id =
+			#{channelBean.businessId}
+		</if>
+		<if test="channelBean != null and channelBean.occupyShareStock != null">
+			and scod.order_share_stock =
+			${channelBean.occupyShareStock}
+		</if>
+		<if test="channelBean != null and channelBean.occupyPrivateStock != null">
+			and scod.order_private_stock =
+			${channelBean.occupyPrivateStock}
+		</if>
+		<if test="channelBean != null and channelBean.occupyShopGroupStock != null">
+			and scod.order_shop_group_stock =
+			${channelBean.occupyShopGroupStock}
+		</if>
+	</insert>
+
+
+
+	<insert id="insertToOrderHisByCodeAndProdId">
+		INSERT INTO stock_channel_order_detail_his (
+		id,
+		channel_code,
+		business_id,
+		os_order_id,
+		sub_order_id,
+		prod_id,
+		is_pre_occupy,
+		order_private_stock,
+		order_share_stock,
+		order_shop_group_stock,
+		relation_channel,
+		update_time,
+		release_time
+		)
+		SELECT
+		0 AS id,
+		scod.channel_code,
+		scod.business_id,
+		scod.os_order_id,
+		scod.sub_order_id,
+		scod.prod_id,
+		scod.is_pre_occupy,
+		scod.order_private_stock,
+		scod.order_share_stock,
+		scod.order_shop_group_stock,
+		scod.relation_channel,
+		scod.update_time,
+		NOW() release_time
+		FROM
+		stock_channel_order_detail
+		scod
+		WHERE
+		scod.relation_channel =
+		#{channelBean.channelCode}
+		AND scod.prod_id =
+		#{channelBean.prodId}
+		AND scod.lazy_status = 1
+	</insert>
+
+	<update id="updateOrderDetailForPreOrder">
+		update
+		stock_channel_order_detail scod set
+		scod.is_pre_occupy = 0 WHERE scod.prod_id =
+		#{prodId}
+		and
+		scod.channel_code = #{channelCode}
+		and
+		scod.relation_channel =
+		#{channelCode}
+		and scod.is_pre_occupy = 1
+	</update>
+
+</mapper>

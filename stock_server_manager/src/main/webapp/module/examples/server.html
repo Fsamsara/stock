@@ -1,0 +1,402 @@
+<style>
+    .card-container .card .back{
+        padding:0px;
+        text-align: left;
+    }
+    .card-container .card .back .panel {
+        margin-bottom: 0px;
+        border: 0px solid transparent;
+    }
+
+    .card-container .card .back .panel .panel-body{
+        height:114px;
+        overflow-y:auto;
+    }
+
+    .card-container .card .back .panel .list-group-item{
+        padding: 2px 15px;
+    }
+
+    .card-container .card .back .panel.list-group-item:first-child {
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+    }
+    .card-container .card .back .panel .list-group {
+        margin-bottom: 0px;
+    }
+
+    .card-container .card .back .label {
+        display: inline-block;
+    }
+
+    #p_server h6.filled{
+        margin-top: 0px;
+    }
+
+    #p_server .card .front{
+        padding: 0px;
+    }
+
+    body #content .tile .tile-widget ul.tile-navbar{
+        padding: 5px 5px;
+    }
+
+    .anchorjs-icon {
+        font-size: 60%;
+        vertical-align: .2em;
+    }
+    .anchorjs-icon {
+        font-family: anchorjs-link;
+        speak: none;
+        font-style: normal;
+        font-weight: 400;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    .anchorjs-link {
+        float: left;
+        width: 1em;
+        height: 1em;
+        margin-left: -1.2em;
+        opacity: 0;
+        color: inherit;
+        text-align: center;
+    }
+    .tomcat{
+        background-size:20px 20px;
+        background-image: url(module/examples/images/tomcat.png) !important;
+        background-repeat: no-repeat;
+    }
+</style>
+<section class="tile transparent" id="p_server">
+
+    <div class="tile-widget color transparent-black rounded-top-corners">
+        <ul class="tile-navbar bg-transparent-black-3">
+         <!--   <li>
+                <div class="checkbox check-transparent">
+                    <input type="checkbox" value="1" id="selectall">
+                    <label for="selectall">全选</label>
+                </div>
+            </li>
+            <li>
+                <a href="#" class="gallery-tool"><i class="fa fa-share"></i> 发布</a>
+            </li>-->
+          <!--  <li>
+                <a href="#" class="gallery-tool"><i class="fa fa-download"></i> 导出</a>
+            </li>-->
+            <li>
+                <a href="#" class="gallery-tool">&nbsp;</a>
+            </li>
+            <li>
+                <a href="#modalConfirm" data-toggle="modal" class="gallery-tool"><i class="fa fa-plus"></i> 添加</a>
+            </li>
+          <!--  <li>
+                <a href="#" class="gallery-tool"><i class="fa fa-trash-o"></i> 删除</a>
+            </li>-->
+            <li class="filters">
+                <a href="#">All</a>
+                <a href="#">DB</a>
+                <a href="#" class="active">WEB</a>
+                <a href="#" >缓存</a>
+                <a href="#">其它</a>
+            </li>
+
+        </ul>
+    </div>
+    <!-- tile body -->
+    <div class="tile-body color transparent-black superbox">
+
+        <!-- cards -->
+        <div class="row cards">
+
+            <div class="card-container col-lg-4 col-sm-6 col-xs-12">
+                <div class="card card-blue hover">
+                    <div class="front">
+
+                        <div class="media">
+                            <div>
+                                <h6 class="filled slategray sans-serif">B2C测试服务器</h6>
+                            </div>
+                            <div class="media-body row">
+                                <div class="col-lg-10 col-xs-10 col-sm-10">
+                                    <div class="title">
+                                        <span class="label label-warning">IP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><kbd>192.168.1.234</kbd>
+                                    </div>
+                                    <div class="title">
+                                        <span class="label label-warning">CPU</span><kbd>4核</kbd>
+                                    </div>
+                                    <div class="title">
+                                        <span class="label label-warning">内存&nbsp;</span><kbd>8G</kbd>
+                                    </div>
+                                    <div class="title">
+                                        <span class="label label-warning">MAC</span><kbd>64-51-06-FF-17-20</kbd>
+                                    </div>
+                                    <div class="title">
+                                        <span class="label label-warning">系统&nbsp;</span><kbd>CentOS 6.5 64位</kbd>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-xs-2 col-sm-2 btn-group-vertical btn-group-xs"  role="group">
+                                    <a class="btn btn-default" title="修改" ><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-default" title="查看密码" for="passwordPanel1" ><i class="fa fa-lock"></i></a>
+                                    <a class="btn btn-default" title="查看容器" for="component1" ><i class="fa fa-cubes"></i></a>
+                                    <!-- <a class="btn" title="发布" ><i class="fa fa-share"></i></a>-->
+                                    <a class="btn btn-default" title="监控" ><i class="fa fa-bar-chart"></i></a>
+                                    <a class="btn btn-warning" title="删除" ><i class="fa fa-trash"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="panel panel-primary" id="passwordPanel1" style="display:none">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <span>服务器密码</span>
+                                    <div class="pull-right">
+                                        <div class="btn-group btn-group-xs" role="group" aria-label="操作">
+                                        </div>
+                                        <a class="btn btn-danger btn-xs module-back" href="#" title="返回"><i class="fa fa-reply"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <span>admin1</span>
+                            </div>
+                        </div>
+                        <div class="panel panel-primary" id="component1">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <span>容器组件</span>
+                                    <div class="pull-right">
+                                        <div class="btn-group btn-group-xs" role="group" aria-label="操作">
+                                           <!-- <a class="btn btn-default" href="#" title="发布"><i class="fa fa-share"></i> </a>-->
+                                            <a class="btn btn-default" href="#" title="增加"><i class="fa fa-plus-circle"></i></a>
+                                        </div>
+                                        <a class="btn btn-danger btn-xs module-back" href="#" title="返回"><i class="fa fa-reply"></i></a>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="panel-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item" data-toggle="tooltip" data-placement="top" data-original-title="/opt/tomcat6/webapp/"><span class="badge badge-red">8080</span><span class="tomcat">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><kbd>V_6.0</kbd><div class="pull-right"><a class="btn btn-success btn-xs">启动</a></div></li>
+                                    <li class="list-group-item" data-toggle="tooltip" data-placement="top" data-original-title="/tomcat_8081/webapp/"><span class="badge badge-cyan">8081</span><span class="tomcat">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><kbd>V_7.0</kbd><div class="pull-right"><a class="btn btn-success btn-xs">启动</a></div></li>
+                                    <li class="list-group-item" data-toggle="tooltip" data-placement="top" data-original-title="/tomcat7_8082/webapp/"><span class="badge badge-greensea">8082</span><span class="tomcat">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><kbd>V_7.0</kbd><div class="pull-right"><a class="btn btn-success btn-xs">启动</a></div></li>
+                                    <li class="list-group-item" data-toggle="tooltip" data-placement="top" data-original-title="/tomcat_8083/webapp/"><span class="badge badge-greensea">8083</span><span class="tomcat">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><kbd>V_6.0</kbd><div class="pull-right"><a class="btn btn-warning btn-xs">停止</a></div></li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card-container col-lg-4 col-sm-6 col-xs-12">
+                <div class="card card-blue hover">
+                    <div class="front">
+
+                        <div class="media">
+                            <div>
+                                <h6 class="filled slategray sans-serif" title="开发测试服务器">HP2520</h6>
+                            </div>
+                            <div class="media-body row">
+                                <div class="col-lg-10 col-xs-10 col-sm-10">
+                                    <div class="title">
+                                        <span class="label label-warning">IP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><kbd>192.168.1.234</kbd>
+                                    </div>
+                                    <div class="title">
+                                        <span class="label label-warning">CPU</span><kbd>4核</kbd>
+                                    </div>
+                                    <div class="title">
+                                        <span class="label label-warning">内存&nbsp;</span><kbd>8G</kbd>
+                                    </div>
+                                    <div class="title">
+                                        <span class="label label-warning">MAC</span><kbd>64-51-06-FF-17-20</kbd>
+                                    </div>
+                                    <div class="title">
+                                        <span class="label label-warning">系统&nbsp;</span><kbd>CentOS 6.5 64位</kbd>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-xs-2 col-sm-2 btn-group-vertical btn-group-xs"  role="group">
+                                    <a class="btn btn-default" title="修改" ><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-default" title="查看密码" for="passwordPanel" ><i class="fa fa-lock"></i></a>
+                                    <a class="btn btn-default" title="查看容器" for="component" ><i class="fa fa-cubes"></i></a>
+                                    <a class="btn btn-default" title="监控" ><i class="fa fa-bar-chart"></i></a>
+                                    <a class="btn btn-danger" title="删除" ><i class="fa fa-trash"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="panel panel-primary" id="passwordPanel" style="display:none">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <span>服务器密码</span>
+                                    <div class="pull-right">
+                                        <div class="btn-group btn-group-xs" role="group" aria-label="操作">
+                                        </div>
+                                        <a class="btn btn-danger btn-xs module-back" href="#" title="返回"><i class="fa fa-reply"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <span>admin123321</span>
+                            </div>
+                        </div>
+                        <div class="panel panel-primary" id="component">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <span>容器组件</span>
+                                    <div class="pull-right">
+                                        <div class="btn-group btn-group-xs" role="group" aria-label="操作">
+                                            <a class="btn btn-default" href="#" title="发布"><i class="fa fa-share"></i> </a>
+                                            <a class="btn btn-default" href="#" title="增加"><i class="fa fa-plus-circle"></i></a>
+                                            <a class="btn btn-default" href="#" title="删除" ><i class="fa fa-minus-circle"></i></a>
+                                        </div>
+                                        <a class="btn btn-danger btn-xs module-back" href="#" title="返回"><i class="fa fa-reply"></i></a>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="panel-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item" data-toggle="tooltip" data-placement="top" data-original-title="/opt/tomcat6/webapp/"><span class="badge badge-red">8080</span><span class="tomcat">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><kbd>V_6.0</kbd><div class="pull-right"><a class="btn btn-success btn-xs">启动</a></div></li>
+                                    <li class="list-group-item" data-toggle="tooltip" data-placement="top" data-original-title="/tomcat_8081/webapp/"><span class="badge badge-cyan">8081</span><span class="tomcat">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><kbd>V_7.0</kbd><div class="pull-right"><a class="btn btn-success btn-xs">启动</a></div></li>
+                                    <li class="list-group-item" data-toggle="tooltip" data-placement="top" data-original-title="/tomcat7_8082/webapp/"><span class="badge badge-greensea">8082</span><span class="tomcat">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><kbd>V_7.0</kbd><div class="pull-right"><a class="btn btn-success btn-xs">启动</a></div></li>
+                                    <li class="list-group-item" data-toggle="tooltip" data-placement="top" data-original-title="/tomcat_8083/webapp/"><span class="badge badge-greensea">8083</span><span class="tomcat">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><kbd>V_6.0</kbd><div class="pull-right"><a class="btn btn-warning btn-xs">停止</a></div></li>
+                                    <li class="list-group-item" data-toggle="tooltip" data-placement="top" data-original-title="/tomcat_8083/webapp/"><span class="badge badge-greensea">8083</span><span class="tomcat">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><kbd>V_6.0</kbd><div class="pull-right"><a class="btn btn-warning btn-xs">停止</a></div></li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /cards -->
+
+    </div>
+    <!-- /tile body -->
+
+
+
+
+</section>
+
+<div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="modalConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">Close</button>
+                <h5 class="modal-title" id="modalConfirmLabel"><strong>添加</strong> 服务器</h5>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="exampleInput">服务器名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="exampleInput">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label" for="passwordInput">IP</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="passwordInput">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="placeholderInput">CPU</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="placeholderInput" placeholder="This is a placeholder...">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="placeholderInput1">内存</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="placeholderInput1" placeholder="This is a placeholder...">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="placeholderInput2">MAC</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="placeholderInput2" placeholder="This is a placeholder...">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">描述</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-red btn-sm" data-dismiss="modal" aria-hidden="true">关闭</button>
+                <button class="btn btn-green btn-sm">保存</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<section  class="tile transparent" id="p_component">
+    <div class="panel panel-transparent-black">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <span>B2C统一配货/模块</span>
+                <div class="pull-right">
+                    <div class="btn-group btn-group-xs" role="group" aria-label="操作">
+                        <a class="btn btn-default" href="#" title="增加"><i class="fa fa-plus-circle"></i></a>
+                        <a class="btn btn-default" href="#" title="删除" ><i class="fa fa-minus-circle"></i></a>
+                    </div>
+                    <a class="btn btn-danger btn-xs module-back" href="#" title="返回"><i class="fa fa-reply"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+
+                    <div class="col-lg-3 col-sm-4 col-sm-12">
+                        <h4 class="filled">jdbc.url</h4>
+                        <p class="filled">
+                            jdbc:mysql://localhost:3306/test
+                        </p>
+                    </div>
+                    <div class="col-lg-3 col-sm-4 col-sm-12">
+                        <h4 class="filled">driverClass</h4>
+                        <p class="filled">
+                            com.mysql.jdbc.Driver
+                        </p>
+                    </div>
+
+
+                    <div class="col-lg-3 col-sm-4 col-sm-12">
+                        <h4 class="filled">jdbc.username</h4>
+                        <p class="filled">
+                            <strong>root</strong>
+                        </p>
+                    </div>
+                    <div class="col-lg-3 col-sm-4 col-sm-12">
+                        <h4 class="filled">jdbc.password</h4>
+                        <p class="filled">
+                            admin123
+                        </p>
+                    </div>
+
+        </div>
+    </div>
+
+</section>
+<script src="module/examples/js/server.js" ></script>

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.auto.core.mapper.StockPreSaleModifyDetailMapper">
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.core.StockPreSaleModifyDetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="relation_id" jdbcType="BIGINT" property="relationId" />
+    <result column="wareh_id" jdbcType="VARCHAR" property="warehId" />
+    <result column="prod_id" jdbcType="VARCHAR" property="prodId" />
+    <result column="pre_private_stock" jdbcType="INTEGER" property="prePrivateStock" />
+    <result column="pre_private_stock_modify" jdbcType="INTEGER" property="prePrivateStockModify" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="end_time_modify" jdbcType="TIMESTAMP" property="endTimeModify" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="reserved_status" jdbcType="INTEGER" property="reservedStatus" />
+    <result column="reserved_remark" jdbcType="VARCHAR" property="reservedRemark" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, relation_id, wareh_id, prod_id, pre_private_stock, pre_private_stock_modify, 
+    start_time, end_time, end_time_modify, update_time, update_by, reserved_status, reserved_remark
+  </sql>
+  <select id="selectByExample" parameterType="com.metersbonwe.stock.po.core.StockPreSaleModifyDetailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from stock_pre_sale_modify_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from stock_pre_sale_modify_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from stock_pre_sale_modify_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.metersbonwe.stock.po.core.StockPreSaleModifyDetailExample">
+    delete from stock_pre_sale_modify_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.metersbonwe.stock.po.core.StockPreSaleModifyDetail">
+    insert into stock_pre_sale_modify_detail (id, relation_id, wareh_id, 
+      prod_id, pre_private_stock, pre_private_stock_modify, 
+      start_time, end_time, end_time_modify, 
+      update_time, update_by, reserved_status, 
+      reserved_remark)
+    values (#{id,jdbcType=INTEGER}, #{relationId,jdbcType=BIGINT}, #{warehId,jdbcType=VARCHAR}, 
+      #{prodId,jdbcType=VARCHAR}, #{prePrivateStock,jdbcType=INTEGER}, #{prePrivateStockModify,jdbcType=INTEGER}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{endTimeModify,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{reservedStatus,jdbcType=INTEGER}, 
+      #{reservedRemark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.metersbonwe.stock.po.core.StockPreSaleModifyDetail">
+    insert into stock_pre_sale_modify_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="relationId != null">
+        relation_id,
+      </if>
+      <if test="warehId != null">
+        wareh_id,
+      </if>
+      <if test="prodId != null">
+        prod_id,
+      </if>
+      <if test="prePrivateStock != null">
+        pre_private_stock,
+      </if>
+      <if test="prePrivateStockModify != null">
+        pre_private_stock_modify,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="endTimeModify != null">
+        end_time_modify,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="reservedStatus != null">
+        reserved_status,
+      </if>
+      <if test="reservedRemark != null">
+        reserved_remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="relationId != null">
+        #{relationId,jdbcType=BIGINT},
+      </if>
+      <if test="warehId != null">
+        #{warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="prePrivateStock != null">
+        #{prePrivateStock,jdbcType=INTEGER},
+      </if>
+      <if test="prePrivateStockModify != null">
+        #{prePrivateStockModify,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTimeModify != null">
+        #{endTimeModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="reservedStatus != null">
+        #{reservedStatus,jdbcType=INTEGER},
+      </if>
+      <if test="reservedRemark != null">
+        #{reservedRemark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.metersbonwe.stock.po.core.StockPreSaleModifyDetailExample" resultType="java.lang.Integer">
+    select count(*) from stock_pre_sale_modify_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update stock_pre_sale_modify_detail
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.relationId != null">
+        relation_id = #{record.relationId,jdbcType=BIGINT},
+      </if>
+      <if test="record.warehId != null">
+        wareh_id = #{record.warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodId != null">
+        prod_id = #{record.prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prePrivateStock != null">
+        pre_private_stock = #{record.prePrivateStock,jdbcType=INTEGER},
+      </if>
+      <if test="record.prePrivateStockModify != null">
+        pre_private_stock_modify = #{record.prePrivateStockModify,jdbcType=INTEGER},
+      </if>
+      <if test="record.startTime != null">
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTimeModify != null">
+        end_time_modify = #{record.endTimeModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reservedStatus != null">
+        reserved_status = #{record.reservedStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.reservedRemark != null">
+        reserved_remark = #{record.reservedRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update stock_pre_sale_modify_detail
+    set id = #{record.id,jdbcType=INTEGER},
+      relation_id = #{record.relationId,jdbcType=BIGINT},
+      wareh_id = #{record.warehId,jdbcType=VARCHAR},
+      prod_id = #{record.prodId,jdbcType=VARCHAR},
+      pre_private_stock = #{record.prePrivateStock,jdbcType=INTEGER},
+      pre_private_stock_modify = #{record.prePrivateStockModify,jdbcType=INTEGER},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      end_time_modify = #{record.endTimeModify,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      reserved_status = #{record.reservedStatus,jdbcType=INTEGER},
+      reserved_remark = #{record.reservedRemark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.metersbonwe.stock.po.core.StockPreSaleModifyDetail">
+    update stock_pre_sale_modify_detail
+    <set>
+      <if test="relationId != null">
+        relation_id = #{relationId,jdbcType=BIGINT},
+      </if>
+      <if test="warehId != null">
+        wareh_id = #{warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null">
+        prod_id = #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="prePrivateStock != null">
+        pre_private_stock = #{prePrivateStock,jdbcType=INTEGER},
+      </if>
+      <if test="prePrivateStockModify != null">
+        pre_private_stock_modify = #{prePrivateStockModify,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTimeModify != null">
+        end_time_modify = #{endTimeModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="reservedStatus != null">
+        reserved_status = #{reservedStatus,jdbcType=INTEGER},
+      </if>
+      <if test="reservedRemark != null">
+        reserved_remark = #{reservedRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.metersbonwe.stock.po.core.StockPreSaleModifyDetail">
+    update stock_pre_sale_modify_detail
+    set relation_id = #{relationId,jdbcType=BIGINT},
+      wareh_id = #{warehId,jdbcType=VARCHAR},
+      prod_id = #{prodId,jdbcType=VARCHAR},
+      pre_private_stock = #{prePrivateStock,jdbcType=INTEGER},
+      pre_private_stock_modify = #{prePrivateStockModify,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      end_time_modify = #{endTimeModify,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      reserved_status = #{reservedStatus,jdbcType=INTEGER},
+      reserved_remark = #{reservedRemark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

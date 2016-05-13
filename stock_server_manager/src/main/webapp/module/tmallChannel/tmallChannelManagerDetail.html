@@ -1,0 +1,128 @@
+<div id="tmallChannelManagerDetail_buttion_div" style="height:45px;padding:6px;background-color: #eff3f8;">
+	<table id="tmallChannelManagerDetail_buttion_table" border="0" cellspacing="0" cellpadding="0" class="EditTable" style="border-top: 0px !important;">
+		<tbody>
+		<tr>
+			<td colspan="2"><hr class="ui-widget-content" style="margin:1px"></td>
+		</tr>
+		<tr   id="tmallChannelManagerDetail_buttion">
+			<td class="EditButton">
+				<button id="bt_save" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-primary" onclick="save()">
+					保存
+				</button>
+				<button id="bt_check" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-primary"  onclick="check()">
+					审批
+				</button>
+				<button id="bt_cancel" class="fm-button ui-state-default ui-corner-all fm-button-icon-left btn btn-sm btn-primary" onclick="cancel()">
+					撤销
+				</button>
+			</td>
+		</tr>
+		<tr style="display:none" class="binfo">
+			<td class="bottominfo" colspan="2"></td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+
+<div style="margin-top:5px;">
+	<div id="tmallChannelManagerDetail_tab1_div" class="tile-widget color transparent-black rounded-top-corners nopadding">
+		<ul class="nav nav-tabs">
+			<li class="dropdown pull-right hide">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<i class="fa fa-th-list"></i>
+					<b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+				</ul>
+			</li>
+			<li class="active" style="text-align:center;">
+				<a href="#content_M_601090_1_BASE" data-toggle="tab" id="li_content_M_601090_1_BASE" aria-expanded="true">
+					基本信息
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div id="tmallChannelManagerDetail_prentMsg" class="tile-body tab-content1 nopadding rounded-bottom-corners">
+		<ul class="tab-pane fade active in">
+			<div style="height:90px;margin-top:2px;background-color: #eff3f8;padding: 10px;">
+				<div style="float:left;height:100%;">
+					<table class="EditTable" cellspacing="0" cellpadding="0" border="0" style="margin-left:10px;border-top: 0px !important;">
+						<tbody>
+						<td class="ui-state-error" colspan="2"></td>
+						</tr>
+						<tr style="display:none" class="tinfo">
+							<td class="topinfo" colspan="2"></td>
+						</tr>
+						<tr rowpos="1" class="FormData">
+							<td class="CaptionTD" style="padding:6px 3px 0px 6px;">同步单号：</td>
+							<td class="DataTD" style="padding:6px 3px 0px 6px;">
+							<input type="text" id="incrementId" name="incrementId" class="FormElement ui-widget-content ui-corner-all" readonly="true" style="width:300px;background-color: gainsboro;">
+							</td>
+						</tr>
+                        <tr rowpos="2" class="FormData">
+                            <td class="CaptionTD" style="padding:6px 3px 0px 6px;">同步名称：</td>
+                            <td class="DataTD" style="padding:6px 3px 0px 6px;">
+                            <input type="text" id="incrementName" name="incrementName" class="FormElement ui-widget-content ui-corner-all" style="width:300px;"></td>
+                        </tr>
+						</tbody>
+					</table>
+				</div>
+				<div style="float:right;height:100%;">
+					<table class="EditTable" cellspacing="0" cellpadding="0" border="0" style="margin-right:10px;border-top: 0px !important;">
+						<tbody>
+						<tr style="display:none">
+							<td class="ui-state-error" colspan="2"></td>
+						</tr>
+						<tr style="display:none" class="tinfo">
+							<td class="topinfo" colspan="2"></td>
+						</tr>
+						<tr rowpos="3" class="FormData">
+							<td class="CaptionTD" style="padding:6px 3px 0px 6px;">当前进度：</td>
+							<td class="DataTD" style="padding:6px 3px 0px 6px;">
+							<input type="text" id="iStatus" name="iStatus" class="FormElement ui-widget-content ui-corner-all" readonly="true" style="width:300px;background-color: gainsboro;">
+							</td>
+						</tr>
+                        <tr rowpos="4" class="FormData">
+                            <td class="CaptionTD" style="padding:6px 3px 0px 6px;">渠道编码：</td>
+                            <td class="DataTD" style="padding:6px 3px 0px 6px;">
+                            <input type="text" id="channelCode" name="channelCode" class="FormElement ui-widget-content ui-corner-all" style="width:300px;">
+                            </td>
+                        </tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</ul>
+	</div>
+</div>
+
+
+<div id="tmallChannelManagerDetail_table"  style="margin-top:5px;">
+	<div class="tile-widget color transparent-black rounded-top-corners nopadding">
+		<ul class="nav nav-tabs">
+			<li class="dropdown pull-right tabdrop hide">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<i class="fa fa-th-list"></i>
+					<b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+				</ul>
+			</li>
+			<li class="active" style="text-align:center;">
+				<a data-toggle="tab" id="li_content_M_605011" aria-expanded="false">
+					同步明细信息
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div class="tile-body tab-content1 nopadding rounded-bottom-corners">
+		<ul class="tab-pane fade active in">
+			<div id="tmallChannelManagerDetail">
+				<div id="tmallChannelManagerDetailSearch"></div>
+				<table id="tmallChannelManagerDetailTable"></table>
+				<div id="tmallChannelManagerDetailPager"></div>
+			</div>
+			<script src="module/tmallChannel/js/tmallChannelManagerDetailGrid.js"></script>
+		</ul>
+	</div>
+</div>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.core.mapper.FreeLockChangeCoreMapper" >
+  <update id="updateChannelProd" parameterType="java.util.HashMap">
+      update ${tableName} t left join
+       (
+         select prod_id,
+                sum(finalFreeShareStock) finalFreeShareStock,
+                sum(lock_stock) lockStock
+           from (
+                 ${tempTable}
+                 ) tt1
+           group by prod_id
+        ) ttt1 on t.prod_id = ttt1.prod_id
+    set t.final_free_stock = ifnull(ttt1.finalFreeShareStock,0),
+        t.lock_stock = ifnull(ttt1.lockStock,0),
+        t.update_time = now()
+  where t.prod_id = #{prodId}
+  </update>
+
+    <select id="getFreeLockData" parameterType="java.util.HashMap" resultType="org.apache.commons.collections.map.CaseInsensitiveMap">
+         select prod_id,
+                sum(finalFreeShareStock) freestock,
+                sum(lock_stock) lockstock
+           from (
+                 ${tempTable}
+                 ) tt1
+           group by prod_id
+    </select>
+</mapper>

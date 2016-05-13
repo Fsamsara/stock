@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.sync.mapper.TmpShopSafeStockDefineMapper">
+	<resultMap id="BaseResultMap"
+		type="com.metersbonwe.stock.po.sync.TmpShopSafeStock">
+		<id column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="WAREH_ID" property="warehId" jdbcType="VARCHAR" />
+		<result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
+		<result column="SHOP_SAFE_STOCK" property="shopSafeStock"
+			jdbcType="DECIMAL" />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertList" parameterType="java.util.List">
+		insert into TMP_SHOP_SAFE_STOCK (WAREH_ID, PROD_ID,SHOP_SAFE_STOCK,
+		UPDATE_TIME)
+		<foreach collection="list" item="item" index="index" open="("
+			close=")" separator="union">
+			SELECT
+			#{item.warehId,jdbcType=VARCHAR},
+			#{item.prodId,jdbcType=VARCHAR},
+			#{item.shopSafeStock,jdbcType=DECIMAL},
+			<if test="item.updateTime==null">sysdate</if>
+			<if test="item.updateTime!=null"> #{item.updateTime,jdbcType=TIMESTAMP}</if>
+			FROM DUAL
+		</foreach>
+	</insert>
+
+	<select id="selectAllDeleteRepeat" parameterType="com.metersbonwe.stock.pojo.TmpShopSafeGlobalBean"
+		resultMap="BaseResultMap">
+		SELECT T.ID, T.WAREH_ID, T.PROD_ID, T.SHOP_SAFE_STOCK, T.UPDATE_TIME
+		FROM (SELECT TWS.ID,
+		TWS.WAREH_ID,
+		TWS.PROD_ID,
+		TWS.SHOP_SAFE_STOCK,
+		TWS.UPDATE_TIME,
+		RANK() OVER(PARTITION BY TWS.WAREH_ID, TWS.PROD_ID
+		ORDER BY TWS.UPDATE_TIME
+		DESC, TWS.ID DESC) RK
+		FROM TMP_SHOP_SAFE_STOCK
+		TWS) T
+		WHERE T.RK <![CDATA[<]]>
+		2
+		<if test="startId != null">
+			AND T.ID <![CDATA[>]]>
+			#{startId,jdbcType=INTEGER}
+		</if>
+		AND ROWNUM <![CDATA[<=]]>
+		#{maxDataCount,jdbcType=INTEGER}
+	</select>
+
+</mapper>

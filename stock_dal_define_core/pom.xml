@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.metersbonwe.stock</groupId>
+		<artifactId>stock</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>stock_dal_define_core</artifactId>
+	<name>stock_dal_define_core</name>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+		<dependency>
+			<groupId>com.metersbonwe.stock</groupId>
+			<artifactId>stock_po</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.metersbonwe.stock</groupId>
+			<artifactId>stock_vo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.metersbonwe.stock</groupId>
+			<artifactId>stock_dal_auto_core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.metersbonwe.stock</groupId>
+			<artifactId>stock_datasource_core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

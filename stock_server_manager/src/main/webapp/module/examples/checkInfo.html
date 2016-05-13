@@ -1,0 +1,69 @@
+<style type="text/css">
+#popSearch .menu-header{ height: 36px; line-height: 36px; background:#307ecc; color: #fff; font-size: 15px; font-weight: lighter; padding-left: 12px;}
+#popSearch .modal-title{ color:#2679b5;}
+#popSearch .modal-header{ padding: 11px 15px; background: rgba(0, 0, 0, 0.03); border-bottom: 1px solid #e5e5e5;}
+#popSearch .table-striped>tbody>tr:nth-of-type(odd){ background: #fff;}
+#popSearch .table-striped>tbody>tr:nth-of-type(even){ background: #f9f9f9;}
+</style>
+<div id="popSearch">
+    <div class="col-xs-3">
+        <div class="input-group margin-bottom-20 margin-top-15">
+            <input type="hidden" name="userID" id="userID">
+            <input type="text" class="form-control" name="user" style=" border-right:none;" id="user" />
+            <div class="input-group-addon" style="background: #fff; cursor: pointer;" id="tableSearch"><i class="fa fa-search"></i></div>
+        </div>
+    </div>
+
+    <!-- 弹出 begin -->
+    <div class="modal fade" id="pop" tabindex="-1" role="dialog" aria-labelledby="addLabel" aria-hidden="true" style="min-width: 600px;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <h5 class="modal-title" id="addLabel"><strong>列表明细</strong></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <div id="tableList"></div>
+                        </div>
+                        <div class="col-xs-2 center" style="padding-top: 130px;">
+                            <button type="button" id="addReference" class="btn btn-default btn-block margin-bottom-20">添加 <i class="fa fa-angle-double-right"></i></button>
+                            <button type="button" id="removeReference" class="btn btn-default btn-block">移除 <i class="fa fa-angle-double-left"></i></button>
+                        </div>
+                        <div class="col-xs-5">
+                            <div id="tableListResult"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-red btn-sm" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    <button class="btn btn-green btn-sm" id="saveReference">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 弹出 end -->
+</div>
+
+<script src="module/examples/js/checkInfo.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $("#tableSearch").checkInfo({
+            th : ["用户ID","时间","姓名","时间1","姓名1","时间2"],
+            data : [
+					["1008","08:01","李天","08:01","李天","08:01"],
+					["1003","08:01","李天","08:01","李天","08:01"],
+					["1002","09:01","张三","08:01","李天","08:01"],
+					["1009","07:01","王五","08:01","李天","08:01"],
+					["1004","08:01","李天","08:01","李天","08:01"],
+					["1005","09:01","张三","08:01","李天","08:01"],
+					["1007","07:01","王五","08:01","李天","08:01"],
+					["1006","08:01","李天","08:01","李天","08:01"],
+					["1000","09:01","张三","08:01","李天","08:01"]
+				]
+        });
+
+        $("#popSearch").parent(".tab-pane").css("overflow-x","hidden");
+    });
+</script>

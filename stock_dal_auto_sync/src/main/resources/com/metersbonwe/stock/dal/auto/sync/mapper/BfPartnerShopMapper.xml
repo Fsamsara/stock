@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.auto.sync.mapper.BfPartnerShopMapper">
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.BfPartnerShop">
+    <result column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="AGENT_ID" jdbcType="DECIMAL" property="agentId" />
+    <result column="SHOP_ID" jdbcType="DECIMAL" property="shopId" />
+    <result column="OWNER_ID" jdbcType="DECIMAL" property="ownerId" />
+    <result column="ACCOUNT_WAREH_ID" jdbcType="DECIMAL" property="accountWarehId" />
+    <result column="SHOP_MANAGER" jdbcType="VARCHAR" property="shopManager" />
+    <result column="SHOP_PHONE" jdbcType="VARCHAR" property="shopPhone" />
+    <result column="SHOP_ADDRESS" jdbcType="VARCHAR" property="shopAddress" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="COUNTY" jdbcType="VARCHAR" property="county" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="CREATE_USER" jdbcType="VARCHAR" property="createUser" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="LAST_MODIFIED_USER" jdbcType="VARCHAR" property="lastModifiedUser" />
+    <result column="LAST_MODIFIED_DATE" jdbcType="TIMESTAMP" property="lastModifiedDate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID, AGENT_ID, SHOP_ID, OWNER_ID, ACCOUNT_WAREH_ID, SHOP_MANAGER, SHOP_PHONE, SHOP_ADDRESS, 
+    PROVINCE, CITY, COUNTY, REMARK, CREATE_USER, CREATE_DATE, LAST_MODIFIED_USER, LAST_MODIFIED_DATE
+  </sql>
+  <select id="selectByExample" parameterType="com.metersbonwe.stock.po.sync.BfPartnerShopExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from BF_PARTNER_SHOP
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.metersbonwe.stock.po.sync.BfPartnerShopExample">
+    delete from BF_PARTNER_SHOP
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.metersbonwe.stock.po.sync.BfPartnerShop">
+    insert into BF_PARTNER_SHOP (ID, AGENT_ID, SHOP_ID, 
+      OWNER_ID, ACCOUNT_WAREH_ID, SHOP_MANAGER, 
+      SHOP_PHONE, SHOP_ADDRESS, PROVINCE, 
+      CITY, COUNTY, REMARK, 
+      CREATE_USER, CREATE_DATE, LAST_MODIFIED_USER, 
+      LAST_MODIFIED_DATE)
+    values (#{id,jdbcType=DECIMAL}, #{agentId,jdbcType=DECIMAL}, #{shopId,jdbcType=DECIMAL}, 
+      #{ownerId,jdbcType=DECIMAL}, #{accountWarehId,jdbcType=DECIMAL}, #{shopManager,jdbcType=VARCHAR}, 
+      #{shopPhone,jdbcType=VARCHAR}, #{shopAddress,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{lastModifiedUser,jdbcType=VARCHAR}, 
+      #{lastModifiedDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.metersbonwe.stock.po.sync.BfPartnerShop">
+    insert into BF_PARTNER_SHOP
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="agentId != null">
+        AGENT_ID,
+      </if>
+      <if test="shopId != null">
+        SHOP_ID,
+      </if>
+      <if test="ownerId != null">
+        OWNER_ID,
+      </if>
+      <if test="accountWarehId != null">
+        ACCOUNT_WAREH_ID,
+      </if>
+      <if test="shopManager != null">
+        SHOP_MANAGER,
+      </if>
+      <if test="shopPhone != null">
+        SHOP_PHONE,
+      </if>
+      <if test="shopAddress != null">
+        SHOP_ADDRESS,
+      </if>
+      <if test="province != null">
+        PROVINCE,
+      </if>
+      <if test="city != null">
+        CITY,
+      </if>
+      <if test="county != null">
+        COUNTY,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE,
+      </if>
+      <if test="lastModifiedUser != null">
+        LAST_MODIFIED_USER,
+      </if>
+      <if test="lastModifiedDate != null">
+        LAST_MODIFIED_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="agentId != null">
+        #{agentId,jdbcType=DECIMAL},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=DECIMAL},
+      </if>
+      <if test="ownerId != null">
+        #{ownerId,jdbcType=DECIMAL},
+      </if>
+      <if test="accountWarehId != null">
+        #{accountWarehId,jdbcType=DECIMAL},
+      </if>
+      <if test="shopManager != null">
+        #{shopManager,jdbcType=VARCHAR},
+      </if>
+      <if test="shopPhone != null">
+        #{shopPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="shopAddress != null">
+        #{shopAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedUser != null">
+        #{lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null">
+        #{lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.metersbonwe.stock.po.sync.BfPartnerShopExample" resultType="java.lang.Integer">
+    select count(*) from BF_PARTNER_SHOP
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update BF_PARTNER_SHOP
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=DECIMAL},
+      </if>
+      <if test="record.agentId != null">
+        AGENT_ID = #{record.agentId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shopId != null">
+        SHOP_ID = #{record.shopId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.ownerId != null">
+        OWNER_ID = #{record.ownerId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.accountWarehId != null">
+        ACCOUNT_WAREH_ID = #{record.accountWarehId,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shopManager != null">
+        SHOP_MANAGER = #{record.shopManager,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopPhone != null">
+        SHOP_PHONE = #{record.shopPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopAddress != null">
+        SHOP_ADDRESS = #{record.shopAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.province != null">
+        PROVINCE = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null">
+        CITY = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.county != null">
+        COUNTY = #{record.county,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUser != null">
+        CREATE_USER = #{record.createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null">
+        CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastModifiedUser != null">
+        LAST_MODIFIED_USER = #{record.lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastModifiedDate != null">
+        LAST_MODIFIED_DATE = #{record.lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update BF_PARTNER_SHOP
+    set ID = #{record.id,jdbcType=DECIMAL},
+      AGENT_ID = #{record.agentId,jdbcType=DECIMAL},
+      SHOP_ID = #{record.shopId,jdbcType=DECIMAL},
+      OWNER_ID = #{record.ownerId,jdbcType=DECIMAL},
+      ACCOUNT_WAREH_ID = #{record.accountWarehId,jdbcType=DECIMAL},
+      SHOP_MANAGER = #{record.shopManager,jdbcType=VARCHAR},
+      SHOP_PHONE = #{record.shopPhone,jdbcType=VARCHAR},
+      SHOP_ADDRESS = #{record.shopAddress,jdbcType=VARCHAR},
+      PROVINCE = #{record.province,jdbcType=VARCHAR},
+      CITY = #{record.city,jdbcType=VARCHAR},
+      COUNTY = #{record.county,jdbcType=VARCHAR},
+      REMARK = #{record.remark,jdbcType=VARCHAR},
+      CREATE_USER = #{record.createUser,jdbcType=VARCHAR},
+      CREATE_DATE = #{record.createDate,jdbcType=TIMESTAMP},
+      LAST_MODIFIED_USER = #{record.lastModifiedUser,jdbcType=VARCHAR},
+      LAST_MODIFIED_DATE = #{record.lastModifiedDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+</mapper>

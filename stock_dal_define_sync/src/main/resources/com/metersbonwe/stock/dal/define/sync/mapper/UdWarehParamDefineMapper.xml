@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.sync.mapper.UdWarehParamDefineMapper">
+	<resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.define.UdWarehParamDefine">
+		<id column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="BF_ORG_ID" property="bfOrgId" jdbcType="DECIMAL" />
+		<result column="CODE" property="code" jdbcType="VARCHAR" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="IS_SHOP" property="shoped" jdbcType="INTEGER" />
+		<result column="ORG_TYPE" property="orgType" jdbcType="VARCHAR" />
+		<result column="VIRTUAL_WAREHOUSE_ID" property="virtualWarehouseId"
+			jdbcType="DECIMAL" />
+		<result column="B2C_STARTING_QTY" property="b2cStartingQty"
+			jdbcType="DECIMAL" />
+		<result column="B2C_DIST_PEAK_VALUE" property="b2cDistPeakValue"
+			jdbcType="DECIMAL" />
+		<result column="B2B_STARTING_QTY" property="b2bStartingQty"
+			jdbcType="DECIMAL" />
+		<result column="B2B_DIST_PEAK_VALUE" property="b2bDistPeakValue"
+			jdbcType="DECIMAL" />
+		<result column="ONLINE_SAFEQTY_TYPE" property="onlineSafeqtyType"
+			jdbcType="VARCHAR" />
+		<result column="OFFLINE_SAFEQTY_TYPE" property="offlineSafeqtyType"
+			jdbcType="VARCHAR" />
+		<result column="FLAG" property="flag" jdbcType="CHAR" />
+		<result column="UP_FLAG" property="upFlag" jdbcType="CHAR" />
+		<result column="UD_ONLINE" property="udOnline" jdbcType="CHAR" />
+		<result column="UD_OFFLINE" property="udOffline" jdbcType="CHAR" />
+		<result column="SHIPPING_ID" property="shippingId" jdbcType="DECIMAL" />
+		<result column="HAND_CREATE_DOC" property="handCreateDoc"
+			jdbcType="CHAR" />
+		<result column="MIN_NUM" property="minNum" jdbcType="DECIMAL" />
+		<result column="PROD_SOURCE" property="prodSource" jdbcType="VARCHAR" />
+		<result column="SAFETY_STOCK" property="safetyStock" jdbcType="DECIMAL" />
+		<result column="IS_TFO_DIST_WAREH" property="isTfoDistWareh"
+			jdbcType="CHAR" />
+		<result column="USED_MA" property="usedMa" jdbcType="CHAR" />
+		<result column="CANAD_ZONES" property="canadZones" jdbcType="VARCHAR" />
+		<result column="IS_STK_SYNC2OS" property="isStkSync2os"
+			jdbcType="CHAR" />
+		<result column="IS_DOUBLE_LOCKED" property="isDoubleLocked"
+			jdbcType="CHAR" />
+		<result column="RELEASE_ORDER" property="releaseOrder"
+			jdbcType="DECIMAL" />
+	</resultMap>
+
+	<select id="selectAllForB2C" resultMap="BaseResultMap">
+		select A.ID, A.BF_ORG_ID, A.ORG_TYPE, A.VIRTUAL_WAREHOUSE_ID,
+		A.B2C_STARTING_QTY, A.B2C_DIST_PEAK_VALUE,
+		A.B2B_STARTING_QTY, A.B2B_DIST_PEAK_VALUE, A.ONLINE_SAFEQTY_TYPE, A.OFFLINE_SAFEQTY_TYPE,
+		A.FLAG, A.UP_FLAG, A.UD_ONLINE, A.UD_OFFLINE, A.SHIPPING_ID,
+		A.HAND_CREATE_DOC, A.MIN_NUM, A.PROD_SOURCE,
+		A.SAFETY_STOCK, A.IS_TFO_DIST_WAREH, A.USED_MA, A.CANAD_ZONES, A.IS_STK_SYNC2OS,
+		A.IS_DOUBLE_LOCKED,
+		A.RELEASE_ORDER,B.CODE,B.NAME
+		from UD_WAREH_PARAM A
+		LEFT JOIN BF_ORG B ON A.BF_ORG_ID = B.ID
+		WHERE A.FLAG = '1'
+	</select>
+	
+	<select id="selectWarehParamByWarehs" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+        SELECT O.CODE, SAW.DATA_SOURCE AS PROD_SOURCE, SAW.IS_SHOP,
+               P. SAFETY_STOCK, P.IS_TFO_DIST_WAREH,
+               P.ONLINE_SAFEQTY_TYPE,P.OFFLINE_SAFEQTY_TYPE
+        FROM ST_ACTIVITY_WAREH SAW INNER JOIN BF_ORG O ON SAW.WAREH_ID=O.CODE
+             LEFT JOIN UD_WAREH_PARAM P ON O.ID=P.BF_ORG_ID
+        WHERE O.CODE IN
+          <foreach collection="warehList" item="item" index="index" open="(" separator=","  close=")">
+           #{item}
+          </foreach>
+    </select>
+</mapper>

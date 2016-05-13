@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.core.mapper.StockChannelProdDefineMapper">
+	
+    <select id="selectForChannelAndProd" parameterType="com.metersbonwe.stock.po.core.define.ChannelProdBean"
+        resultType="com.metersbonwe.stock.po.core.define.ChannelProdBean">
+        
+         SELECT T.channel_code "channelCode",
+                T.prod_id "prodId",
+                T.private_stock "privateStock",
+                T.final_free_stock "finalFreeStock",
+                T.lock_stock "lockStock",
+                S.order_share_total_stock "orderPrivateTotalStock",
+                S.pre_private_stock "orderShareTotalStock",
+                S.pre_order_total_stock "prePrivateStock",
+                S.order_private_total_stock "preOrderTotalStock",
+                S.is_pre "isPre"
+           FROM stock_channel_prod_${channelCode} AS T
+     INNER JOIN stock_channel_prod_sub_${channelCode} AS S 
+		     ON T.channel_code = S.channel_code
+		    AND T.prod_id = S.prod_id
+		  WHERE T.prod_id = #{prodId,jdbcType=VARCHAR}
+		    
+    </select>
+
+	<select id="selectForChannelsAndProds" parameterType="com.metersbonwe.stock.pojo.StockChannelProdBean"
+		resultType="com.metersbonwe.stock.pojo.StockChannelProdBean">
+		
+		<foreach collection="channelCodes" item="item" index="index" separator="union">
+			 SELECT T.channel_code "channelCode",
+	                T.prod_id "prodId",
+	                T.private_stock "privateStock",
+	                T.final_free_stock "finalFreeStock",
+	                T.lock_stock "lockStock",
+	                S.order_share_total_stock "orderPrivateTotalStock",
+	                S.pre_private_stock "orderShareTotalStock",
+	                S.pre_order_total_stock "prePrivateStock",
+	                S.order_private_total_stock "preOrderTotalStock",
+	                S.is_pre "isPre"
+	           FROM stock_channel_prod_${item} AS T
+	     INNER JOIN stock_channel_prod_sub_${item} AS S 
+	             ON T.channel_code = S.channel_code
+	            AND T.prod_id = S.prod_id
+	          WHERE 1 = 1
+            <if test="prodIds != null">
+                AND T.prod_id in
+				<foreach collection="prodIds" item="item" index="index" open="(" close=")" separator="," >
+				#{item,jdbcType=VARCHAR}
+				</foreach>
+            </if>
+		</foreach>
+		
+    </select>
+    
+    <!-- 批量插入数据 -->
+    <insert id="insert" parameterType="com.metersbonwe.stock.po.core.StockChannelProd">
+      replace into stock_channel_prod_${tableSuffix} 
+        (channel_code,prod_id,private_stock,final_free_stock,lock_stock,update_time)
+      VALUES
+        (
+            #{channelCode,jdbcType=VARCHAR}, 
+            #{prodId,jdbcType=VARCHAR}, 
+            #{privateStock,jdbcType=INTEGER},
+            #{finalFreeStock,jdbcType=INTEGER},
+            #{lockStock,jdbcType=INTEGER},
+            <if test="updateTime==null">
+            NOW()
+            </if>
+            <if test="updateTime!=null">
+            #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        )    
+    </insert>
+    
+</mapper>

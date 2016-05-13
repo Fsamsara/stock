@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.sync.mapper.UdChannleStockScopeDtlDefineMapper" >
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.UdChannleStockScopeDtl" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="UD_CW_ID" property="udCwId" jdbcType="DECIMAL" />
+    <result column="UD_LOCKED_TYPE" property="udLockedType" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="LAST_MODIFIED_USER" property="lastModifiedUser" jdbcType="VARCHAR" />
+    <result column="LAST_MODIFIED_DATE" property="lastModifiedDate" jdbcType="TIMESTAMP" />
+    <result column="FORCED_LOCKED_TYPE" property="forcedLockedType" jdbcType="VARCHAR" />
+    <result column="SEQ_NUM" property="seqNum" jdbcType="DECIMAL" />
+    <result column="ISMONOPOLIZE" property="ismonopolize" jdbcType="CHAR" />
+    <result column="IS_SYNC_OS" property="isSyncOs" jdbcType="CHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    ID, UD_CW_ID, UD_LOCKED_TYPE, STATUS, REMARK, LAST_MODIFIED_USER, LAST_MODIFIED_DATE, 
+    FORCED_LOCKED_TYPE, SEQ_NUM, ISMONOPOLIZE, IS_SYNC_OS
+  </sql>
+  
+  <select id="selectLockTypeByOnlineAndMonopolize" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    SELECT UCSD.ID, UCSD.UD_CW_ID, UCSD.UD_LOCKED_TYPE, 
+           UCSD.STATUS, UCSD.REMARK, UCSD.LAST_MODIFIED_USER, UCSD.LAST_MODIFIED_DATE, 
+           UCSD.FORCED_LOCKED_TYPE, UCSD.SEQ_NUM, UCSD.ISMONOPOLIZE, UCSD.IS_SYNC_OS
+    FROM UD_CHANNLE_STOCK_SCOPE_DTL UCSD
+         INNER JOIN UD_CHANNLE_STOCK_SCOPE UCS ON UCSD.UD_CW_ID = UCS.ID
+    WHERE UCS.CHANNLE_SORCE = 'ONLINE'
+          AND UCSD.STATUS = '1'
+          AND UCSD.IS_SYNC_OS = '1'
+          AND UCSD.FORCED_LOCKED_TYPE='01'
+          AND UCSD.ISMONOPOLIZE = 1
+  </select>
+  
+</mapper>

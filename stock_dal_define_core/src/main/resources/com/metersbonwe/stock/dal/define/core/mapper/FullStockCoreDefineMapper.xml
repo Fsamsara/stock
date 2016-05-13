@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.core.mapper.FullStockCoreDefineMapper">
+
+	<insert id="insertFreeStockTmp" parameterType="map">
+		insert into tmp_stock_wareh_prod_free_${suffix} (wareh_id, prod_id,
+		stk_on_hand,
+		qty_committed, free_share_stock, safe_type,
+		safe_stock,
+		is_shop, update_time
+		)
+		values
+		<foreach collection="freeStocks" index="index" item="item"
+			separator=",">
+			(#{item.warehId,jdbcType=VARCHAR},
+			#{item.prodId,jdbcType=VARCHAR}, #{item.stkOnHand,jdbcType=INTEGER},
+			#{item.qtyCommitted,jdbcType=INTEGER},
+			#{item.freeShareStock,jdbcType=INTEGER},
+			#{item.safeType,jdbcType=VARCHAR},
+			#{item.safeStock,jdbcType=INTEGER},
+			#{item.isShop,jdbcType=INTEGER},
+			now()
+			)
+		</foreach>
+	</insert>
+
+	<insert id="insertLockedStockTmp" parameterType="map">
+		insert into tmp_stock_wareh_prod_lock_${suffix} (wareh_id, prod_id,
+		lock_stock, update_time)
+		values
+		<foreach collection="lockStocks" index="index" item="item"
+			separator=",">
+			(#{item.warehId,jdbcType=VARCHAR},
+			#{item.prodId,jdbcType=VARCHAR}, #{item.lockStock,jdbcType=INTEGER},
+			now())
+		</foreach>
+	</insert>
+
+	<update id="updateWpSafeStockTmp" parameterType="map">
+		update
+		tmp_stock_wareh_prod_free_${suffix} tmp,
+		stock_wp_safe safe
+		set tmp.safe_stock=safe.safe_stock
+		where
+		tmp.wareh_id=safe.wareh_id
+		and tmp.prod_id=safe.prod_id
+		and
+		tmp.safe_type='WP'
+		and tmp.is_shop=0;
+	</update>
+
+	<update id="updateNOSafeStockTmp" parameterType="map">
+		update
+		tmp_stock_wareh_prod_free_${suffix} tmp
+		set tmp.safe_stock=0
+		where
+		tmp.safe_type='NO'
+		and tmp.is_shop=0;
+	</update>
+
+
+	<update id="updateShopSafeStockTmp" parameterType="map">
+		update
+		tmp_stock_wareh_prod_free_${suffix} tmp,
+		stock_shop_safe safe
+		set tmp.safe_stock=safe.safe_stock
+		where
+		tmp.wareh_id=safe.wareh_id
+		and tmp.prod_id=safe.prod_id
+		and
+		tmp.is_shop=1
+	</update>
+
+	<update id="updateShopSafeStockDefaultTmp" parameterType="map">
+		update
+		tmp_stock_wareh_prod_free_${suffix} tmp
+		set tmp.safe_stock=-1
+		where
+		tmp.is_shop=1 or tmp.safe_type='WP'
+	</update>
+	<update id="updateShopDame" parameterType="map">
+		update
+		tmp_stock_wareh_prod_free_${suffix} tmp,
+		stock_shop_dame dame
+		set tmp.dame_stock=dame.dame_stock
+		where
+		tmp.wareh_id=dame.wareh_id
+		and
+		tmp.prod_id=dame.prod_id
+		and
+		tmp.is_shop=1
+	</update>
+	<insert id="insertGroupByShopReMail">
+		insert into
+		tmp_shop_remail(wareh_id,prod_id,remail_stock)
+		select
+		wareh_id,prod_id,sum(remail_stock) as remail_stock
+		from
+		stock_shop_remail
+		group by
+		wareh_id,prod_id
+	</insert>
+	<update id="updateShopRemail" parameterType="map">
+		update
+		tmp_stock_wareh_prod_free_${suffix} tmp,
+		tmp_shop_remail remail
+		set tmp.remail_stock=remail.remail_stock
+		where
+		tmp.wareh_id=remail.wareh_id
+		and
+		tmp.prod_id=remail.prod_id
+		and
+		tmp.is_shop=1
+	</update>
+
+	<insert id="insertStockWarehProdTableFormTmp" parameterType="map">
+		insert into stock_wareh_prod_${suffix} (
+		wareh_id,
+		six_prod_id,
+		eight_prod_id,
+		prod_id,
+		stk_on_hand,
+		qty_committed,
+		free_share_stock,
+		final_free_share_stock,
+		online_safe_stock,
+		shop_remail,
+		shop_dame,
+		lock_stock,
+		wms_stock,
+		is_shop,
+		update_time)
+		select
+		free.wareh_id,
+		left(free.prod_id,6) as six_prod_id,
+		left(free.prod_id,8) as eight_prod_id,
+		free.prod_id,
+		free.stk_on_hand,
+		free.qty_committed,
+		free.free_share_stock,
+		0,
+		free.safe_stock,
+		free.remail_stock,
+		free.dame_stock,
+		ifnull(llock.lock_stock,0),
+		free.wms_stock,
+		free.is_shop,
+		now()
+		from
+		tmp_stock_wareh_prod_free_${suffix} free
+		left join
+		tmp_stock_wareh_prod_lock_${suffix} llock on free.wareh_id=llock.wareh_id and free.prod_id=llock.prod_id
+	</insert>
+
+	<update id="updateStockWmsLockedStock" parameterType="map">
+		update
+		tmp_stock_wareh_prod_free_${suffix} tmp,
+		${tableName} wms
+		set tmp.wms_stock=wms.wms_stock
+		where
+		tmp.wareh_id=wms.wareh_id
+		and
+		tmp.prod_id=wms.prod_id
+		and tmp.used_ma='1'
+	</update>
+
+</mapper>

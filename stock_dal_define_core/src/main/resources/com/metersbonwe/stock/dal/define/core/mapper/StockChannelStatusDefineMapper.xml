@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.core.mapper.StockChannelStatusDefineMapper">
+	<resultMap id="BaseResultMap"
+		type="com.metersbonwe.stock.po.core.StockChannelStatus">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="channel_code" property="channelCode" jdbcType="VARCHAR" />
+		<result column="six_prod_id" property="sixProdId" jdbcType="VARCHAR" />
+		<result column="sale_status" property="saleStatus" jdbcType="VARCHAR" />
+		<result column="is_sync" property="isSync" jdbcType="TINYINT" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 单条数据的插入 或者 更新 -->
+	<insert id="insertOrReplace" parameterType="com.metersbonwe.stock.po.core.StockChannelStatus">
+		REPLACE INTO
+		stock_channel_status
+		(channel_code,
+		six_prod_id,
+		sale_status,
+		is_sync,
+		update_time,
+		update_by,
+		create_time,
+		create_by)
+		VALUES
+		(
+		#{channelCode,jdbcType=VARCHAR},
+		#{sixProdId,jdbcType=VARCHAR},
+		#{saleStatus,jdbcType=VARCHAR},
+		#{isSync,jdbcType=TINYINT},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{updateBy,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{createBy,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 批量数据插入 或者 更新 -->
+	<insert id="insertOrReplaceList" parameterType="java.util.List">
+		REPLACE INTO stock_channel_status
+		(channel_code,
+		six_prod_id,
+		sale_status,
+		is_sync,
+		update_time,
+		update_by,
+		create_time,
+		create_by)
+		<foreach collection="list" index="index" item="item" open="VALUES"
+			separator=",">
+			(
+			#{item.channelCode,jdbcType=VARCHAR},
+			#{item.sixProdId,jdbcType=VARCHAR},
+			#{item.saleStatus,jdbcType=VARCHAR},
+			#{item.isSync,jdbcType=TINYINT},
+			#{item.updateTime,jdbcType=TIMESTAMP},
+			#{item.updateBy,jdbcType=VARCHAR},
+			#{item.createTime,jdbcType=TIMESTAMP},
+			#{item.createBy,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+
+	<!-- 根据 tmp_stock_channel_status的数据 更新 stock_channel_status表 -->
+	<update id="updateByTmp">
+		UPDATE stock_channel_status
+		s,tmp_stock_channel_status tmp
+		SET s.sale_status = tmp.sale_status,
+		s.is_sync = tmp.is_sync
+		WHERE s.channel_code = tmp.channel_code AND
+		s.six_prod_id = tmp.six_prod_id AND (
+		s.sale_status = tmp.sale_status
+		OR
+		s.is_sync = tmp.is_sync)
+	</update>
+
+	<insert id="insertOrUpdateStatus">
+		REPLACE INTO stock_channel_status (
+		channel_code,
+		six_prod_id,
+		sale_status,
+		is_sync,
+		update_time,
+		create_time
+		)
+		SELECT
+		tscs.channel_code,
+		tscs.six_prod_id,
+		tscs.sale_status,
+		tscs.is_sync,
+		NOW(),
+		NOW()
+		FROM
+		tmp_stock_channel_status tscs,
+		stock_channel_status scs
+		WHERE tscs.channel_code = scs.channel_code
+		AND tscs.six_prod_id =
+		scs.six_prod_id
+	</insert>
+
+	<select id="selectChangedChannelsByTmp" resultType="String">
+		SELECT
+		tscs.six_prod_id
+		FROM
+		tmp_stock_channel_status tscs,
+		stock_channel_status scs
+		WHERE tscs.channel_code = scs.channel_code
+		AND
+		tscs.six_prod_id = scs.six_prod_id AND tscs.is_sync != scs.is_sync
+		AND
+		tscs.sale_status != scs.sale_status
+	</select>
+	
+	<select id="selectStockChannelStatus"
+	   parameterType="com.metersbonwe.stock.pojo.PageStockChannelStatusBean" resultType="com.metersbonwe.stock.po.core.StockChannelStatus">
+		 SELECT t.id,
+				t.channel_code,
+				t.six_prod_id,
+				t.sale_status,
+				t.is_sync,
+				t.update_time,
+				t.update_by,
+				t.create_time,
+				t.create_by
+		   FROM stock_channel_status AS t
+		  WHERE 1 = 1
+        <if test="channelCodes != null">
+            AND t.channel_code in 
+            <foreach collection="channelCodes" item="item" index="index" open="(" close=")" separator="," >
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="sixProdIds != null">
+            AND t.six_prod_id in 
+            <foreach collection="sixProdIds" item="item" index="index" open="(" close=")" separator="," >
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="saleStatus != null">
+            AND t.sale_status in 
+            <foreach collection="saleStatus" item="item" index="index" open="(" close=")" separator="," >
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="isSyncs != null">
+            AND t.is_sync in 
+            <foreach collection="isSyncs" item="item" index="index" open="(" close=")" separator="," >
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+	</select>
+
+</mapper>

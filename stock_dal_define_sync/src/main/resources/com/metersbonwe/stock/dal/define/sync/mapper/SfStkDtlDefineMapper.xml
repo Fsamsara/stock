@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.define.sync.mapper.SfStkDtlDefineMapper">
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.define.SfStkDtlDefine">
+    <result column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="SF_WAREHOUSE_LOC_ID" jdbcType="DECIMAL" property="sfWarehouseLocId" />
+    <result column="LOC_ID" jdbcType="VARCHAR" property="locId" />
+    <result column="PROD_ID" jdbcType="DECIMAL" property="prodId" />
+    <result column="PROD_NUM" jdbcType="VARCHAR" property="prodNum" />
+    <result column="STK_ON_HAND" jdbcType="DECIMAL" property="stkOnHand" />
+    <result column="EXPD_QTY" jdbcType="DECIMAL" property="expdQty" />
+    <result column="ALLOC_QTY" jdbcType="DECIMAL" property="allocQty" />
+    <result column="BF_ORG_ID" jdbcType="DECIMAL" property="bfOrgId" />
+    <result column="WAREH_ID" jdbcType="VARCHAR" property="warehId" />
+    <result column="LAST_MODIFIED_DATE" jdbcType="TIMESTAMP" property="lastModifiedDate" />
+    <result column="LAST_PICK_TIME" jdbcType="TIMESTAMP" property="lastPickTime" />
+    <result column="LOCK_QTY" jdbcType="DECIMAL" property="lockQty" />
+    <result column="STK_ON_HAND_BEFOR" jdbcType="DECIMAL" property="stkOnHandBefor" />
+    <result column="EXPD_QTY_BEFOR" jdbcType="DECIMAL" property="expdQtyBefor" />
+    <result column="STTK_LOCK_QTY" jdbcType="DECIMAL" property="sttkLockQty" />
+  </resultMap>
+  
+  <select id="selectSfStkDtlByOthers" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  <![CDATA[
+  SELECT C.CODE AS WAREH_ID,
+         E.CODE AS LOC_ID,
+         D.PROD_NUM,
+         SUM(A.STK_ON_HAND-(CASE WHEN A.ALLOC_QTY<=0 THEN 0 ELSE A.ALLOC_QTY END)) AS STK_ON_HAND
+  FROM SF_STK_DTL A
+       INNER JOIN BF_ORG C ON A.BF_ORG_ID = C.ID
+       INNER JOIN SF_WAREHOUSE_LOC E ON A.SF_WAREHOUSE_LOC_ID = E.ID
+       INNER JOIN SF_WAREHOUSE_ZONE B ON E.SF_WAREHOUSE_ZONE_ID = B.ID
+                                         AND B.BF_ORG_ID = C.ID
+       INNER JOIN BF_PRODUCT D ON A.PROD_ID = D.ID
+  WHERE C.CODE = #{warehId,jdbcType=VARCHAR}
+  ]]>
+        AND E.CODE IN 
+        <foreach collection="locList" item="item" index="index" open="(" separator=","  close=")">
+        #{item}
+        </foreach>
+        AND SUBSTR(D.PROD_NUM,1,#{prodLen,jdbcType=INTEGER}) IN 
+        <foreach collection="skuList" item="item" index="index" open="(" separator=","  close=")">
+        #{item}
+        </foreach>
+  GROUP BY C.CODE, E.CODE, D.PROD_NUM
+  </select>
+  
+  <select id="selectSfStkDtlByOthersAndNoLoc" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  <![CDATA[
+  SELECT C.CODE AS WAREH_ID,
+         E.CODE AS LOC_ID,
+         D.PROD_NUM,
+         SUM(A.STK_ON_HAND-(CASE WHEN A.ALLOC_QTY<=0 THEN 0 ELSE A.ALLOC_QTY END)) AS STK_ON_HAND
+  FROM SF_STK_DTL A
+       INNER JOIN BF_ORG C ON A.BF_ORG_ID = C.ID
+       INNER JOIN SF_WAREHOUSE_LOC E ON A.SF_WAREHOUSE_LOC_ID = E.ID
+       INNER JOIN SF_WAREHOUSE_ZONE B ON E.SF_WAREHOUSE_ZONE_ID = B.ID
+                                         AND B.BF_ORG_ID = C.ID
+       INNER JOIN BF_PRODUCT D ON A.PROD_ID = D.ID
+  WHERE C.CODE = #{warehId,jdbcType=VARCHAR}
+  ]]>
+        AND SUBSTR(D.PROD_NUM,1,#{prodLen,jdbcType=INTEGER}) in 
+        <foreach collection="skuList" item="item" index="index" open="(" separator=","  close=")">
+        #{item}
+        </foreach>
+  GROUP BY C.CODE, E.CODE, D.PROD_NUM
+  </select>
+
+</mapper>

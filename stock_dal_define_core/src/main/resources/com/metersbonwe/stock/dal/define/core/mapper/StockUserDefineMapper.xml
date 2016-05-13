@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.define.core.mapper.StockUserDefineMapper">
+	<resultMap id="BaseResultMap1" type="com.metersbonwe.stock.po.core.StockUser">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="userName" jdbcType="VARCHAR" property="username" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="nickName" jdbcType="VARCHAR" property="nickname" />
+		<result column="phoneNO" jdbcType="VARCHAR" property="phoneno" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+	
+	<select id="selectStockUserByUserName" parameterType="java.lang.String"
+		resultMap="BaseResultMap1">
+		select
+		id, userName, password, nickName, phoneNO, email, create_time
+		from stock_user
+		where lower(username) = lower(#{userName,jdbcType=VARCHAR}) 
+		      or lower(nickName) = lower(#{userName,jdbcType=VARCHAR})
+		      or phoneNO = #{userName,jdbcType=VARCHAR}
+		      or email = #{userName,jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="insertStockUser" parameterType="com.metersbonwe.stock.po.core.StockUser"  useGeneratedKeys="true" keyProperty="id">
+		insert into stock_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="username != null">
+				userName,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="nickname != null">
+				nickName,
+			</if>
+			<if test="phoneno != null">
+				phoneNO,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="username != null">
+				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="nickname != null">
+				#{nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="phoneno != null">
+				#{phoneno,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	
+</mapper>

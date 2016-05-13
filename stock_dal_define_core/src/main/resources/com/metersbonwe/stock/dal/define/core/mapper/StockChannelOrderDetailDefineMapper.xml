@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.core.mapper.StockChannelOrderDetailDefineMapper" >
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.core.StockChannelOrderDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="channel_code" property="channelCode" jdbcType="VARCHAR" />
+    <result column="business_id" property="businessId" jdbcType="VARCHAR" />
+    <result column="os_order_id" property="osOrderId" jdbcType="VARCHAR" />
+    <result column="sub_order_id" property="subOrderId" jdbcType="VARCHAR" />
+    <result column="prod_id" property="prodId" jdbcType="VARCHAR" />
+    <result column="prod_type" property="prodType" jdbcType="VARCHAR" />
+    <result column="order_private_stock" property="orderPrivateStock" jdbcType="INTEGER" />
+    <result column="order_share_stock" property="orderShareStock" jdbcType="INTEGER" />
+    <result column="relation_channel" property="relationChannel" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+   
+   <!-- 查询去重复后的关联渠道号-->
+   <select id="selectRelationChannel" resultMap="BaseResultMap">
+      SELECT DISTINCT LOWER(relation_channel) AS relation_channel FROM stock_channel_order_detail
+   </select>
+   
+</mapper>

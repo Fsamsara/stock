@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.core.mapper.StockChannelProdSubDefineMapper">
+
+	<update id="updateByPreSaleResult" parameterType="com.metersbonwe.stock.po.core.StockPreSaleResult">
+		UPDATE
+		stock_channel_prod_sub_${tableSuffix}
+		SET
+		is_pre=1,
+		pre_private_stock=#{prePrivateStock,jdbcType=INTEGER},
+		pre_order_total_stock=0
+		WHERE
+		channel_code=#{channelCode,jdbcType=VARCHAR}
+		AND
+		prod_id =
+		#{prodId,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateByChannelDetailWhenIsPre" parameterType="map">
+		UPDATE stock_channel_prod_sub_${suffix} ps,
+		(
+		SELECT p.*
+		FROM
+		stock_channel_prod_sub_${suffix} sub
+		INNER JOIN(
+		SELECT relation_channel
+		AS channel_code,
+		prod_id,
+		SUM(order_private_stock) AS
+		order_private_stock_total,
+		SUM(order_share_stock) AS
+		order_share_stock_total
+		FROM stock_channel_order_detail
+		GROUP BY
+		relation_channel,prod_id
+		ORDER BY relation_channel,prod_id
+		)p
+		ON
+		(sub.channel_code = p.channel_code AND sub.prod_id = p.prod_id)
+		WHERE
+		(
+		sub.is_pre=1 AND
+		sub.pre_order_total_stock !=
+		p.order_private_stock_total
+		)
+		) d
+		SET
+		ps.pre_order_total_stock=d.order_private_stock_total
+		WHERE
+		ps.channel_code = d.channel_code
+		AND ps.prod_id = d.prod_id
+	</update>
+
+	<update id="updateByChannelDetailWhenIsNotPre" parameterType="map">
+		UPDATE stock_channel_prod_sub_${suffix} ps,
+		(
+		SELECT p.*
+		FROM
+		stock_channel_prod_sub_${suffix} sub
+		INNER JOIN(
+		SELECT relation_channel
+		AS channel_code,
+		prod_id,
+		SUM(order_private_stock) AS
+		order_private_stock_total,
+		SUM(order_share_stock) AS
+		order_share_stock_total
+		FROM stock_channel_order_detail
+		GROUP BY
+		relation_channel,prod_id
+		ORDER BY relation_channel,prod_id
+		)p
+		ON
+		(sub.channel_code = p.channel_code AND sub.prod_id = p.prod_id)
+		WHERE (
+		sub.is_pre=0
+		AND sub.order_private_total_stock !=
+		p.order_private_stock_total
+		AND sub.order_share_total_stock !=
+		p.order_share_stock_total
+		)
+		)d
+		SET ps.order_private_total_stock =
+		d.order_private_stock_total,
+		ps.order_share_total_stock =
+		d.order_share_stock_total
+		WHERE ps.channel_code = d.channel_code
+		AND
+		ps.prod_id = d.prod_id
+	</update>
+
+	<!-- 批量插入数据 -->
+	<insert id="insert" parameterType="com.metersbonwe.stock.po.core.StockChannelProdSub">
+		replace into stock_channel_prod_sub_${tableSuffix}
+		(
+		channel_code,
+		six_prod_id,
+		eight_prod_id, prod_id,
+		order_private_total_stock,
+		order_share_total_stock,
+		pre_private_stock,
+		pre_order_total_stock,
+		is_pre, update_time
+		)
+		VALUES
+		( #{channelCode,jdbcType=VARCHAR},
+		#{sixProdId,jdbcType=VARCHAR},
+		#{eightProdId,jdbcType=VARCHAR},
+		#{prodId,jdbcType=VARCHAR},
+		#{orderPrivateTotalStock,jdbcType=INTEGER},
+		#{orderShareTotalStock,jdbcType=INTEGER},
+		#{prePrivateStock,jdbcType=INTEGER},
+		#{preOrderTotalStock,jdbcType=INTEGER},
+		#{isPre,jdbcType=TINYINT},
+		<if test="updateTime==null">
+			NOW()
+		</if>
+		<if test="updateTime!=null">
+			#{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		)
+	</insert>
+
+
+	<update id="updateAndSumPreOrderStock">
+		UPDATE
+		stock_channel_prod_sub_${suffix} scps
+		SET
+		scps.order_private_total_stock = scps.order_private_total_stock +
+		scps.pre_order_total_stock,scps.pre_order_total_stock = 0,scps.pre_private_stock = 0
+		WHERE
+		scps.channel_code = #{channelCode}
+		AND scps.prod_id = #{prodId}
+	</update>
+
+
+</mapper>

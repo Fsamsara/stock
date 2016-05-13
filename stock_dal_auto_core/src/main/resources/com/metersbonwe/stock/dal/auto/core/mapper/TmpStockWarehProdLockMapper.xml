@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.auto.core.mapper.TmpStockWarehProdLockMapper" >
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.core.TmpStockWarehProdLock" >
+    <id column="wareh_id" property="warehId" jdbcType="VARCHAR" />
+    <id column="prod_id" property="prodId" jdbcType="VARCHAR" />
+    <result column="lock_stock" property="lockStock" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    wareh_id, prod_id, lock_stock, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProdLockExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tmp_stock_wareh_prod_lock
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from tmp_stock_wareh_prod_lock
+    where wareh_id = #{warehId,jdbcType=VARCHAR}
+      and prod_id = #{prodId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from tmp_stock_wareh_prod_lock
+    where wareh_id = #{warehId,jdbcType=VARCHAR}
+      and prod_id = #{prodId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProdLockExample" >
+    delete from tmp_stock_wareh_prod_lock
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProdLock" >
+    insert into tmp_stock_wareh_prod_lock (wareh_id, prod_id, lock_stock, 
+      update_time)
+    values (#{warehId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, #{lockStock,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProdLock" >
+    insert into tmp_stock_wareh_prod_lock
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="warehId != null" >
+        wareh_id,
+      </if>
+      <if test="prodId != null" >
+        prod_id,
+      </if>
+      <if test="lockStock != null" >
+        lock_stock,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="warehId != null" >
+        #{warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null" >
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="lockStock != null" >
+        #{lockStock,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProdLockExample" resultType="java.lang.Integer" >
+    select count(*) from tmp_stock_wareh_prod_lock
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tmp_stock_wareh_prod_lock
+    <set >
+      <if test="record.warehId != null" >
+        wareh_id = #{record.warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodId != null" >
+        prod_id = #{record.prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lockStock != null" >
+        lock_stock = #{record.lockStock,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tmp_stock_wareh_prod_lock
+    set wareh_id = #{record.warehId,jdbcType=VARCHAR},
+      prod_id = #{record.prodId,jdbcType=VARCHAR},
+      lock_stock = #{record.lockStock,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProdLock" >
+    update tmp_stock_wareh_prod_lock
+    <set >
+      <if test="lockStock != null" >
+        lock_stock = #{lockStock,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where wareh_id = #{warehId,jdbcType=VARCHAR}
+      and prod_id = #{prodId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.metersbonwe.stock.po.core.TmpStockWarehProdLock" >
+    update tmp_stock_wareh_prod_lock
+    set lock_stock = #{lockStock,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where wareh_id = #{warehId,jdbcType=VARCHAR}
+      and prod_id = #{prodId,jdbcType=VARCHAR}
+  </update>
+</mapper>

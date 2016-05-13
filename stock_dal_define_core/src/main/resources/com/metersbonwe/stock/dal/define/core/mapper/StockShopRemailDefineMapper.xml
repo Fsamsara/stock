@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.core.mapper.StockShopRemailDefineMapper">
+	
+	<resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.core.StockShopRemail" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="wareh_id" property="warehId" jdbcType="VARCHAR" />
+	    <result column="prod_id" property="prodId" jdbcType="VARCHAR" />
+	    <result column="loc_id" property="locId" jdbcType="VARCHAR" />
+	    <result column="remail_stock" property="remailStock" jdbcType="INTEGER" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <insert id="insertShopRemail" parameterType="com.metersbonwe.stock.po.core.StockShopRemail">
+        INSERT INTO stock_shop_remail 
+                    (WAREH_ID, PROD_ID, LOC_ID, REMAIL_STOCK, UPDATE_TIME, RLL_NUM)
+             VALUES (
+                     #{warehId,jdbcType=VARCHAR},
+                     #{prodId,jdbcType=VARCHAR},
+                     #{locId,jdbcType=VARCHAR},
+                     #{remailStock,jdbcType=INTEGER},
+                <if test="updateTime != null">
+                     #{updateTime,jdbcType=DATE},
+                </if>
+                <if test="updateTime == null">
+                     CURRENT_TIMESTAMP,
+                </if>
+                     #{rllNum,jdbcType=VARCHAR}
+                    )
+    </insert>
+    
+    <update id="updateShopRemail" parameterType="com.metersbonwe.stock.po.core.StockShopRemail">
+        UPDATE stock_shop_remail t
+           SET t.remail_stock = (IFNULL(t.remail_stock,0) + (#{remailStock,jdbcType=INTEGER})),
+               t.update_time = CURRENT_TIMESTAMP
+         WHERE t.wareh_id = #{warehId,jdbcType=VARCHAR}
+           AND t.prod_id = #{prodId,jdbcType=VARCHAR}
+           <if test="locId != null">
+           AND t.loc_id = #{locId,jdbcType=VARCHAR}
+           </if>
+    </update>
+  
+	<select id="selectShopRemail" resultType="Map">
+		select 
+			wareh_id,
+			prod_id,
+			sum(remail_stock) as remailStock
+		from 
+			stock_shop_remail
+		where 
+			wareh_id=#{warehId,jdbcType=VARCHAR}
+		and
+			prod_id=#{prodId,jdbcType=VARCHAR}
+		group by
+			wareh_id,prod_id
+	</select>
+	
+	<select id="selectShopLocRemailByOthers" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+		select 
+			wareh_id,
+			loc_id,
+			prod_id,
+			sum(remail_stock) as remail_stock
+		from 
+			stock_shop_remail
+		where 
+			wareh_id=#{warehId,jdbcType=VARCHAR}
+		and
+		    loc_id in 
+		<foreach collection="locList" item="item" index="index" open="(" separator=","  close=")">
+        #{item}
+        </foreach>
+		and
+			left(prod_id,#{prodLen,jdbcType=INTEGER}) in
+		<foreach collection="skuList" item="item" index="index" open="(" separator=","  close=")">
+        #{item}
+        </foreach>
+		group by
+			wareh_id,loc_id,prod_id
+	</select>
+	
+	<select id="selectShopLocRemailByOthersAndNoLoc" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+		select 
+			wareh_id,
+			loc_id,
+			prod_id,
+			sum(remail_stock) as remail_stock
+		from 
+			stock_shop_remail
+		where 
+			wareh_id=#{warehId,jdbcType=VARCHAR}
+		and
+			left(prod_id,#{prodLen,jdbcType=INTEGER}) in
+		<foreach collection="skuList" item="item" index="index" open="(" separator=","  close=")">
+        #{item}
+        </foreach>
+		group by
+			wareh_id,loc_id,prod_id
+	</select>
+	
+</mapper>

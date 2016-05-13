@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.core.mapper.StockChannelOrderDetailHisDefineMapper">
+	
+    <select id="selectForChannelAndProds" parameterType="com.metersbonwe.stock.pojo.StockChannelOrderDetailHisBean"
+        resultType="com.metersbonwe.stock.po.core.StockChannelOrderDetailHis">
+			 SELECT *
+			   FROM stock_channel_order_detail_his AS T
+			  WHERE 1 = 1
+			    <if test="channelCodes != null">
+				    AND channel_code in
+			        <foreach collection="channelCodes" item="item" index="index" open="(" close=")" separator="," >
+			            #{item,jdbcType=VARCHAR}
+			        </foreach>
+		        </if>
+		        <if test="prodIds != null">
+			        AND prod_id in
+			        <foreach collection="prodIds" item="item" index="index" open="(" close=")" separator="," >
+			            #{item,jdbcType=VARCHAR}
+			        </foreach>
+		        </if>
+    </select>
+    
+    
+    
+</mapper>

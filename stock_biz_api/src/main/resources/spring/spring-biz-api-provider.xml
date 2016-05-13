@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+	default-lazy-init="false">
+
+
+	<!-- ===========com.metersbonwe.stock.facade.api.* 部分的dubbo配置=========== -->
+	
+	<!-- 推送线上回写接口 -->
+    <dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+        retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.cache.timeout}"
+        interface="com.metersbonwe.stock.facade.api.StockChannelSendedFacade" ref="stockChannelSendedFacadeImpl" />
+	
+	<!-- 门店查询货位库存接口 -->
+    <dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+        retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+        interface="com.metersbonwe.stock.facade.api.ShopQueryStockFacade" ref="shopQueryStockFacadeImpl" />
+
+	<!-- 活动期间渠道商品配置变化接受接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.ActivityStockFacade" ref="activityStockFacadeImpl" />
+
+	<!-- 渠道单元最小值变化接受接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.ChannelCellMinFacade" ref="channelCellMinFacadeImpl" />
+
+	<!-- 渠道最大、最小值值变化接受接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.ChannelMinmaxFacade" ref="channelMinmaxFacadeImpl" />
+
+	<!-- 渠道-仓|店配发范围变化接受接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="dubbo" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.ChannelScopeFacade" ref="channelScopeFacadeImpl" />
+
+	<!-- 污损值接受写入接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.DameStockFacade" ref="dameStockFacadeImpl" />
+
+	<!-- 新ERP库存预留锁定类型明细表变化接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.NewErpReservedLockFacade"
+		ref="newErpReservedLockFacadeImpl" />
+
+	<!-- 门店日结接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.RemailedStockFacade" ref="remailedStockFacadeImpl" />
+
+	<!-- 未日结接受写入接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.RemailStockFacade" ref="remailStockFacadeImpl" />
+
+	<!-- 仓安全类型变化写入接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.SafeTypeStockFacade" ref="safeTypeStockFacadeImpl" />
+
+	<!-- 门店总开关变化写入接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.ShopMainSwitchFacade" ref="shopMainSwitchFacadeImpl" />
+
+	<!-- 门店属性变化接受接口（是否同步） -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.ShopPropertyFacade" ref="shopPropertyFacadeImpl" />
+
+	<!-- 门店安全库存接受写入接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.ShopSafeStockFacade" ref="shopSafeStockFacadeImpl" />
+
+	<!-- 渠道+款进货(渠道+款上下架是否同步)接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.StockChannelStatusFacade"
+		ref="stockChannelStatusFacadeImpl" />
+
+	<!-- 第三方自由量写入接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.TpStockFacade" ref="tpStockFacadeImpl" />
+
+	<!-- 仓库、门店自由量查询 || 预留量查询 || 锁定量查询 || POS全流通库存查询 || 分配时查询库存（手工分单） || 全流通库存查询（总查询） -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.UniformQueryStockFacade"
+		ref="uniformQueryStockFacadeImpl" />
+
+	<!-- 通用可用库存查询接口 || 返回指定SKU在指定channelCode的实际可用库存| 批量查询指定sku在指定channelCode的库存 
+		|根据指定sn码查询其下所有sku的库存量 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.UsefulStockSearchService"
+		ref="usefulStockSearchServiceImpl" />
+
+	<!-- 仓是否同步OS变化接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.WarehIsSyncOsFacade" ref="warehIsSyncOsFacadeImpl" />
+
+	<!-- 仓WMS属性变化接口类 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.WmsPropertyFacade" ref="wmsPropertyFacadeImpl" />
+
+	<!-- 仓WP安全库存接受写入接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.WpStockFacade" ref="wpStockFacadeImpl" />
+
+	<!-- 仓ws安全库存写入接口 -->
+	<dubbo:service registry="cacheRegistry" group="${dubbo.group}"
+		retries="${dubbo.cache.retries}" protocol="json" timeout="${dubbo.cache.timeout}"
+		interface="com.metersbonwe.stock.facade.api.WsStockFacade" ref="wsStockFacadeImpl" />
+
+	<!-- ===========com.metersbonwe.stock.facade.api.* 部分的dubbo配置 END=========== -->
+</beans>

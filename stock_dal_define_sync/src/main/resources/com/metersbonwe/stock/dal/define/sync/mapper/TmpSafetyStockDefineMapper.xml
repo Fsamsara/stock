@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.sync.mapper.TmpSafetyStockDefineMapper">
+	<resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.TmpSafetyStock">
+		<id column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="SHOP_ID" property="shopId" jdbcType="VARCHAR" />
+		<result column="PROD_ID" property="prodId" jdbcType="VARCHAR" />
+		<result column="SAFETY_STOCK_QTY" property="safetyStockQty"
+			jdbcType="DECIMAL" />
+		<result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<select id="selectAllDeleteRepeat" resultMap="BaseResultMap">
+		SELECT T.ID,
+		T.SHOP_ID, T.PROD_ID, T.SAFETY_STOCK_QTY, T.UPDATE_TIME
+		FROM (SELECT TWS.ID,
+		TWS.SHOP_ID,
+		TWS.PROD_ID,
+		TWS.SAFETY_STOCK_QTY,
+		TWS.UPDATE_TIME,
+		RANK() OVER(PARTITION BY TWS.SHOP_ID, TWS.PROD_ID ORDER BY TWS.UPDATE_TIME
+		DESC, TWS.ID DESC) RK
+		FROM TMP_SAFETY_STOCK TWS) T
+		WHERE T.RK &lt; 2
+	</select>
+
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration 
+PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<classPathEntry
+		location="d:/maven-3.3.3/localpath/com/oracle/ojdbc14/10.2.0.5/ojdbc14-10.2.0.5.jar" />
+	<context id="OracleContext" defaultModelType="flat">
+		<property name="mergeable" value="false" />
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+			<property name="suppressDate" value="true" />
+		</commentGenerator>
+		<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+			connectionURL="jdbc:oracle:thin:@10.100.20.151:1521:MBOLTPGG" userId="stock_user"
+			password="stock_user">
+		</jdbcConnection>
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		<javaModelGenerator targetPackage="com.metersbonwe.stock.po.sync"
+			targetProject="src/main/java">
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="com.metersbonwe.stock.dal.auto.sync.mapper"
+			targetProject="E:\\workspace\\stock\\stock_dal_auto_sync\\src\\main\\resources">
+		</sqlMapGenerator>
+
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.metersbonwe.stock.dal.auto.sync.mapper"
+			targetProject="E:\\workspace\\stock\\stock_dal_auto_sync\\src\\main\\java">
+		</javaClientGenerator>
+
+<!-- 		<table schema="stock_user" tableName="%" /> -->
+		<table tableName="TMP_DAME_STOCK" />
+<!-- 		<table schema="stock_user" tableName="BF_PARTNER_SHOP" /> -->
+<!-- 		<table schema="stock_user" tableName="STK_DTL" /> -->
+<!-- 		<table schema="stock_user" tableName="SF_STK_DTL" /> -->
+<!-- 		<table schema="stock_user" tableName="SF_WAREHOUSE_LOC" /> -->
+<!-- 		<table schema="stock_user" tableName="SF_WAREHOUSE_ZONE" /> -->
+	</context>
+</generatorConfiguration>

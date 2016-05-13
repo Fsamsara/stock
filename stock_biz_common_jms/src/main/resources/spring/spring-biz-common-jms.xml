@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+     http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd">
+
+
+
+	<!-- MQ发送消息连接工厂配置 -->
+	<bean id="mqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="${stock.activemq.url}" />
+	</bean>
+
+	<bean id="mqConnectionPoolFactory" scope="singleton"
+		class="org.apache.activemq.pool.PooledConnectionFactory"
+		destroy-method="stop">
+		<property name="connectionFactory" ref="mqConnectionFactory" />
+	</bean>
+
+	<!-- MQ接受消费消息连接工厂配置 -->
+	<bean name="receiveConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="${stock.activemq.url}" />
+		<property name="dispatchAsync" value="${stock.activemq.dispatchAsync}" />
+		<property name="useAsyncSend" value="${stock.activemq.useAsyncSend}" />
+	</bean>
+
+	<bean id="receiveConnectionPoolFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
+		destroy-method="stop">
+		<property name="connectionFactory" ref="receiveConnectionFactory" />
+	</bean>
+
+
+	<bean id="orderSpringJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="mqConnectionPoolFactory" />
+		<!-- <property name="sessionTransacted" value="true" /> -->
+		<!-- <property name="sessionAcknowledgeMode" value="1" /> -->
+		<property name="deliveryMode" value="${stock.activemq.deliveryMode}" />
+		<property name="explicitQosEnabled" value="${stock.activemq.explicitQosEnabled}" />
+	</bean>
+
+
+	<bean id="onlineSpringJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="mqConnectionPoolFactory" />
+		<!-- <property name="sessionTransacted" value="true" /> -->
+		<!-- <property name="sessionAcknowledgeMode" value="1" /> -->
+		<property name="deliveryMode" value="${stock.activemq.deliveryMode}" />
+		<property name="explicitQosEnabled" value="${stock.activemq.explicitQosEnabled}" />
+	</bean>
+
+	<bean id="channelSpringJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="mqConnectionPoolFactory" />
+		<!-- <property name="sessionTransacted" value="true" /> -->
+		<!-- <property name="sessionAcknowledgeMode" value="1" /> -->
+		<property name="deliveryMode" value="${stock.activemq.deliveryMode}" />
+		<property name="explicitQosEnabled" value="${stock.activemq.explicitQosEnabled}" />
+	</bean>
+
+	<bean id="dynamicSpringJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="mqConnectionPoolFactory" />
+		<property name="deliveryMode" value="${stock.activemq.deliveryMode}" />
+		<property name="explicitQosEnabled" value="${stock.activemq.explicitQosEnabled}" />
+	</bean>
+
+	<bean id="mqSendUtils" class="com.metersbonwe.stock.biz.common.service.mq.MqSendUtils">
+		<property name="jmsChooseMap">
+			<map>
+				<entry key="${CHANNEL_WAREH_PROD_FREE_LOCK}" value-ref="channelSpringJmsTemplate" />
+				<entry key="${CHANNEL_WAREH_PROD_RESERVED}" value-ref="channelSpringJmsTemplate" />
+				<entry key="${SEND_TO_LINE_FLAG}" value-ref="channelSpringJmsTemplate" />
+				<entry key="${CHANNEL_ALL}" value-ref="channelSpringJmsTemplate" />
+				<entry key="${CHANNEL_GROUP_RESERVED}" value-ref="channelSpringJmsTemplate" />
+				<entry key="${CHANNEL_ORDER_OCCUPY}" value-ref="orderSpringJmsTemplate" />
+				<entry key="${CHANNEL_ORDER_RELEASE}" value-ref="orderSpringJmsTemplate" />
+				<entry key="${ONLINE_CHANNEL_STOCK}" value-ref="onlineSpringJmsTemplate" />
+				<entry key="${DYNAMIC_REGISTER_TOPIC}" value-ref="dynamicSpringJmsTemplate" />
+			</map>
+		</property>
+	</bean>
+</beans>

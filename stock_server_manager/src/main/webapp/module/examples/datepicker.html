@@ -1,0 +1,52 @@
+<style type="text/css">
+    #date_picker .control-label{ line-height: 40px;}
+</style>
+<div id="date_picker">
+    <div class="col-lg-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label for="datepicker" class="col-md-4 control-label">日期控件</label>
+            <div class="input-group date form_datetime col-md-8">
+                <input type="text" class="form-control" id="datepicker">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label for="datepicker1" class="col-md-4 control-label">日期控件</label>
+            <div class="input-group date form_datetime col-md-8">
+                <input class="form-control" type="text" value="" id="datepicker1">
+                <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+            <label for="datepicker2" class="col-md-4 control-label">日期控件</label>
+            <div class="input-group date form_datetime col-md-8">
+                <input class="form-control" type="text" value="" id="datepicker2">
+                <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#datepicker').datepicker({
+            language:'zh-CN'
+        });
+
+        $('#datepicker1').datepicker({
+            language:'zh-CN',
+            format:'yyyy-mm-dd',
+            autoclose:true
+        }).next().on('click', function(){
+            $(this).prev().focus();
+        });
+
+        $('#datepicker2').datepicker({
+            language:'zh-CN',
+            format:'yyyy-mm-dd',
+            autoclose:true
+        }).next().on('click', function(){
+            $(this).prev().focus();
+        });
+    </script>
+</div>

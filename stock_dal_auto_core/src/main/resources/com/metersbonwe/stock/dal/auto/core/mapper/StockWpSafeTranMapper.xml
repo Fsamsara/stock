@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.auto.core.mapper.StockWpSafeTranMapper" >
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.core.StockWpSafeTran" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="wareh_id" property="warehId" jdbcType="VARCHAR" />
+    <result column="prod_id" property="prodId" jdbcType="VARCHAR" />
+    <result column="safe_stock" property="safeStock" jdbcType="INTEGER" />
+    <result column="safe_stock_type" property="safeStockType" jdbcType="VARCHAR" />
+    <result column="wp_order_type" property="wpOrderType" jdbcType="VARCHAR" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, wareh_id, prod_id, safe_stock, safe_stock_type, wp_order_type, update_by, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.metersbonwe.stock.po.core.StockWpSafeTranExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from stock_wp_safe_tran
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from stock_wp_safe_tran
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from stock_wp_safe_tran
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.metersbonwe.stock.po.core.StockWpSafeTranExample" >
+    delete from stock_wp_safe_tran
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.metersbonwe.stock.po.core.StockWpSafeTran" >
+    insert into stock_wp_safe_tran (id, wareh_id, prod_id, 
+      safe_stock, safe_stock_type, wp_order_type, 
+      update_by, update_time)
+    values (#{id,jdbcType=INTEGER}, #{warehId,jdbcType=VARCHAR}, #{prodId,jdbcType=VARCHAR}, 
+      #{safeStock,jdbcType=INTEGER}, #{safeStockType,jdbcType=VARCHAR}, #{wpOrderType,jdbcType=VARCHAR}, 
+      #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.metersbonwe.stock.po.core.StockWpSafeTran" >
+    insert into stock_wp_safe_tran
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="warehId != null" >
+        wareh_id,
+      </if>
+      <if test="prodId != null" >
+        prod_id,
+      </if>
+      <if test="safeStock != null" >
+        safe_stock,
+      </if>
+      <if test="safeStockType != null" >
+        safe_stock_type,
+      </if>
+      <if test="wpOrderType != null" >
+        wp_order_type,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="warehId != null" >
+        #{warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null" >
+        #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="safeStock != null" >
+        #{safeStock,jdbcType=INTEGER},
+      </if>
+      <if test="safeStockType != null" >
+        #{safeStockType,jdbcType=VARCHAR},
+      </if>
+      <if test="wpOrderType != null" >
+        #{wpOrderType,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.metersbonwe.stock.po.core.StockWpSafeTranExample" resultType="java.lang.Integer" >
+    select count(*) from stock_wp_safe_tran
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update stock_wp_safe_tran
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.warehId != null" >
+        wareh_id = #{record.warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prodId != null" >
+        prod_id = #{record.prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safeStock != null" >
+        safe_stock = #{record.safeStock,jdbcType=INTEGER},
+      </if>
+      <if test="record.safeStockType != null" >
+        safe_stock_type = #{record.safeStockType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wpOrderType != null" >
+        wp_order_type = #{record.wpOrderType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateBy != null" >
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update stock_wp_safe_tran
+    set id = #{record.id,jdbcType=INTEGER},
+      wareh_id = #{record.warehId,jdbcType=VARCHAR},
+      prod_id = #{record.prodId,jdbcType=VARCHAR},
+      safe_stock = #{record.safeStock,jdbcType=INTEGER},
+      safe_stock_type = #{record.safeStockType,jdbcType=VARCHAR},
+      wp_order_type = #{record.wpOrderType,jdbcType=VARCHAR},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.metersbonwe.stock.po.core.StockWpSafeTran" >
+    update stock_wp_safe_tran
+    <set >
+      <if test="warehId != null" >
+        wareh_id = #{warehId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null" >
+        prod_id = #{prodId,jdbcType=VARCHAR},
+      </if>
+      <if test="safeStock != null" >
+        safe_stock = #{safeStock,jdbcType=INTEGER},
+      </if>
+      <if test="safeStockType != null" >
+        safe_stock_type = #{safeStockType,jdbcType=VARCHAR},
+      </if>
+      <if test="wpOrderType != null" >
+        wp_order_type = #{wpOrderType,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.metersbonwe.stock.po.core.StockWpSafeTran" >
+    update stock_wp_safe_tran
+    set wareh_id = #{warehId,jdbcType=VARCHAR},
+      prod_id = #{prodId,jdbcType=VARCHAR},
+      safe_stock = #{safeStock,jdbcType=INTEGER},
+      safe_stock_type = #{safeStockType,jdbcType=VARCHAR},
+      wp_order_type = #{wpOrderType,jdbcType=VARCHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metersbonwe.stock.dal.define.sync.mapper.StkDtlDefineMapper">
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.sync.StkDtl">
+    <result column="WAREH_ID" jdbcType="VARCHAR" property="warehId" />
+    <result column="LOC_ID" jdbcType="VARCHAR" property="locId" />
+    <result column="PROD_ID" jdbcType="CHAR" property="prodId" />
+    <result column="STK_ON_HAND" jdbcType="DECIMAL" property="stkOnHand" />
+    <result column="ALLOC_QTY" jdbcType="DECIMAL" property="allocQty" />
+    <result column="EXPD_QTY" jdbcType="DECIMAL" property="expdQty" />
+    <result column="STK_CHANGE_DATE" jdbcType="TIMESTAMP" property="stkChangeDate" />
+  </resultMap>
+  
+  <select id="selectStkDtlByOthers" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  <![CDATA[
+  SELECT D.WAREH_ID, D.PROD_ID, D.LOC_ID, 
+         SUM(D.STK_ON_HAND-(CASE WHEN D.ALLOC_QTY<=0 THEN 0 ELSE D.ALLOC_QTY END)) AS STK_ON_HAND
+  FROM STK_DTL D
+  WHERE D.WAREH_ID = #{warehId,jdbcType=VARCHAR}
+  ]]>
+        AND D.LOC_ID IN 
+        <foreach collection="locList" item="item" index="index" open="(" separator=","  close=")">
+        #{item}
+        </foreach>
+        AND SUBSTR(D.PROD_ID,1,#{prodLen,jdbcType=INTEGER}) IN 
+        <foreach collection="skuList" item="item" index="index" open="(" separator=","  close=")">
+        #{item}
+        </foreach>
+  GROUP BY D.WAREH_ID, D.PROD_ID, D.LOC_ID
+  </select>
+
+  <select id="selectStkDtlByOthersAndNoLoc" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  <![CDATA[
+  SELECT D.WAREH_ID, D.PROD_ID, D.LOC_ID, 
+         SUM(D.STK_ON_HAND-(CASE WHEN D.ALLOC_QTY<=0 THEN 0 ELSE D.ALLOC_QTY END)) AS STK_ON_HAND
+  FROM STK_DTL D
+  WHERE D.WAREH_ID = #{warehId,jdbcType=VARCHAR}
+  ]]>
+        AND SUBSTR(D.PROD_ID,1,#{prodLen,jdbcType=INTEGER}) IN 
+        <foreach collection="skuList" item="item" index="index" open="(" separator=","  close=")">
+        #{item}
+        </foreach>
+  GROUP BY D.WAREH_ID, D.PROD_ID, D.LOC_ID
+  </select>
+  
+</mapper>

@@ -1,0 +1,71 @@
+<div id="selectSearch">
+    <form>
+        <span class="input-icon">
+            <input type="text" id="condition"/>
+            <i class=" fa fa-search blue"></i>
+        </span>
+    </form>
+    <hr/>
+    <div class="row">
+        <div class="col-xs-5">
+            <select name="from" id="undo_redo" class="form-control" size="13" multiple="multiple">
+            </select>
+        </div>
+
+        <div class="col-xs-2">
+            <button type="button" id="undo_redo_undo" class="btn btn-primary btn-block">undo</button>
+            <button type="button" id="undo_redo_rightAll" class="btn btn-default btn-block"><i class="fa fa-forward"></i></button>
+            <button type="button" id="undo_redo_rightSelected" class="btn btn-default btn-block"><i class="fa fa-chevron-right"></i></button>
+            <button type="button" id="undo_redo_leftSelected" class="btn btn-default btn-block"><i class="fa fa-chevron-left"></i></button>
+            <button type="button" id="undo_redo_leftAll" class="btn btn-default btn-block"><i class="fa fa-backward"></i></button>
+            <button type="button" id="undo_redo_redo" class="btn btn-warning btn-block">redo</button>
+        </div>
+
+        <div class="col-xs-5">
+            <select name="to" id="undo_redo_to" class="form-control" size="13" multiple="multiple"></select>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        $('#undo_redo').multiselect();
+
+        var list = $('#undo_redo'),
+                condition = $('#condition'),
+                data = ["上海浦东","河南南阳","湖北武汉","上海长宁","1200","1300","1400","abcd","cbcd"], val, html;
+
+        for (var i = 0; i < data.length; i++) {
+            html += '<option>'+ data[i] +'</option>';
+        }
+        list.append(html);
+
+        condition.on('input propertychange', function() {
+            if( val = condition.val() ) {
+                result = matchOption(data, val);
+                selectOption(list[0], result);
+            }else{
+                list.empty().append(html);
+            }
+        });
+
+        function selectOption(select, arr) {
+            var option;
+            select.length = 0;
+            for(var i = 0; i < arr.length; i++) {
+                option = new Option(arr[i]);
+                select.add(option);
+            }
+        }
+
+        function matchOption(arr, val) {
+            var result = [];
+            for(var i = arr.length - 1; i >= 0; i--) {
+                arr[i].indexOf(val) != -1 && result.push(arr[i]);
+            }
+            return result;
+        }
+
+        $("#selectSearch").parent(".tab-pane").css("overflow-x","hidden");
+    });
+</script>

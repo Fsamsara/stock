@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+     http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd">
+
+	<bean id="stockSyncAutoFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="stockSyncDataSource" />
+		<property name="configLocation" value="classpath:mybatis/mybatis-sync-configuration.xml" />
+		<property name="typeAliasesPackage" value="com.metersbonwe.stock.po.sync" />
+	</bean>
+
+	<!-- scan for mappers and let them be autowired -->
+	<bean id="stockSyncAutoMapper" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.metersbonwe.stock.dal.auto.sync" />
+		<property name="sqlSessionFactoryBeanName" value="stockSyncAutoFactory" />
+	</bean>
+
+	<bean id="wmsOracleFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="wmsDatasource" />
+		<property name="configLocation" value="classpath:mybatis/mybatis-sync-configuration.xml" />
+		<property name="typeAliasesPackage" value="com.metersbonwe.stock.po.wms" />
+	</bean>
+
+	<!-- scan for mappers and let them be autowired -->
+	<bean id="wmsOracleMapper" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.metersbonwe.stock.dal.auto.wms" />
+		<property name="sqlSessionFactoryBeanName" value="wmsOracleFactory" />
+	</bean>
+
+
+	<!-- 以下提供自主从BASEDAO获取数据源 慎用 会频繁建立新的对象 除特殊情况一般没必要用下面的template -->
+	<bean id="stockSyncTemplate" class="org.mybatis.spring.SqlSessionTemplate"
+		scope="prototype">
+		<constructor-arg index="0" ref="stockSyncAutoFactory" />
+	</bean>
+	<bean id="wmsTemplate" class="org.mybatis.spring.SqlSessionTemplate"
+		scope="prototype">
+		<constructor-arg index="0" ref="wmsOracleFactory" />
+	</bean>
+
+</beans>

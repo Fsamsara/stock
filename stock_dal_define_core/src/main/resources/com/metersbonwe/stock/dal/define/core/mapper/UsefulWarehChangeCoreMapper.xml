@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.core.mapper.UsefulWarehChangeCoreMapper" >
+    <resultMap id="channelProdResultMap" type="com.metersbonwe.stock.po.core.define.ChannelProdBean">
+        <result column="channel_code" property="channelCode" jdbcType="VARCHAR"/>
+        <result column="prod_id" property="prodId" jdbcType="VARCHAR"/>
+        <result column="private_stock" property="privateStock" jdbcType="INTEGER"/>
+        <result column="channel_group_private_stock" property="shopGroupStock" jdbcType="INTEGER"/>
+        <result column="final_free_stock" property="finalFreeStock" jdbcType="INTEGER"/>
+        <result column="lock_stock" property="lockStock" jdbcType="INTEGER"/>
+        <result column="six_prod_id" property="sixProdId" jdbcType="VARCHAR"/>
+        <result column="eight_prod_id" property="eightProdId" jdbcType="VARCHAR"/>
+        <result column="order_private_total_stock" property="orderPrivateTotalStock" jdbcType="INTEGER"/>
+        <result column="order_share_total_stock" property="orderShareTotalStock" jdbcType="INTEGER"/>
+        <result column="order_shop_group_stock" property="orderShopGroupStock" jdbcType="INTEGER"/>
+        <result column="pre_private_stock" property="prePrivateStock" jdbcType="INTEGER"/>
+        <result column="pre_order_total_stock" property="preOrderTotalStock" jdbcType="INTEGER"/>
+        <result column="is_pre" property="isPre" jdbcType="TINYINT"/>
+    </resultMap>
+
+  <insert id="insertToTmpStockChannelProd"  parameterType="java.util.HashMap" >
+   insert into tmp_stock_channel_prod
+            (prod_id, final_free_stock, lock_stock, channel_code,update_time)
+   select t.prod_id, sum(t.free_num), sum(t.lock_num), 'allChannel', now()
+     from tmp_stock_table_sum t
+    group by t.prod_id
+  </insert>
+
+  <insert id="insertToTmpStockBatchReserved" parameterType="java.util.HashMap">
+    insert into tmp_stock_batch_reserved
+    (wareh_id, prod_id, channel_code, reserved_stock, safe_type)
+    values
+    <foreach collection="reservedBeanList" item="item" index="index" separator="," >
+      (#{item.warehId}, #{item.prodId}, #{item.channelCode}, #{item.reservedStock},#{item.safeType})
+    </foreach>
+  </insert>
+
+    <insert id="insertToTmpStockBatchShopGroupReserved" parameterType="java.util.HashMap">
+        insert into tmp_stock_batch_shop_group_reserved
+        (wareh_id, prod_id, shop_group_id, shop_group_reserved_stock, safe_type)
+        values
+        <foreach collection="reservedBeanList" item="item" index="index" separator="," >
+            (#{item.warehId}, #{item.prodId}, #{item.channelCode}, #{item.reservedStock},#{item.safeType})
+        </foreach>
+    </insert>
+
+  <update id="updateDecreaceSku" parameterType="java.util.HashMap">
+    update ${tableName} t
+      left join tmp_stock_channel_prod t1 on t.prod_id = t1.prod_id
+       set t.private_stock = 0,
+            t.channel_group_private_stock = 0,
+            t.final_free_stock = 0,
+            t.lock_stock = 0,
+            t.update_time = now()
+     where t1.prod_id is null
+  </update>
+
+  <insert id="insertToStockChannelProdSub" parameterType="java.util.HashMap">
+     insert into ${tableName}(channel_code, six_prod_id, eight_prod_id, prod_id, update_time)
+     select #{channelCode}, substr(t.prod_id, 1, 6), substr(t.prod_id,1,8),t.prod_id,now()
+       from tmp_stock_channel_prod t
+       left join ${tableName} t1
+         on t.prod_id = t1.prod_id
+      where t1.prod_id is null
+  </insert>
+
+  <select id="getNeedSendData" parameterType="java.util.HashMap" resultMap="channelProdResultMap">
+        select t.channel_code,
+                t.prod_id,
+                t.private_stock,
+                t.final_free_stock,
+                t.lock_stock,
+                t.channel_group_private_stock,
+                t1.six_prod_id,
+                t1.eight_prod_id,
+                t1.order_private_total_stock,
+                t1.order_share_total_stock,
+                t1.pre_private_stock,
+                t1.pre_order_total_stock,
+                t1.is_pre,
+                t1.order_shop_group_stock
+          from ${tableName} t,
+                ${subTableName} t1,
+                stock_channel_status t2
+         where t.prod_id = t1.prod_id
+          and t.channel_code = t2.channel_code
+          and substr(t.prod_id, 1, 6) = t2.six_prod_id
+          and t2.is_sync = '1'
+          and t2.sale_status &lt;&gt; '0'
+          <if test="prodId != null and prodId != ''">
+              and t.prod_id = #{prodId}
+          </if>
+    </select>
+
+    <insert id="insertIntoTmpReservedSum" >
+      insert into tmp_reserved_sum(channel_code, prod_id, private_stock)
+      select tt.channel_code, tt.prod_id, sum(tt.reservedStock) reservedStock
+        from (
+                select channel_code, t.prod_id, sum(t.reserved_stock) reservedStock
+                  from tmp_stock_batch_reserved t
+                 where t.safe_type in ('ws', 'no')
+                 group by t.prod_id, t.channel_code
+                 union all
+                select channel_code, t.prod_id, sum(t.reserved_stock)
+                  from tmp_stock_batch_reserved t, stock_wp_safe t1
+                 where t.safe_type = 'wp'
+                   and t.prod_id = t1.prod_id
+                   and t.wareh_id = t1.wareh_id
+                   and t1.safe_stock != -1
+                 group by t.prod_id, t.channel_code
+              ) tt
+        group by tt.prod_id, tt.channel_code
+    </insert>
+
+    <insert id="insertIntoTmpShopGroupReservedSum" >
+        insert into tmp_shop_group_reserved_sum(shop_group_id, prod_id, private_stock)
+        select tt.shop_group_id, tt.prod_id, sum(tt.reservedStock) reservedStock
+        from (
+        select shop_group_id, t.prod_id, sum(t.shop_group_reserved_stock) reservedStock
+        from tmp_stock_batch_shop_group_reserved t
+        where t.safe_type in ('ws', 'no')
+        group by t.prod_id, t.shop_group_id
+        union all
+        select shop_group_id, t.prod_id, sum(t.shop_group_reserved_stock)
+        from tmp_stock_batch_shop_group_reserved t, stock_wp_safe t1
+        where t.safe_type = 'wp'
+        and t.prod_id = t1.prod_id
+        and t.wareh_id = t1.wareh_id
+        and t1.safe_stock != -1
+        group by t.prod_id, t.shop_group_id
+        ) tt
+        group by tt.prod_id, tt.shop_group_id
+    </insert>
+
+    <update id="updateChannelProdTable" parameterType="java.util.Map">
+        update ${tableName} t
+         inner join tmp_stock_channel_prod t2 on t.prod_id = t2.prod_id
+          left join tmp_reserved_sum t3 on t2.prod_id = t3.prod_id  and t3.channel_code = #{channelCode}
+		  left join tmp_shop_group_reserved_sum t4 on t2.prod_id = t4.prod_id and t4.shop_group_id = #{shopGroupId}
+           set t.final_free_stock = t2.final_free_stock,
+		        t.lock_stock = t2.lock_stock,
+		        t.private_stock = ifnull(t3.private_stock,0),
+				t.channel_group_private_stock = ifnull(t4.private_stock, 0),
+		        t.update_time = now()
+    </update>
+
+    <insert id="insertIntoChannelProdTable" parameterType="java.util.Map">
+        insert into ${tableName}(prod_id, channel_code, update_time)
+        select t.prod_id, #{channelCode}, now()
+          from tmp_stock_channel_prod t
+          left join ${tableName} t1
+            on t.prod_id = t1.prod_id
+         where t1.prod_id is null
+    </insert>
+
+    <insert id="insertToTmpStockWareh" parameterType="java.util.Map">
+        insert into tmp_stock_wareh(wareh_id, is_b2b)
+        values
+        <foreach collection="allWarehList" item="item" index="index" separator=",">
+            (#{item.warehId}, #{item.isB2B})
+        </foreach>
+    </insert>
+
+    <select id="getTmpStockWareh" resultType="java.lang.String">
+        select wareh_id from tmp_stock_wareh
+    </select>
+
+    <select id="getTableNoList" resultType="java.lang.String">
+        select distinct hash
+          from stock_wareh_table_mapping t
+         where t.wareh_id in
+         <foreach collection="warehOrShopList" open="(" separator="," close=")" index="index" item="item">
+             #{item}
+         </foreach>
+    </select>
+
+    <insert id="insertWarehToTmpStockTableSum" parameterType="java.util.HashMap" >
+        insert into tmp_stock_table_sum (prod_id, free_num, lock_num)
+        select t.prod_id, t.final_free_share_stock, if(t1.is_b2b, t.lock_stock, 0)
+          from ${tableName} t
+          left join tmp_stock_wareh t1 on t.wareh_id = t1.wareh_id
+        where t.wareh_id in
+        <foreach collection="warehList" index="index" open="(" separator="," close=")" item="item">
+          #{item}
+        </foreach>
+        and t.online_safe_stock != '-1'
+    </insert>
+
+    <insert id="insertShopToTmpStockTableSum" parameterType="java.util.HashMap" >
+        insert into tmp_stock_table_sum (prod_id, free_num, lock_num)
+        select t.prod_id, t.final_free_share_stock, t.lock_stock
+        from ${tableName} t
+        where t.wareh_id in
+        <foreach collection="shopList" index="index" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
+        and t.online_safe_stock != '-1'
+    </insert>
+
+</mapper>

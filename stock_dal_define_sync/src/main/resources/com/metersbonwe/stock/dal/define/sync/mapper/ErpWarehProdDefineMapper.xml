@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.metersbonwe.stock.dal.define.sync.mapper.ErpWarehProdDefineMapper" >
+  <resultMap id="BaseResultMap" type="com.metersbonwe.stock.po.core.StockWarehProd" >
+    <result column="wareh_id" property="warehId" jdbcType="VARCHAR" />
+    <result column="six_prod_id" property="sixProdId" jdbcType="VARCHAR" />
+    <result column="eight_prod_id" property="eightProdId" jdbcType="VARCHAR" />
+    <result column="prod_id" property="prodId" jdbcType="VARCHAR" />
+    <result column="stk_on_hand" property="stkOnHand" jdbcType="INTEGER" />
+    <result column="qty_committed" property="qtyCommitted" jdbcType="INTEGER" />
+    <result column="free_share_stock" property="freeShareStock" jdbcType="INTEGER" />
+    <result column="final_free_share_stock" property="finalFreeShareStock" jdbcType="INTEGER" />
+    <result column="online_safe_stock" property="onlineSafeStock" jdbcType="INTEGER" />
+    <result column="shop_remail" property="shopRemail" jdbcType="INTEGER" />
+    <result column="shop_dame" property="shopDame" jdbcType="INTEGER" />
+    <result column="lock_stock" property="lockStock" jdbcType="INTEGER" />
+    <result column="wms_stock" property="wmsStock" jdbcType="INTEGER" />
+    <result column="is_shop" property="isShop" jdbcType="TINYINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <!-- 查询新ERP中仓或者门店的ID和SKUID：查询实际库存为0，且（最后操作时间+有效时间小于当前时间的 、或最后操作时间为空的）-->
+  <select id="selectNewErpWarehIdAndSku" parameterType="map" resultMap="BaseResultMap">
+	<![CDATA[
+         SELECT 
+	       B.CODE AS warehId,
+	       C.PROD_NUM AS prodId
+	  FROM SF_WAREH_PROD A  
+	  LEFT JOIN BF_ORG B ON A.BF_ORG_ID = B.ID
+	  LEFT JOIN BF_PRODUCT C ON A.BF_PRODUCT_ID = C.ID
+	  RIGHT JOIN ST_ACTIVITY_WAREH D ON D.WAREH_ID = B.CODE
+	WHERE 
+	    D.IS_SHOP = #{isShop,jdbcType=VARCHAR} AND 
+	    D.DATA_SOURCE = 'NERP' AND
+	    A.STK_ON_HAND = 0 AND
+	    (  A.LAST_MODIFIED_DATE is null OR 
+	       A.LAST_MODIFIED_DATE+(#{configValue,jdbcType=INTEGER}/24/60/60)<SYSTIMESTAMP
+	    ) ]]>
+  </select>
+  
+  <!-- 查询老ERP中 仓或者门店的ID和SKUID：查询实际库存为0，且（最后操作时间+有效时间小于当前时间的 、或最后操作时间为空的）-->
+  <select id="selectOldErpWarehIdAndSku" parameterType="map" resultMap="BaseResultMap">	   
+	<![CDATA[
+	SELECT A.WAREH_ID AS warehId,
+           A.PROD_ID AS prodId   
+      FROM ST_ACTIVITY_WAREH B 
+      LEFT JOIN WAREH_PROD A ON B.WAREH_ID = A.WAREH_ID
+    WHERE
+       B.IS_SHOP = #{isShop,jdbcType=VARCHAR} AND 
+       B.DATA_SOURCE = 'OERP' AND
+       A.STK_ON_HAND = 0 AND 
+       ( A.STK_CHANGE_DATE is null OR 
+         A.STK_CHANGE_DATE+(#{configValue,jdbcType=INTEGER}/24/60/60)<SYSTIMESTAMP
+       )]]>
+  </select>
+</mapper>

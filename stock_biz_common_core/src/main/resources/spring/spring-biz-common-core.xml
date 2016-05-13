@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+     http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd">
+
+	<!-- Email 配置 -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="protocol" value="smtp" />
+		<property name="host">
+			<value>smtp.metersbonwe.com</value>
+		</property>
+		<property name="port">
+			<value>587</value>
+		</property>
+		<property name="username">
+			<value>bizmonitor</value>
+		</property>
+		<property name="password">
+			<value>bizmonitor123</value>
+		</property>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.timeout">25000</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 邮箱服务配置 -->
+	<bean id="mailManager" class="com.metersbonwe.stock.utils.MailManager">
+		<property name="mailSender">
+			<ref bean="mailSender" />
+		</property>
+		<property name="from">
+			<value>bizmonitor@metersbonwe.com</value>
+		</property>
+	</bean>
+
+	<!-- spring 多线程服务 -->
+	<bean id="stockCommonExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="200" />
+		<property name="keepAliveSeconds" value="30000" />
+		<property name="maxPoolSize" value="200" />
+		<property name="daemon" value="true" />
+	</bean>
+
+</beans>

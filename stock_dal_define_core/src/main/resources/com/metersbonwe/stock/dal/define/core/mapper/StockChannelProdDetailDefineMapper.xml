@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.metersbonwe.stock.dal.define.core.mapper.StockChannelProdDetailDefineMapper">
+
+	<!-- 推送线上时：的结果封装ResultMap -->
+	<resultMap id="DetailResultMap"
+		type="com.metersbonwe.stock.po.core.define.ChannelProdBean">
+		<result column="channel_code" property="channelCode" jdbcType="VARCHAR" />
+		<result column="six_prod_id" property="sixProdId" jdbcType="VARCHAR" />
+		<result column="eight_prod_id" property="eightProdId" jdbcType="VARCHAR" />
+		<result column="prod_id" property="prodId" jdbcType="VARCHAR" />
+		<result column="private_stock" property="privateStock"
+			jdbcType="INTEGER" />
+		<result column="final_free_stock" property="finalFreeStock"
+			jdbcType="INTEGER" />
+		<result column="lock_stock" property="lockStock" jdbcType="INTEGER" />
+		<result column="order_private_total_stock" property="orderPrivateTotalStock"
+			jdbcType="INTEGER" />
+		<result column="order_share_total_stock" property="orderShareTotalStock"
+			jdbcType="INTEGER" />
+		<result column="pre_private_stock" property="prePrivateStock"
+			jdbcType="INTEGER" />
+		<result column="pre_order_total_stock" property="preOrderTotalStock"
+			jdbcType="INTEGER" />
+		<result column="is_pre" property="isPre" jdbcType="TINYINT" />
+		<result column="relation_id" property="relationId" jdbcType="BIGINT" />
+	</resultMap>
+
+	<sql id="channelInnerJoin">
+		SELECT
+		p.channel_code,
+		p.prod_id,
+		p.private_stock,
+		p.final_free_stock,
+		p.lock_stock,
+		sub.six_prod_id,
+		sub.eight_prod_id,
+		sub.order_private_total_stock,
+		sub.order_share_total_stock,
+		sub.pre_private_stock,
+		sub.pre_order_total_stock,
+		sub.is_pre
+		FROM
+		stock_channel_prod_${tableSuffix} p INNER JOIN
+		stock_channel_prod_sub_${tableSuffix} sub
+		ON
+		(p.channel_code=sub.channel_code and p.prod_id=sub.prod_id)
+	</sql>
+
+	<!-- 循环时候使用 -->
+	<sql id="channelInnerJoinForLoop">
+		SELECT
+		p.channel_code,
+		p.prod_id,
+		p.private_stock,
+		p.final_free_stock,
+		p.lock_stock,
+		sub.six_prod_id,
+		sub.eight_prod_id,
+		sub.order_private_total_stock,
+		sub.order_share_total_stock,
+		sub.pre_private_stock,
+		sub.pre_order_total_stock,
+		sub.is_pre
+		FROM
+		stock_channel_prod_${item.tableSuffix} p INNER JOIN
+		stock_channel_prod_sub_${item.tableSuffix} sub
+		ON ( p.channel_code =
+		sub.channel_code and p.prod_id = sub.prod_id )
+	</sql>
+
+	<!-- 根据传入的渠道号、商品六位码，渠道+款的两张表和渠道状态stock_channel_status（渠道商品状态明细表）连接查询 -->
+	<select id="selectByChannelStatus" parameterType="com.metersbonwe.stock.po.core.StockChannelStatus"
+		resultMap="DetailResultMap">
+		select prod.*
+		FROM
+		stock_channel_status cs LEFT OUTER JOIN
+		(
+		<include refid="channelInnerJoin" />
+		) prod
+		ON ( cs.channel_code = prod.channel_code AND cs.six_prod_id =
+		prod.six_prod_id )
+		WHERE cs.channel_code =
+		#{channelCode,jdbcType=VARCHAR} and cs.six_prod_id
+		=
+		#{sixProdId,jdbcType=VARCHAR} AND cs.sale_status!='0'
+	</select>
+
+	<!-- 业务表和对应的临时表比较，查询 -->
+	<select id="selectByStatusCompareToTmp" parameterType="com.metersbonwe.stock.po.core.TmpStockChannelStatus"
+		resultMap="DetailResultMap">
+		SELECT prod.*
+		FROM
+		tmp_stock_channel_status tmpCstatus
+		LEFT JOIN
+		stock_channel_status cstatus
+		ON (tmpCstatus.channel_code =
+		cstatus.channel_code AND
+		tmpCstatus.six_prod_id = cstatus.six_prod_id )
+		LEFT JOIN (
+		<include refid="channelInnerJoin" />
+		) prod
+		ON tmpCstatus.channel_code=prod.channel_code AND
+		prod.six_prod_id=tmpCstatus.six_prod_id
+		WHERE
+		tmpCstatus.sale_status!='0' AND(
+		tmpCstatus.sale_status!=cstatus.sale_status OR
+		tmpCstatus.is_sync!=cstatus.is_sync )
+	</select>
+
+	<!-- 根据预售结果列表查询渠道+SKU明细 -->
+	<select id="selectByPreSaleResult" parameterType="java.util.List"
+		resultMap="DetailResultMap">
+		SELECT p.* FROM
+		<foreach collection="list" index="index" item="item" open="("
+			close=")p" separator="union">
+			(
+			SELECT prod.*,#{item.relationId,jdbcType=BIGINT} as relationId FROM(
+			<include refid="channelInnerJoinForLoop" />
+			) prod
+			WHERE prod.channel_code=#{item.channelCode,jdbcType=VARCHAR}
+			AND
+			prod.prod_id=#{item.prodId,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</select>
+
+	<!-- 批量更新 -->
+	<update id="updateChannelByBeanList"
+		parameterType="com.metersbonwe.stock.po.core.define.ChannelProdBean">
+		UPDATE stock_channel_prod_${tableSuffix} prod,
+		stock_channel_prod_sub_${tableSuffix} sub
+		SET
+		prod.private_stock=#{privateStock,jdbcType=INTEGER},
+		sub.is_pre=#{isPre,jdbcType=TINYINT},
+		sub.pre_private_stock=#{prePrivateStock,jdbcType=INTEGER},
+		sub.pre_order_total_stock=#{preOrderTotalStock,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectByChannelCode" parameterType="map" resultMap="DetailResultMap">
+		<include refid="channelInnerJoin" />
+	</select>
+
+	<select id="selectByChannelCodeAndSku" parameterType="map"
+		resultMap="DetailResultMap">
+		<include refid="channelInnerJoin" />
+		where p.prod_id=#{prodId,jdbcType=VARCHAR}
+	</select>
+
+
+	<select id="selectByChannelCodeAndSkus" parameterType="map"
+		resultMap="DetailResultMap">
+		<include refid="channelInnerJoin" />
+		where p.prod_id in
+		<foreach collection="prodIds" close=")" open="(" item="item"
+			separator=",">
+			#{item,jdbcType=VARCHAR}
+		</foreach>
+	</select>
+</mapper>
